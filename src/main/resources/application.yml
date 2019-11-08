@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: LPrutas
+  datasource:
+    plataform: MySQL
+    url: jdbc:mysql://localhost:3306/lapazbuses
+    username: fernanda
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true

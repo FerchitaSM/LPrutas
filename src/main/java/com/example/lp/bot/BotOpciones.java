@@ -1,12 +1,12 @@
-package bot;
+package com.example.lp.bot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Opciones {
+public class BotOpciones {
     String call_data;
 
-    public Opciones(String call_data) {
+    public BotOpciones(String call_data) {
         this.call_data = call_data;
     }
 

@@ -1,4 +1,4 @@
-package bot;
+package com.example.lp.bot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,21 +7,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.toIntExact;
 
 public class BotMain  extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotMain.class);
@@ -61,7 +51,7 @@ public class BotMain  extends TelegramLongPollingBot {
         if(update.hasCallbackQuery()) {
             call_data=update.getCallbackQuery().getData();
         }
-        Opciones op= new Opciones(call_data);
+        BotOpciones op= new BotOpciones(call_data);
         List<String> opciones = op.lista_opciones();
         //lista con opciones
 
