@@ -39,8 +39,7 @@ public class BotMain  extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        karen_prueba(update);
-        /*
+
         String chatId =idUser(update);
         InlineKeyboardMarkup respuesta_botones = (InlineKeyboardMarkup) responderBotones(update);
         String respuesta_texto= responderTexto(update);
@@ -57,30 +56,15 @@ public class BotMain  extends TelegramLongPollingBot {
             log.info("error");
             e.printStackTrace();
         }
-       */
+
     }
 
-    private void karen_prueba(Update update) {
-        log.info("update");
-        if(update.hasMessage() && update.getMessage().hasText()){
-            TipoMovilidadEntity tipoMovilidadEntity=tipoMovilidadBl.findTipoMovilidadById(1);
-            SendMessage message=new SendMessage()
-                    .setChatId(update.getMessage().getChatId())
-                    .setText("TipoMovilidad desde BDD: "+tipoMovilidadEntity);
-            try{
-                this.execute(message);
-            }catch (TelegramApiException e){
-                e.printStackTrace();
-            }
 
-        }
-    }
 
 
     public String responderTexto(Update update) {
         String ret = "Elije una opcion";
-        MovilidadEntity movilidadEntity = movilidadBl.findMovilidadById(0);
-        ret= movilidadEntity.toString();
+        ret="Seleccione una opción";
         return ret;
     }
 
