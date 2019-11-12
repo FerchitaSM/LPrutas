@@ -17,13 +17,15 @@ public class BotOpciones {
             case "Buscar la ruta de una linea":
                 retornar.add("Mi Teleferico");
                 retornar.add("Puma Katari");
+            case "Buscar minibuses a mi destino":
+                retornar.add("Enviar mi ubicacion");
+            case "Enviar mi ubicacion":
             default:
                 retornar.add("Buscar la ruta de una linea");
                 retornar.add("Buscar minibuses a mi destino");
         }
         return retornar;
     }
-
     public String getCall_data() {
         return call_data;
     }
