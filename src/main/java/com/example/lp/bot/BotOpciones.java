@@ -18,7 +18,7 @@ public class BotOpciones {
 
                 retornar.add("Mi Teleferico");
                 retornar.add("Puma Katari");
-            case "Buscar minibuses a mi destino":
+            case "Buscar paradas de minibuses cercanas":
                 retornar.add("Enviar mi ubicacion");
             case "Enviar mi ubicacion":
                 break;
