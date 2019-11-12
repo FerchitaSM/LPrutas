@@ -1,5 +1,7 @@
 package com.example.lp.bot;
 
+import com.example.lp.bl.MovilidadBl;
+import com.example.lp.domain.MovilidadEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -16,23 +18,23 @@ import java.util.List;
 public class BotMain  extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotMain.class);
     SendMessage message = new SendMessage();
+
+    MovilidadBl movilidadBl;
+
+    public BotMain ( MovilidadBl movilidadBl){
+        this.movilidadBl = movilidadBl;
+    }
+
     @Override
-
     public void onUpdateReceived(Update update) {
-        String chatId ="";
-        if(update.hasCallbackQuery())
-        {chatId = update.getCallbackQuery().getFrom().getId().toString();}
-        else
-        { chatId = update.getMessage().getFrom().getId().toString();}
-
-        InlineKeyboardMarkup respuesta_botones = new InlineKeyboardMarkup();
-        respuesta_botones= (InlineKeyboardMarkup) responderBotones(update);
+        String chatId =idUser(update);
+        InlineKeyboardMarkup respuesta_botones = (InlineKeyboardMarkup) responderBotones(update);
+        String respuesta_texto= responderTexto(update);
 
         message
                 .setChatId(chatId)
-                .setText("Elige una opcion")
+                .setText(respuesta_texto)
                 .setReplyMarkup(respuesta_botones);
-
 
         try {
             log.info("mensaje enviado");
@@ -43,6 +45,13 @@ public class BotMain  extends TelegramLongPollingBot {
         }
     }
 
+
+    private String responderTexto(Update update) {
+        String ret = "Elije una opcion";
+        MovilidadEntity movilidadEntity = movilidadBl.findMovilidadById(0);
+        ret= movilidadEntity.toString();
+        return ret;
+    }
 
 
     private ReplyKeyboard responderBotones(Update update) {
@@ -68,10 +77,21 @@ public class BotMain  extends TelegramLongPollingBot {
     }
 
 
+    private String idUser(Update update) {
+        String chatId;
+        if(update.hasCallbackQuery())
+        {chatId = update.getCallbackQuery().getFrom().getId().toString();}
+        else
+        { chatId = update.getMessage().getFrom().getId().toString();}
+        return chatId;
+    }
+
 
     @Override
     public String getBotUsername() {
-        return "pruebaRLP_bot";
+        return "pruebaRLP_bot"; // chatbot Fernanda
+        //return "Rutas_La_Paz_Bot"; // chat Grupo
+        // creence su chat bot para que podamos correr en conjunto si
     }
 
     @Override

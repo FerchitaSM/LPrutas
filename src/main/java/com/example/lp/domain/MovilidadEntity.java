@@ -100,4 +100,14 @@ public class MovilidadEntity {
     public void setMovilidadRutasByIdMovilidad(Collection<MovilidadRutaEntity> movilidadRutasByIdMovilidad) {
         this.movilidadRutasByIdMovilidad = movilidadRutasByIdMovilidad;
     }
+    @Override
+    public String toString() {
+        return "MovilidadEntity {" +
+                "idMovilidad=" + idMovilidad +
+                ", status=" + status + '\'' +
+                ", textUser=" + textUser + '\'' +
+                ", textHost=" + textHost + '\'' +
+                ", idTipoMovilidad=" + idTipoMovilidad +
+                '}';
+    }
 }
