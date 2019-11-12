@@ -1,7 +1,9 @@
 package com.example.lp.bot;
 
 import com.example.lp.bl.MovilidadBl;
+import com.example.lp.bl.TipoMovilidadBl;
 import com.example.lp.domain.MovilidadEntity;
+import com.example.lp.domain.TipoMovilidadEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -19,15 +21,30 @@ public class BotMain  extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotMain.class);
     SendMessage message = new SendMessage();
 
-    MovilidadBl movilidadBl;
-
+    TipoMovilidadBl tipoMovilidadBl;
+    public BotMain(TipoMovilidadBl tipoMovilidadBl){this.tipoMovilidadBl=tipoMovilidadBl;}
+   /* MovilidadBl movilidadBl;
     public BotMain ( MovilidadBl movilidadBl){
         this.movilidadBl = movilidadBl;
-    }
+    }*/
 
     @Override
     public void onUpdateReceived(Update update) {
-        String chatId =idUser(update);
+        log.info("update");
+        if(update.hasMessage() && update.getMessage().hasText()){
+            TipoMovilidadEntity tipoMovilidadEntity=tipoMovilidadBl.findTipoMovilidadById(1);
+            SendMessage message=new SendMessage()
+                    .setChatId(update.getMessage().getChatId())
+                    .setText("TipoMovilidad desde BDD: "+tipoMovilidadEntity);
+            try{
+                this.execute(message);
+            }catch (TelegramApiException e){
+                e.printStackTrace();
+            }
+
+
+        }
+        /*String chatId =idUser(update);
         InlineKeyboardMarkup respuesta_botones = (InlineKeyboardMarkup) responderBotones(update);
         String respuesta_texto= responderTexto(update);
 
@@ -42,16 +59,16 @@ public class BotMain  extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             log.info("error");
             e.printStackTrace();
-        }
+        }*/
     }
 
 
-    private String responderTexto(Update update) {
+ /*   public String responderTexto(Update update) {
         String ret = "Elije una opcion";
-        MovilidadEntity movilidadEntity = movilidadBl.findMovilidadById(0);
+        MovilidadEntity movilidadEntity = TipoMovilidadBl.findTipoMovilidadById(0);
         ret= movilidadEntity.toString();
         return ret;
-    }
+    }*/
 
 
     private ReplyKeyboard responderBotones(Update update) {
@@ -77,7 +94,7 @@ public class BotMain  extends TelegramLongPollingBot {
     }
 
 
-    private String idUser(Update update) {
+    public String idUser(Update update) {
         String chatId;
         if(update.hasCallbackQuery())
         {chatId = update.getCallbackQuery().getFrom().getId().toString();}

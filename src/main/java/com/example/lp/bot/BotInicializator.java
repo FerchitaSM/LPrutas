@@ -2,6 +2,7 @@ package com.example.lp.bot;
 
 
 import com.example.lp.bl.MovilidadBl;
+import com.example.lp.bl.TipoMovilidadBl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,11 @@ import javax.annotation.PostConstruct;
 public class BotInicializator  {
     private static final Logger log = LoggerFactory.getLogger(BotInicializator.class);
 
-    MovilidadBl movilidadBl;
 
-    @Autowired
-    public BotInicializator(MovilidadBl movilidadBl) {
-        this.movilidadBl = movilidadBl;
+    TipoMovilidadBl tipomovilidadBl;
+
+    public BotInicializator(TipoMovilidadBl tipomovilidadBl) {
+        this.tipomovilidadBl = tipomovilidadBl;
     }
 
     public BotInicializator(){
@@ -31,7 +32,7 @@ public class BotInicializator  {
        ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
-           telegramBotsApi.registerBot(new BotMain(movilidadBl));
+           telegramBotsApi.registerBot(new BotMain(tipomovilidadBl));
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");
