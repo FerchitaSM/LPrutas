@@ -17,14 +17,26 @@ import javax.annotation.PostConstruct;
 public class BotInicializator  {
     private static final Logger log = LoggerFactory.getLogger(BotInicializator.class);
 
-
+    MovilidadBl movilidadBl;
     TipoMovilidadBl tipomovilidadBl;
+
+    public BotInicializator(MovilidadBl movilidadBl) {
+        this.movilidadBl = movilidadBl;
+    }
 
     public BotInicializator(TipoMovilidadBl tipomovilidadBl) {
         this.tipomovilidadBl = tipomovilidadBl;
     }
 
+
+    public BotInicializator(MovilidadBl movilidadBl, TipoMovilidadBl tipomovilidadBl) {
+        this.movilidadBl = movilidadBl;
+        this.tipomovilidadBl = tipomovilidadBl;
+    }
+
     public BotInicializator(){
+        log.info("...............................................................................");
+        log.info(String.valueOf(movilidadBl));
     }
 
     @PostConstruct
