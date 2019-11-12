@@ -2,8 +2,6 @@ package com.example.lp.bot;
 
 import com.example.lp.bl.MovilidadBl;
 import com.example.lp.bl.TipoMovilidadBl;
-import com.example.lp.domain.MovilidadEntity;
-import com.example.lp.domain.TipoMovilidadEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -87,6 +85,7 @@ public class BotMain  extends TelegramLongPollingBot {
         }
         rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
+        log.info(""+markupInline);
         return markupInline;
     }
 

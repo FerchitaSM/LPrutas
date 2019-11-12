@@ -15,11 +15,13 @@ public class BotOpciones {
         List<String> retornar = new ArrayList();
         switch (getCall_data()) {
             case "Buscar la ruta de una linea":
+
                 retornar.add("Mi Teleferico");
                 retornar.add("Puma Katari");
             case "Buscar minibuses a mi destino":
                 retornar.add("Enviar mi ubicacion");
             case "Enviar mi ubicacion":
+                break;
             default:
                 retornar.add("Buscar la ruta de una linea");
                 retornar.add("Buscar minibuses a mi destino");
