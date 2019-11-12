@@ -1,0 +1,11 @@
+package com.example.lp.api;
+
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/v1/movilidad")
+public class MovilidadController {
+
+}
