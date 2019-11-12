@@ -1,5 +1,6 @@
 package com.example.lp.bot;
 
+import com.example.lp.bl.BotBl;
 import com.example.lp.bl.MovilidadBl;
 import com.example.lp.bl.TipoMovilidadBl;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ public class BotMain  extends TelegramLongPollingBot {
 
     MovilidadBl movilidadBl;
     TipoMovilidadBl tipoMovilidadBl;
+    BotBl botBl;
 
     public BotMain ( MovilidadBl movilidadBl){
         this.movilidadBl = movilidadBl;
@@ -30,9 +32,12 @@ public class BotMain  extends TelegramLongPollingBot {
         this.tipoMovilidadBl=tipoMovilidadBl;
     }
 
-    public BotMain(MovilidadBl movilidadBl, TipoMovilidadBl tipoMovilidadBl) {
+    public BotMain(BotBl botBl){this.botBl=botBl;}
+
+    public BotMain(MovilidadBl movilidadBl, TipoMovilidadBl tipoMovilidadBl, BotBl botBl) {
         this.movilidadBl = movilidadBl;
         this.tipoMovilidadBl = tipoMovilidadBl;
+        this.botBl = botBl;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class BotMain  extends TelegramLongPollingBot {
         String chatId =idUser(update);
         InlineKeyboardMarkup respuesta_botones = (InlineKeyboardMarkup) responderBotones(update);
         String respuesta_texto= responderTexto(update);
-
+        List<String> messages = botBl.processUpdate(update);
         message
                 .setChatId(chatId)
                 .setText(respuesta_texto)
