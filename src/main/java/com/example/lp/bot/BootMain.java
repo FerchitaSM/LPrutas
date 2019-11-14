@@ -16,9 +16,8 @@ import java.util.List;
 public class BootMain   extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotMain.class);
     SendMessage message = new SendMessage();
-    BotOpciones op;
+    BotOpciones op;List<String> opciones;
     @Override
-
     public void onUpdateReceived(Update update) {
         String chatId ="";
         if(update.hasCallbackQuery())
@@ -45,32 +44,16 @@ public class BootMain   extends TelegramLongPollingBot {
         }
     }
 
-    private String responderTexto(Update update) {
-        String mensaje="Elige una opcion ";
-        List<String> opciones = op.getRetornar();
-        update.getMessage().getFrom().getId();
-        if(opciones.get(0).equals("Enviar mi ubicacion")) {
-            if (update.hasMessage() && update.getMessage().hasLocation()) {
-                mensaje = "Tengo tu ubicacion";
-                String latitud = String.valueOf(update.getMessage().getLocation().getLatitude());
-                String longitud = String.valueOf(update.getMessage().getLocation().getLongitude());
-                mensaje += " latitud:" + latitud + " longitud: " + longitud;
-            }
-        }
-
-        return mensaje;
-    }
-
 
     private ReplyKeyboard responderBotones(Update update) {
-        //para mandar a la clse opciones
         String call_data="s/d";
         if(update.hasCallbackQuery()) {
             call_data=update.getCallbackQuery().getData();
         }
         op= new BotOpciones(call_data);
-        List<String> opciones = op.getRetornar();
+        opciones = op.getRetornar();
         //lista con opciones
+
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         for (int i=0; i<opciones.size();i++)
@@ -86,8 +69,18 @@ public class BootMain   extends TelegramLongPollingBot {
         return markupInline;
     }
 
-
-
+    private String responderTexto(Update update) {
+        String mensaje="Elige una opcion ";
+        if(opciones.get(0).equals("Enviar mi ubicacion")) {
+            if (update.hasMessage() && update.getMessage().hasLocation()) {
+                mensaje = "Tengo tu ubicacion";
+                String latitud = String.valueOf(update.getMessage().getLocation().getLatitude());
+                String longitud = String.valueOf(update.getMessage().getLocation().getLongitude());
+                mensaje += " latitud:" + latitud + " longitud: " + longitud;
+            }
+        }
+        return mensaje;
+    }
 
     @Override
     public String getBotUsername() {
