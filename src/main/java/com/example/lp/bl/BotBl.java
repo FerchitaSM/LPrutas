@@ -1,6 +1,8 @@
 package com.example.lp.bl;
 
+import com.example.lp.dao.UserInfoRepository;
 import com.example.lp.dao.UsersRepository;
+import com.example.lp.domain.UserInfoEntity;
 import com.example.lp.domain.UsersEntity;
 import com.example.lp.dto.Status;
 import org.slf4j.Logger;
@@ -19,11 +21,13 @@ public class BotBl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BotBl.class);
 
-    private UsersRepository UsersRepository;
+    private UsersRepository usersRepository;
+    private UserInfoRepository  userInfoRepository;
 
     @Autowired
-    public BotBl(UsersRepository UsersRepository) {
-        this.UsersRepository = UsersRepository;
+    public BotBl(UsersRepository usersRepository, UserInfoRepository userInfoRepository) {
+        this.usersRepository = usersRepository;
+        this.userInfoRepository = userInfoRepository;
     }
 
     public List<String> processUpdate(Update update) {
@@ -44,24 +48,25 @@ public class BotBl {
         return result;
     }
 
-
-    private void coninueChatWithUSer(UsersEntity userEntity) {
-        // Ver donde se quedo el Usuario
-        // continuear co conversacion
-    }
-
-    private boolean initUser(User user) {
+    private boolean initUser(User users) {
         boolean result = false;
-        UsersEntity usersEntity = UsersRepository.findByBotUserId(user.getId().toString());
+        UsersEntity usersEntity = usersRepository.findByUserName(users.getId().toString());
         if (usersEntity == null) {
+            UserInfoEntity userInfoEntity = new UserInfoEntity();
+            userInfoEntity.setUserInfoStatus(Status.ACTIVE.getStatus());
+            userInfoEntity.setFirstName(users.getFirstName());
+            userInfoEntity.setLastName(users.getLastName());
+            userInfoEntity.setTxHost("localhost");
+            userInfoEntity.setTxUser("admin");
+            userInfoEntity.setTxDate((java.sql.Date) new Date());
+            userInfoRepository.save(userInfoEntity);
             usersEntity = new UsersEntity();
-            usersEntity.setIdUser(user.getId());
+            usersEntity.setUserName(users.getId().toString());
             usersEntity.setuStatus(Status.ACTIVE.getStatus());
             usersEntity.setTxHost("localhost");
             usersEntity.setTxUser("admin");
             usersEntity.setTxDate((java.sql.Date) new Date());
-            usersEntity.setUserName("xd");
-            UsersRepository.save(usersEntity);
+            usersRepository.save(usersEntity);
             result = true;
         }
         return result;

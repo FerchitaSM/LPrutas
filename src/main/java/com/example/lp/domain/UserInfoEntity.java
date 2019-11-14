@@ -7,6 +7,7 @@ import java.sql.Date;
 @Table(name = "user_info", schema = "dbtest_lpbus2", catalog = "")
 public class UserInfoEntity {
     private int idUser;
+    private int userInfoStatus;
     private String txHost;
     private String txUser;
     private Date txDate;
@@ -23,6 +24,16 @@ public class UserInfoEntity {
 
     public void setIdUser(int idUser) {
         this.idUser = idUser;
+    }
+
+    @Basic
+    @Column(name = "user_info_status")
+    public int getUserInfoStatus() {
+        return userInfoStatus;
+    }
+
+    public void setUserInfoStatus(int userInfoStatus) {
+        this.userInfoStatus = userInfoStatus;
     }
 
     @Basic
@@ -103,6 +114,7 @@ public class UserInfoEntity {
         UserInfoEntity that = (UserInfoEntity) o;
 
         if (idUser != that.idUser) return false;
+        if (userInfoStatus != that.userInfoStatus) return false;
         if (phoneNumber != that.phoneNumber) return false;
         if (age != that.age) return false;
         if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
@@ -117,6 +129,7 @@ public class UserInfoEntity {
     @Override
     public int hashCode() {
         int result = idUser;
+        result = 31 * result + userInfoStatus;
         result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);

@@ -11,6 +11,7 @@ public class TransportEntity {
     private String txHost;
     private String txUser;
     private Date txDate;
+    private String nombre;
     private String description;
 
     @Id
@@ -64,6 +65,16 @@ public class TransportEntity {
     }
 
     @Basic
+    @Column(name = "nombre")
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    @Basic
     @Column(name = "description")
     public String getDescription() {
         return description;
@@ -85,6 +96,7 @@ public class TransportEntity {
         if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
+        if (nombre != null ? !nombre.equals(that.nombre) : that.nombre != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
 
         return true;
@@ -97,6 +109,7 @@ public class TransportEntity {
         result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
+        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }

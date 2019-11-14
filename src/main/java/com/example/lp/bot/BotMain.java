@@ -12,7 +12,7 @@ public class BotMain extends TelegramLongPollingBot {
 
     BotBl botBl;
 
-    public BotMain(BotBl customerBl) {
+     public BotMain(BotBl customerBl) {
         this.botBl = customerBl;
     }
 
@@ -23,7 +23,7 @@ public class BotMain extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             List<String> messages = botBl.processUpdate(update);
             for(String messageText: messages) {
-                SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
+                SendMessage message = new SendMessage()
                         .setChatId(update.getMessage().getChatId())
                         .setText(messageText);
                 try {
@@ -37,11 +37,11 @@ public class BotMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "Rutas_La_Paz_Bot";
+        return "test_ec";
     }
     @Override
     public String getBotToken() {
-        return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+        return "907879278:AAFWrrtBMYmRXkslcZopfAjGECk0OHQGFus";  // chat Grupo
         // creence su chat bot para que podamos correr en conjunto si
 
     }
