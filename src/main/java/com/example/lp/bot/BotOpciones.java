@@ -1,14 +1,5 @@
 package com.example.lp.bot;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.maps.DistanceMatrixApi;
-import com.google.maps.GeoApiContext;
-import com.google.maps.errors.ApiException;
-import com.google.maps.model.DistanceMatrix;
-import com.google.maps.model.TravelMode;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

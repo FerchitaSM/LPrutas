@@ -1,23 +1,17 @@
 package com.example.lp.domain;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Date;
 
 @Entity
-@Table(name = "user_address", schema = "dbtest_lpbus2", catalog = "")
+@javax.persistence.Table(name = "user_address", schema = "dbtest_lpbus2", catalog = "")
 public class UserAddressEntity {
     private int idUserAddress;
-    private int addressStatus;
-    private String txHost;
-    private String txUser;
-    private Date txDate;
-    private double latitude;
-    private double longitude;
-    private String addressName;
-    private int addressDescription;
 
     @Id
-    @Column(name = "id_user_address")
+    @javax.persistence.Column(name = "id_user_address")
     public int getIdUserAddress() {
         return idUserAddress;
     }
@@ -26,8 +20,10 @@ public class UserAddressEntity {
         this.idUserAddress = idUserAddress;
     }
 
+    private int addressStatus;
+
     @Basic
-    @Column(name = "address_status")
+    @javax.persistence.Column(name = "address_status")
     public int getAddressStatus() {
         return addressStatus;
     }
@@ -36,8 +32,10 @@ public class UserAddressEntity {
         this.addressStatus = addressStatus;
     }
 
+    private String txHost;
+
     @Basic
-    @Column(name = "tx_host")
+    @javax.persistence.Column(name = "tx_host")
     public String getTxHost() {
         return txHost;
     }
@@ -46,8 +44,10 @@ public class UserAddressEntity {
         this.txHost = txHost;
     }
 
+    private String txUser;
+
     @Basic
-    @Column(name = "tx_user")
+    @javax.persistence.Column(name = "tx_user")
     public String getTxUser() {
         return txUser;
     }
@@ -56,8 +56,10 @@ public class UserAddressEntity {
         this.txUser = txUser;
     }
 
+    private Date txDate;
+
     @Basic
-    @Column(name = "tx_date")
+    @javax.persistence.Column(name = "tx_date")
     public Date getTxDate() {
         return txDate;
     }
@@ -66,8 +68,10 @@ public class UserAddressEntity {
         this.txDate = txDate;
     }
 
+    private double latitude;
+
     @Basic
-    @Column(name = "latitude")
+    @javax.persistence.Column(name = "latitude")
     public double getLatitude() {
         return latitude;
     }
@@ -76,8 +80,10 @@ public class UserAddressEntity {
         this.latitude = latitude;
     }
 
+    private double longitude;
+
     @Basic
-    @Column(name = "longitude")
+    @javax.persistence.Column(name = "longitude")
     public double getLongitude() {
         return longitude;
     }
@@ -86,8 +92,10 @@ public class UserAddressEntity {
         this.longitude = longitude;
     }
 
+    private String addressName;
+
     @Basic
-    @Column(name = "address_name")
+    @javax.persistence.Column(name = "address_name")
     public String getAddressName() {
         return addressName;
     }
@@ -96,8 +104,10 @@ public class UserAddressEntity {
         this.addressName = addressName;
     }
 
+    private int addressDescription;
+
     @Basic
-    @Column(name = "address_description")
+    @javax.persistence.Column(name = "address_description")
     public int getAddressDescription() {
         return addressDescription;
     }
