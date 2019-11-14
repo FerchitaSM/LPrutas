@@ -1,4 +1,4 @@
-package com.example.lp.bl;
+/*package com.example.lp.bl;
 
 import com.google.gson.Gson;
 import com.google.maps.DistanceMatrixApi;
@@ -45,3 +45,4 @@ public class CalcularDistanciaBl {
     }
 
 }
+*/
