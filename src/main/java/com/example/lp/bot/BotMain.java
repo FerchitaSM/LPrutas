@@ -1,116 +1,44 @@
 package com.example.lp.bot;
 
 import com.example.lp.bl.BotBl;
-import com.example.lp.bl.MovilidadBl;
-import com.example.lp.bl.TipoMovilidadBl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class BotMain  extends TelegramLongPollingBot {
-    private static final Logger log = LoggerFactory.getLogger(BotMain.class);
-    SendMessage message = new SendMessage();
+public class BotMain extends TelegramLongPollingBot {
 
-    MovilidadBl movilidadBl;
-    TipoMovilidadBl tipoMovilidadBl;
     BotBl botBl;
 
-    public BotMain ( MovilidadBl movilidadBl){
-        this.movilidadBl = movilidadBl;
-    }
-
-    public BotMain(TipoMovilidadBl tipoMovilidadBl){
-        this.tipoMovilidadBl=tipoMovilidadBl;
-    }
-
-    public BotMain(BotBl botBl){this.botBl=botBl;}
-
-    public BotMain(MovilidadBl movilidadBl, TipoMovilidadBl tipoMovilidadBl, BotBl botBl) {
-        this.movilidadBl = movilidadBl;
-        this.tipoMovilidadBl = tipoMovilidadBl;
-        this.botBl = botBl;
+    public BotMain(BotBl customerBl) {
+        this.botBl = customerBl;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-
-        String chatId =idUser(update);
-        InlineKeyboardMarkup respuesta_botones = (InlineKeyboardMarkup) responderBotones(update);
-        String respuesta_texto= responderTexto(update);
-        List<String> messages = botBl.processUpdate(update);
-        message
-                .setChatId(chatId)
-                .setText(respuesta_texto)
-                .setReplyMarkup(respuesta_botones);
-
-        try {
-            log.info("mensaje enviado");
-            this.execute(message);
-        } catch (TelegramApiException e) {
-            log.info("error");
-            e.printStackTrace();
+        System.out.println(update);
+        update.getMessage().getFrom().getId();
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            List<String> messages = botBl.processUpdate(update);
+            for(String messageText: messages) {
+                SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
+                        .setChatId(update.getMessage().getChatId())
+                        .setText(messageText);
+                try {
+                    this.execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                } 
+            }
         }
-
     }
-
-
-
-
-    public String responderTexto(Update update) {
-        String ret = "Elije una opcion";
-        ret="Seleccione una opción";
-        return ret;
-    }
-
-    private ReplyKeyboard responderBotones(Update update) {
-        //para mandar a la clse opciones
-        String call_data="s/d";
-        if(update.hasCallbackQuery()) {
-            call_data=update.getCallbackQuery().getData();
-        }
-        BotOpciones op= new BotOpciones(call_data);
-        List<String> opciones = op.lista_opciones();
-        //lista con opciones
-
-        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        for (int i=0; i<opciones.size();i++)
-        {
-            rowInline.add(new InlineKeyboardButton().setText(opciones.get(i)).setCallbackData(opciones.get(i)));
-        }
-        rowsInline.add(rowInline);
-        markupInline.setKeyboard(rowsInline);
-        log.info(""+markupInline);
-        return markupInline;
-    }
-
-
-    public String idUser(Update update) {
-        String chatId;
-        if(update.hasCallbackQuery())
-        {chatId = update.getCallbackQuery().getFrom().getId().toString();}
-        else
-        { chatId = update.getMessage().getFrom().getId().toString();}
-        return chatId;
-    }
-
 
     @Override
     public String getBotUsername() {
-        return "Rutas_La_Paz_Bot"; // chat Grupo
-        // creence su chat bot para que podamos correr en conjunto si
+        return "Rutas_La_Paz_Bot";
     }
-
     @Override
     public String getBotToken() {
         return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
