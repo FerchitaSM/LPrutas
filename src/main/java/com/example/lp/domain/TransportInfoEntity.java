@@ -2,6 +2,10 @@ package com.example.lp.domain;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
+/*@NamedQueries({
+        @NamedQuery(name="transport_info.findAll",query = "SELECT * FROM TransportInfoEntity");
+})*/
 
 @Entity
 @Table(name = "transport_info", schema = "dbtest_lpbus2", catalog = "")
