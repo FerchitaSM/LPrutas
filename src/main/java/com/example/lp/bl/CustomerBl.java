@@ -13,9 +13,11 @@ import java.util.Optional;
 
 @Service
 public class CustomerBl {
-    UserInfoRepository userInfoRepository;
 
     @Autowired
+    UserInfoRepository userInfoRepository;
+
+
     public CustomerBl(UserInfoRepository userInfoRepository) {
         this.userInfoRepository = userInfoRepository;
     }
@@ -32,7 +34,7 @@ public class CustomerBl {
 
     public List<UserInfoDto> findAllUsers() {
         List<UserInfoDto> userInfoDtoList = new ArrayList<>();
-        for (UserInfoEntity userInfoEntity:userInfoRepository.findAllByStatus(Status.ACTIVE.getStatus())) {
+        for (UserInfoEntity userInfoEntity:userInfoRepository.findAllByUserInfoStatus(Status.ACTIVE.getStatus())) {
             userInfoDtoList.add(new UserInfoDto(userInfoEntity));
         }
         return userInfoDtoList;

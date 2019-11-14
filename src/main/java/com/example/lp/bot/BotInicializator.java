@@ -5,6 +5,7 @@ import com.example.lp.bl.BotBl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -16,23 +17,23 @@ import javax.annotation.PostConstruct;
 public class BotInicializator  {
     private static final Logger log = LoggerFactory.getLogger(BotInicializator.class);
     BotBl   botBl;
-
+    @Autowired
     public BotInicializator(BotBl botBl) {
         this.botBl = botBl;
     }
 
-    public BotInicializator(){
+   /* public BotInicializator(){
         log.info("...............................................................................");
         //log.info(String.valueOf(movilidadBl));
-    }
+    }*/
 
     @PostConstruct
    public void levantando_bot() {
        ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
-        //   telegramBotsApi.registerBot(new BotMain(botBl));
-           telegramBotsApi.registerBot(new BootMain());
+           telegramBotsApi.registerBot(new BotMain(botBl));
+           //telegramBotsApi.registerBot(new BootMain());
 
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
