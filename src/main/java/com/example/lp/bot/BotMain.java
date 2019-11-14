@@ -32,28 +32,34 @@ public class BotMain extends TelegramLongPollingBot {
         System.out.println(update);
         update.getMessage().getFrom().getId();
         if (update.hasMessage() && update.getMessage().hasLocation()) {
-            List<String> messages = botBl.processUpdate(update);
-            for(String messageText: messages) {
+/*            List<String> messages = botBl.processUpdate(update);
+            for(String messageText: messages) {*/
                 SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
                         .setChatId(update.getMessage().getChatId())
-                        .setText(messageText);
+                        ;
 
                //OBTENCION DE LA UBICACION DEL USUARIO
                String latitud=String.valueOf(update.getMessage().getLocation().getLatitude());
                String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
-               logger.info("latitud"+latitud);
-               logger.info("longitud"+longitud);
                String ubi_inicio=latitud+","+longitud;
                String ubi_final="";
-               String distancia=Calculardistancia(ubi_inicio,ubi_final);
-               message.setText("Esta es la distancia caminando ")
+                try {
+                    Calculardistancia(ubi_inicio,ubi_final);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                message.setText("Esta es la distancia caminando ");
 
                 try {
                     this.execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-            }
+            //}
         }
     }
 
@@ -66,7 +72,7 @@ public class BotMain extends TelegramLongPollingBot {
         return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
         // creence su chat bot para que podamos correr en conjunto si
     }
-    public String Calculardistancia(String ubicacion_inicio,String ubicacion_llegada) throws InterruptedException, ApiException, IOException {
+    public void Calculardistancia(String ubicacion_inicio,String ubicacion_llegada) throws InterruptedException, ApiException, IOException {
         String dist="";
         String origen=ubicacion_inicio;
         String destino="-16.495663,-68.133407";
@@ -81,7 +87,6 @@ public class BotMain extends TelegramLongPollingBot {
         ).mode(TravelMode.WALKING).await();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println(gson.toJson(distancia));
-        return dist;
     }
 }
 
