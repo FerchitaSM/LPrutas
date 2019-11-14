@@ -30,7 +30,7 @@ public class BotMain extends TelegramLongPollingBot {
                     this.execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
-                } 
+                }
             }
         }
     }

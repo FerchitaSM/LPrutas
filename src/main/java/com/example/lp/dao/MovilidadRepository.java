@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@org.springframework.stereotype.Repository
 public interface MovilidadRepository extends JpaRepository<MovilidadEntity,Integer> {
 
     List<MovilidadEntity> findAllByStatus(int status);
