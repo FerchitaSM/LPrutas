@@ -31,7 +31,9 @@ public class BotInicializator  {
        ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
-           telegramBotsApi.registerBot(new BotMain(botBl));
+        //   telegramBotsApi.registerBot(new BotMain(botBl));
+           telegramBotsApi.registerBot(new BootMain());
+
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");
