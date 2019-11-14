@@ -1,0 +1,98 @@
+package com.example.lp.bot;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BootMain   extends TelegramLongPollingBot {
+    private static final Logger log = LoggerFactory.getLogger(BotMain.class);
+    SendMessage message = new SendMessage();
+    @Override
+
+    public void onUpdateReceived(Update update) {
+        String chatId ="";
+        if(update.hasCallbackQuery())
+        {chatId = update.getCallbackQuery().getFrom().getId().toString();}
+        else
+        { chatId = update.getMessage().getFrom().getId().toString();}
+
+        String respuesta_texto=responderTexto(update);
+        InlineKeyboardMarkup respuesta_botones = new InlineKeyboardMarkup();
+        respuesta_botones= (InlineKeyboardMarkup) responderBotones(update);
+
+        message
+                .setChatId(chatId)
+                .setText(respuesta_texto)
+                .setReplyMarkup(respuesta_botones);
+
+
+        try {
+            log.info("mensaje enviado");
+            this.execute(message);
+        } catch (TelegramApiException e) {
+            log.info("error");
+            e.printStackTrace();
+        }
+    }
+
+    private String responderTexto(Update update) {
+        String mensaje="";
+        update.getMessage().getFrom().getId();
+        if (update.hasMessage() && update.getMessage().hasLocation()) {
+            mensaje ="Tengo tu ubicacion";
+            String latitud=String.valueOf(update.getMessage().getLocation().getLatitude());
+            String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
+            mensaje+=" latitud:"+latitud + " longitud: "+longitud;
+        }
+        return mensaje;
+    }
+
+
+    private ReplyKeyboard responderBotones(Update update) {
+        //para mandar a la clse opciones
+        String call_data="s/d";
+        if(update.hasCallbackQuery()) {
+            call_data=update.getCallbackQuery().getData();
+        }
+        BotOpciones op= new BotOpciones(call_data);
+        List<String> opciones = op.lista_opciones();
+        //lista con opciones
+
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        for (int i=0; i<opciones.size();i++)
+        {
+            rowInline.add(new InlineKeyboardButton().setText(opciones.get(i)).setCallbackData(opciones.get(i)));
+        }
+        rowsInline.add(rowInline);
+        markupInline.setKeyboard(rowsInline);
+        return markupInline;
+    }
+
+
+
+    @Override
+    public String getBotUsername() {
+        return "pruebaRLP_bot";
+    }
+
+    @Override
+    public String getBotToken() {
+        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
+        //return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+        // creence su chat bot para que podamos correr en conjunto si
+
+    }
+}
+
+

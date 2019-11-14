@@ -29,8 +29,9 @@ public class BotMain extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        System.out.println(update);
+
         update.getMessage().getFrom().getId();
+
         if (update.hasMessage() && update.getMessage().hasLocation()) {
 /*            List<String> messages = botBl.processUpdate(update);
             for(String messageText: messages) {*/
