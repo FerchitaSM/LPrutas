@@ -9,6 +9,7 @@ public class BotOpciones {
 
     public BotOpciones(String call_data) {
         this.call_data = call_data;
+        lista_opciones();
     }
 
     public List<String> lista_opciones ()
@@ -53,6 +54,10 @@ public class BotOpciones {
 
     public String getCall_data() {
         return call_data;
+    }
+
+    public List<String> getRetornar() {
+        return retornar;
     }
 }
 

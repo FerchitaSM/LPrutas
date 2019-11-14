@@ -16,6 +16,7 @@ import java.util.List;
 public class BootMain   extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotMain.class);
     SendMessage message = new SendMessage();
+    BotOpciones op;
     @Override
 
     public void onUpdateReceived(Update update) {
@@ -25,9 +26,9 @@ public class BootMain   extends TelegramLongPollingBot {
         else
         { chatId = update.getMessage().getFrom().getId().toString();}
 
-        String respuesta_texto=responderTexto(update);
         InlineKeyboardMarkup respuesta_botones = new InlineKeyboardMarkup();
         respuesta_botones= (InlineKeyboardMarkup) responderBotones(update);
+        String respuesta_texto=responderTexto(update);
 
         message
                 .setChatId(chatId)
@@ -45,14 +46,18 @@ public class BootMain   extends TelegramLongPollingBot {
     }
 
     private String responderTexto(Update update) {
-        String mensaje="";
+        String mensaje="Elige una opcion ";
+        List<String> opciones = op.getRetornar();
         update.getMessage().getFrom().getId();
-        if (update.hasMessage() && update.getMessage().hasLocation()) {
-            mensaje ="Tengo tu ubicacion";
-            String latitud=String.valueOf(update.getMessage().getLocation().getLatitude());
-            String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
-            mensaje+=" latitud:"+latitud + " longitud: "+longitud;
+        if(opciones.get(0).equals("Enviar mi ubicacion")) {
+            if (update.hasMessage() && update.getMessage().hasLocation()) {
+                mensaje = "Tengo tu ubicacion";
+                String latitud = String.valueOf(update.getMessage().getLocation().getLatitude());
+                String longitud = String.valueOf(update.getMessage().getLocation().getLongitude());
+                mensaje += " latitud:" + latitud + " longitud: " + longitud;
+            }
         }
+
         return mensaje;
     }
 
@@ -63,21 +68,24 @@ public class BootMain   extends TelegramLongPollingBot {
         if(update.hasCallbackQuery()) {
             call_data=update.getCallbackQuery().getData();
         }
-        BotOpciones op= new BotOpciones(call_data);
-        List<String> opciones = op.lista_opciones();
+        op= new BotOpciones(call_data);
+        List<String> opciones = op.getRetornar();
         //lista con opciones
-
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-        List<InlineKeyboardButton> rowInline = new ArrayList<>();
         for (int i=0; i<opciones.size();i++)
         {
-            rowInline.add(new InlineKeyboardButton().setText(opciones.get(i)).setCallbackData(opciones.get(i)));
+            List<InlineKeyboardButton> rowInline = new ArrayList<>();
+            for (int j=i;j<=i;j++)
+            {
+                rowInline.add(new InlineKeyboardButton().setText(opciones.get(j)).setCallbackData(opciones.get(j)));
+            }
+            rowsInline.add(rowInline);
         }
-        rowsInline.add(rowInline);
         markupInline.setKeyboard(rowsInline);
         return markupInline;
     }
+
 
 
 
