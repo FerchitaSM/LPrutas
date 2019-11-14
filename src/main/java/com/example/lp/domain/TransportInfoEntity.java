@@ -2,10 +2,6 @@ package com.example.lp.domain;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.List;
-/*@NamedQueries({
-        @NamedQuery(name="transport_info.findAll",query = "SELECT * FROM TransportInfoEntity");
-})*/
 
 @Entity
 @Table(name = "transport_info", schema = "dbtest_lpbus2", catalog = "")
@@ -89,10 +85,7 @@ public class TransportInfoEntity {
         if (txHosts != null ? !txHosts.equals(that.txHosts) : that.txHosts != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
-        if (infoDescription != null ? !infoDescription.equals(that.infoDescription) : that.infoDescription != null)
-            return false;
-
-        return true;
+        return infoDescription != null ? infoDescription.equals(that.infoDescription) : that.infoDescription == null;
     }
 
     @Override

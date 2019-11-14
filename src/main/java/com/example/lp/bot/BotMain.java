@@ -22,8 +22,8 @@ public class BotMain extends TelegramLongPollingBot {
         update.getMessage().getFrom().getId();
         if (update.hasMessage() && update.getMessage().hasText()) {
             List<String> messages = botBl.processUpdate(update);
-            for(String messageText: messages) {
-                SendMessage message = new SendMessage()
+            for(String messageText:     messages) {
+                SendMessage message = new SendMessage() 
                         .setChatId(update.getMessage().getChatId())
                         .setText(messageText);
                 try {

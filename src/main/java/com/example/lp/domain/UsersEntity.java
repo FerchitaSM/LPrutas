@@ -1,17 +1,21 @@
 package com.example.lp.domain;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@javax.persistence.Table(name = "users", schema = "dbtest_lpbus2", catalog = "")
+@Table(name = "users", schema = "dbtest_lpbus2", catalog = "")
 public class UsersEntity {
     private int idUser;
+    private int uStatus;
+    private String txHost;
+    private String txUser;
+    private Date txDate;
+    private String userName;
+    private String lastChat;
 
     @Id
-    @javax.persistence.Column(name = "id_user")
+    @Column(name = "id_user")
     public int getIdUser() {
         return idUser;
     }
@@ -20,10 +24,8 @@ public class UsersEntity {
         this.idUser = idUser;
     }
 
-    private int uStatus;
-
     @Basic
-    @javax.persistence.Column(name = "u_status")
+    @Column(name = "u_status")
     public int getuStatus() {
         return uStatus;
     }
@@ -32,10 +34,8 @@ public class UsersEntity {
         this.uStatus = uStatus;
     }
 
-    private String txHost;
-
     @Basic
-    @javax.persistence.Column(name = "tx_host")
+    @Column(name = "tx_host")
     public String getTxHost() {
         return txHost;
     }
@@ -44,10 +44,8 @@ public class UsersEntity {
         this.txHost = txHost;
     }
 
-    private String txUser;
-
     @Basic
-    @javax.persistence.Column(name = "tx_user")
+    @Column(name = "tx_user")
     public String getTxUser() {
         return txUser;
     }
@@ -56,10 +54,8 @@ public class UsersEntity {
         this.txUser = txUser;
     }
 
-    private Date txDate;
-
     @Basic
-    @javax.persistence.Column(name = "tx_date")
+    @Column(name = "tx_date")
     public Date getTxDate() {
         return txDate;
     }
@@ -68,10 +64,8 @@ public class UsersEntity {
         this.txDate = txDate;
     }
 
-    private String userName;
-
     @Basic
-    @javax.persistence.Column(name = "user_name")
+    @Column(name = "user_name")
     public String getUserName() {
         return userName;
     }
@@ -80,10 +74,8 @@ public class UsersEntity {
         this.userName = userName;
     }
 
-    private String lastChat;
-
     @Basic
-    @javax.persistence.Column(name = "last_chat")
+    @Column(name = "last_chat")
     public String getLastChat() {
         return lastChat;
     }
@@ -105,9 +97,7 @@ public class UsersEntity {
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
         if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
-        if (lastChat != null ? !lastChat.equals(that.lastChat) : that.lastChat != null) return false;
-
-        return true;
+        return lastChat != null ? lastChat.equals(that.lastChat) : that.lastChat == null;
     }
 
     @Override

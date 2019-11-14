@@ -1,14 +1,8 @@
 
-insert into transport_info(id_transport_info, tx_hosts, tx_user, tx_date, type, info_description) values
-(1,"localhost","user1",now(),1,"teleferico"),
-(2,"localhost","user2",now(),2,"pumakatari");
-
 insert into tipo_movilidad(id_tipo_movilidad, status, text_user, text_host, descripcion) values(	1	,	1   ,   'tuser' ,		'thost',    'otro'	);
 insert into tipo_movilidad(id_tipo_movilidad, status, text_user, text_host, descripcion) values(	2	,	1   ,   'tuser' ,		'thost',	'teleferico'	);
 insert into tipo_movilidad(id_tipo_movilidad, status, text_user, text_host, descripcion) values(	3	,	1   ,   'tuser' ,		'thost',    'pumakatari'	);
 insert into tipo_movilidad(id_tipo_movilidad, status, text_user, text_host, descripcion) values(	4	,	0   ,   'tuser' ,		'thost',    'prueba'	);
-
-
 
 insert into movilidad(id_movilidad, status, text_user, text_host, id_tipo_movilidad) values(	1	,	1	,	'tuser'	,	'thost'	,	1	);
 insert into movilidad(id_movilidad, status, text_user, text_host, id_tipo_movilidad) values(	2	,	1	,	'tuser'	,	'thost'	,	3	);

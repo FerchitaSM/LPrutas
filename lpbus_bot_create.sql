@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2019-11-14 18:56:14.254
+-- Last modification date: 2019-11-14 00:24:24.446
 
 -- tables
 -- Table: ride_data
@@ -7,10 +7,10 @@ CREATE TABLE ride_data (
     id_ride int NOT NULL,
     users_id_user int NOT NULL,
     transport_id_transport int NOT NULL,
+    route_stop_id_route_stop int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
-    route_id_route int NOT NULL,
     CONSTRAINT ride_data_pk PRIMARY KEY (id_ride)
 );
 
@@ -22,8 +22,6 @@ CREATE TABLE route (
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
     route_details varchar(200) NOT NULL,
-    stop_start int NOT NULL,
-    stop_finish int NOT NULL,
     CONSTRAINT route_pk PRIMARY KEY (id_route)
 );
 
@@ -69,7 +67,6 @@ CREATE TABLE transport (
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
-    nombre varchar(50) NOT NULL,
     description varchar(200) NOT NULL,
     transport_info_id_transport_info int NOT NULL,
     CONSTRAINT transport_pk PRIMARY KEY (id_transport)
@@ -104,7 +101,6 @@ CREATE TABLE user_address (
 -- Table: user_info
 CREATE TABLE user_info (
     id_user int NOT NULL,
-    user_info_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
@@ -129,9 +125,9 @@ CREATE TABLE users (
 );
 
 -- foreign keys
--- Reference: ride_data_route (table: ride_data)
-ALTER TABLE ride_data ADD CONSTRAINT ride_data_route FOREIGN KEY ride_data_route (route_id_route)
-    REFERENCES route (id_route);
+-- Reference: ride_data_route_stop (table: ride_data)
+ALTER TABLE ride_data ADD CONSTRAINT ride_data_route_stop FOREIGN KEY ride_data_route_stop (route_stop_id_route_stop)
+    REFERENCES route_stop (id_route_stop);
 
 -- Reference: ride_data_transport (table: ride_data)
 ALTER TABLE ride_data ADD CONSTRAINT ride_data_transport FOREIGN KEY ride_data_transport (transport_id_transport)
@@ -140,10 +136,6 @@ ALTER TABLE ride_data ADD CONSTRAINT ride_data_transport FOREIGN KEY ride_data_t
 -- Reference: ride_data_users (table: ride_data)
 ALTER TABLE ride_data ADD CONSTRAINT ride_data_users FOREIGN KEY ride_data_users (users_id_user)
     REFERENCES users (id_user);
-
--- Reference: route_stop (table: route)
-ALTER TABLE route ADD CONSTRAINT route_stop FOREIGN KEY route_stop (stop_finish)
-    REFERENCES stop (id_stop);
 
 -- Reference: route_stop_route (table: route_stop)
 ALTER TABLE route_stop ADD CONSTRAINT route_stop_route FOREIGN KEY route_stop_route (route_id_route)
@@ -161,10 +153,6 @@ ALTER TABLE route_stop_transport ADD CONSTRAINT route_stop_transport_route FOREI
 ALTER TABLE route_stop_transport ADD CONSTRAINT route_stop_transport_transport FOREIGN KEY route_stop_transport_transport (transport_id_transport)
     REFERENCES transport (id_transport);
 
--- Reference: stop_start (table: route)
-ALTER TABLE route ADD CONSTRAINT stop_start FOREIGN KEY stop_start (stop_start)
-    REFERENCES stop (id_stop);
-
 -- Reference: transport_transport_info (table: transport)
 ALTER TABLE transport ADD CONSTRAINT transport_transport_info FOREIGN KEY transport_transport_info (transport_info_id_transport_info)
     REFERENCES transport_info (id_transport_info);
@@ -178,5 +166,4 @@ ALTER TABLE users ADD CONSTRAINT users_user_info FOREIGN KEY users_user_info (us
     REFERENCES user_info (id_user);
 
 -- End of file.
-
 

@@ -48,6 +48,12 @@ public class BotBl {
         return result;
     }
 
+
+    private void coninueChatWithUSer(UsersEntity usersEntity) {
+        // Ver donde se quedo el Usuario
+        // continuear co conversacion
+    }
+
     private boolean initUser(User users) {
         boolean result = false;
         UsersEntity usersEntity = usersRepository.findByUserName(users.getId().toString());
@@ -66,11 +72,11 @@ public class BotBl {
             usersEntity.setTxHost("localhost");
             usersEntity.setTxUser("admin");
             usersEntity.setTxDate((java.sql.Date) new Date());
+            usersEntity.setUserName("xd");
             usersRepository.save(usersEntity);
             result = true;
         }
         return result;
     }
-
 
 }

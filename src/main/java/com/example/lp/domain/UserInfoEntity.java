@@ -1,17 +1,23 @@
 package com.example.lp.domain;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@javax.persistence.Table(name = "user_info", schema = "dbtest_lpbus2", catalog = "")
+@Table(name = "user_info", schema = "dbtest_lpbus2", catalog = "")
 public class UserInfoEntity {
     private int idUser;
+    private int userInfoStatus;
+    private String txHost;
+    private String txUser;
+    private Date txDate;
+    private String firstName;
+    private String lastName;
+    private int phoneNumber;
+    private int age;
 
     @Id
-    @javax.persistence.Column(name = "id_user")
+    @Column(name = "id_user")
     public int getIdUser() {
         return idUser;
     }
@@ -20,10 +26,8 @@ public class UserInfoEntity {
         this.idUser = idUser;
     }
 
-    private int userInfoStatus;
-
     @Basic
-    @javax.persistence.Column(name = "user_info_status")
+    @Column(name = "user_info_status")
     public int getUserInfoStatus() {
         return userInfoStatus;
     }
@@ -32,10 +36,8 @@ public class UserInfoEntity {
         this.userInfoStatus = userInfoStatus;
     }
 
-    private String txHost;
-
     @Basic
-    @javax.persistence.Column(name = "tx_host")
+    @Column(name = "tx_host")
     public String getTxHost() {
         return txHost;
     }
@@ -44,10 +46,8 @@ public class UserInfoEntity {
         this.txHost = txHost;
     }
 
-    private String txUser;
-
     @Basic
-    @javax.persistence.Column(name = "tx_user")
+    @Column(name = "tx_user")
     public String getTxUser() {
         return txUser;
     }
@@ -56,10 +56,8 @@ public class UserInfoEntity {
         this.txUser = txUser;
     }
 
-    private Date txDate;
-
     @Basic
-    @javax.persistence.Column(name = "tx_date")
+    @Column(name = "tx_date")
     public Date getTxDate() {
         return txDate;
     }
@@ -68,10 +66,8 @@ public class UserInfoEntity {
         this.txDate = txDate;
     }
 
-    private String firstName;
-
     @Basic
-    @javax.persistence.Column(name = "first_name")
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -80,10 +76,8 @@ public class UserInfoEntity {
         this.firstName = firstName;
     }
 
-    private String lastName;
-
     @Basic
-    @javax.persistence.Column(name = "last_name")
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -92,10 +86,8 @@ public class UserInfoEntity {
         this.lastName = lastName;
     }
 
-    private int phoneNumber;
-
     @Basic
-    @javax.persistence.Column(name = "phone_number")
+    @Column(name = "phone_number")
     public int getPhoneNumber() {
         return phoneNumber;
     }
@@ -104,10 +96,8 @@ public class UserInfoEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    private int age;
-
     @Basic
-    @javax.persistence.Column(name = "age")
+    @Column(name = "age")
     public int getAge() {
         return age;
     }
@@ -131,9 +121,7 @@ public class UserInfoEntity {
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-
-        return true;
+        return lastName != null ? lastName.equals(that.lastName) : that.lastName == null;
     }
 
     @Override
