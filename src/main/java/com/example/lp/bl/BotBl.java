@@ -8,6 +8,7 @@ import com.example.lp.dto.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -15,6 +16,8 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+
 
 @Service
 public class BotBl {
