@@ -69,6 +69,7 @@ CREATE TABLE transport (
     tx_date date NOT NULL,
     description varchar(200) NOT NULL,
     transport_info_id_transport_info int NOT NULL,
+    route_image text NOT NULL,
     CONSTRAINT transport_pk PRIMARY KEY (id_transport)
 );
 
@@ -78,7 +79,6 @@ CREATE TABLE transport_info (
     tx_hosts varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
-    type int NOT NULL,
     info_description varchar(200) NOT NULL,
     CONSTRAINT transport_info_pk PRIMARY KEY (id_transport_info)
 );

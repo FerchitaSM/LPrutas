@@ -1,5 +1,9 @@
 package com.example.lp.bot;
 
+import com.example.lp.bl.TransportBl;
+import com.example.lp.bl.TransportInfoBl;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +13,14 @@ public class BotOpciones {
     List<String> retornar = new ArrayList();
     List<String> mostrar = new ArrayList();
 
+    TransportBl transportBl;
+    TransportInfoBl transportInfoBl;
 
-    public BotOpciones(String call_data) {
+    @Autowired
+    public BotOpciones(String call_data,TransportBl transportBl, TransportInfoBl transportInfoBl) {
         this.call_data = call_data;
+        this.transportBl=transportBl;
+        this.transportInfoBl= transportInfoBl;
         lista_opciones();
     }
 
@@ -19,9 +28,9 @@ public class BotOpciones {
     {
         switch (getCall_data()) {
             case "Buscar la ruta de una linea":
-                retornar.add("Mi Teleferico");
-                retornar.add("Puma Katari");
+                sacar_TransporteInfo();
                 break;
+
             case "Mi Teleferico":
                 retornar.add("Linea Blanca");
                 retornar.add("Linea Azul");
@@ -73,11 +82,19 @@ public class BotOpciones {
     }
 
 
+
+
+
+    private void sacar_TransporteInfo(){
+        retornar=transportInfoBl.findAllDescriptiontransportInfo();
+    }
+
     private String sacar_url(String lugar) {
         String ret = "https://urgente.bo/sites/default/files/Ruta%20San%20Pedro-%20Achumani%201.jpg";
-
+        ret =transportBl.findURLTransportByName(lugar);
         return ret;
     }
+
 
 }
 

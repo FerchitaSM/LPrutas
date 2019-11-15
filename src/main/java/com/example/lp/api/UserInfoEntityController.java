@@ -1,4 +1,4 @@
-package com.example.lp.api;
+package bo.edu.ucb.sis.carpool.chatbot.api;
 
 
 import com.example.lp.bl.CustomerBl;

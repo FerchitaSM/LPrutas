@@ -1,8 +1,11 @@
 package com.example.lp.bot;
 
 import com.example.lp.bl.BotBl;
+import com.example.lp.bl.TransportBl;
+import com.example.lp.bl.TransportInfoBl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -23,7 +26,14 @@ public class BootMain  extends TelegramLongPollingBot {
     SendMessage message = new SendMessage();
     BotOpciones op;
     List<String> opciones;
-    public BootMain() {
+
+    TransportBl transportBl;
+    TransportInfoBl transportInfoBl;
+
+    @Autowired
+    public BootMain(TransportBl transportBl, TransportInfoBl transportInfoBl) {
+        this.transportBl =transportBl;
+        this.transportInfoBl=transportInfoBl;
     }
 
     @Override
@@ -59,7 +69,7 @@ public class BootMain  extends TelegramLongPollingBot {
         if(update.hasCallbackQuery()) {
             call_data=update.getCallbackQuery().getData();
         }
-        op= new BotOpciones(call_data);
+        op= new BotOpciones(call_data,transportBl,transportInfoBl);
         opciones = op.getRetornar();
         //lista con opciones
 
@@ -80,15 +90,15 @@ public class BootMain  extends TelegramLongPollingBot {
 
     private String responderTexto(Update update) {
         String mensaje="Elige una opcion ";
-        if(opciones.get(0).equals("Enviar mi ubicacion")) {
+        if(opciones.size()>0) {
+            if (opciones.get(0).equals("Enviar mi ubicacion")) {
                 mensaje = "Tengo tu ubicacion";
                 String latitud = String.valueOf(update.getMessage().getLocation().getLatitude());
                 String longitud = String.valueOf(update.getMessage().getLocation().getLongitude());
                 mensaje += " latitud:" + latitud + " longitud: " + longitud;
+            }
         }
-        else
-        {
-            List<String> mostrar = op.getMostrar();
+        List<String> mostrar = op.getMostrar();
             if (mostrar.size() > 0) {
                 try {
                     URL url = new URL(mostrar.get(0));
@@ -97,7 +107,7 @@ public class BootMain  extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-        }
+
 
         return mensaje;
     }
@@ -106,14 +116,14 @@ public class BootMain  extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        //return "pruebaRLP_bot";
-        return "Rutas_La_Paz_Bot";
+        return "pruebaRLP_bot";
+        //return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
-        //return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
-        return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo
+        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
+        //return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo
         //992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4
         // creence su chat bot para que podamos correr en conjunto si
 

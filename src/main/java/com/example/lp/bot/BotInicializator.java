@@ -2,6 +2,8 @@ package com.example.lp.bot;
 
 
 import com.example.lp.bl.BotBl;
+import com.example.lp.bl.TransportBl;
+import com.example.lp.bl.TransportInfoBl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +19,26 @@ import javax.annotation.PostConstruct;
 public class BotInicializator  {
     private static final Logger log = LoggerFactory.getLogger(BotInicializator.class);
     BotBl   botBl;
+    TransportBl transportBl;
+    TransportInfoBl transportInfoBl;
     @Autowired
+    public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
+    {
+        this.transportBl=transportBl;
+        this.transportInfoBl=transportInfoBl;
+    }
+    /*
     public BotInicializator(BotBl botBl) {
         this.botBl = botBl;
     }
-
-   /* public BotInicializator(){
-        log.info("...............................................................................");
-        //log.info(String.valueOf(movilidadBl));
-    }*/
-
+*/
     @PostConstruct
    public void levantando_bot() {
        ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
-           telegramBotsApi.registerBot(new BotMain(botBl));
-           //telegramBotsApi.registerBot(new BootMain());
-
+           //telegramBotsApi.registerBot(new BotMain(botBl));
+           telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl));
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");
