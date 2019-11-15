@@ -37,11 +37,21 @@ public class TransportInfoBl {
         List<TransportInfoEntity> ret = this.transportInfoRepository.findAll();
         return ret;
     }
+
     public  List<String> findAllDescriptiontransportInfo() {
         List<TransportInfoEntity> all = this.transportInfoRepository.findAll();
         List<String> ret = new ArrayList<>();
         for (TransportInfoEntity x: all) {
             ret.add(x.getInfoDescription());
+        }
+        return ret;
+    }
+    public int findIdTransportInfoByName(String name) {
+        int ret=0;
+        List<TransportInfoEntity> list = this.transportInfoRepository.findAll();
+        for ( TransportInfoEntity x: list) {
+            if(x.getInfoDescription().equals(name))
+                ret=x.getIdTransportInfo();
         }
         return ret;
     }

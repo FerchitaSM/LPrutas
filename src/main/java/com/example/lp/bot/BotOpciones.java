@@ -26,45 +26,43 @@ public class BotOpciones {
 
     public List<String> lista_opciones ()
     {
-        switch (getCall_data()) {
-            case "Buscar la ruta de una linea":
-                sacar_TransporteInfo();
-                break;
 
-            case "Mi Teleferico":
-                retornar.add("Linea Blanca");
-                retornar.add("Linea Azul");
-                retornar.add("Linea Morada");
-                retornar.add("Linea Roja");
-                retornar.add("Linea Celeste");
-                retornar.add("Linea Verde");
-                retornar.add("Linea Amarilla");
-                retornar.add("Linea Plateada");
-                retornar.add("Linea Naranja");
-                retornar.add("Linea Cafe");
-                break;
-            case "Puma Katari":
-                retornar.add("Chasquipampa");
-                retornar.add("Inca Llojeta");
-                retornar.add("Villa Salome");
-                retornar.add("Caja Ferroviaria");
-                retornar.add("Integradora");
-                retornar.add("Irapvi II");
-                retornar.add("Achumani");
-                break;
-            case "Achumani":
-                mostrar.add(sacar_url("Achumani"));
-                break;
+        List<String> listasTransportInfo =transportInfoBl.findAllDescriptiontransportInfo();
+        List<String> listasTransport  =transportBl.findAllDescriptiontransport();
 
-            case "Buscar minibuses a mi destino":
-                retornar.add("Enviar mi ubicacion");
+        for(int i =0 ; i<listasTransportInfo.size(); i++)
+        {
+            if (listasTransportInfo.get(i).equals(getCall_data()))
+            {
+                int id= transportInfoBl.findIdTransportInfoByName(listasTransportInfo.get(i));
+                sacar_TransportePorInfo(id);
                 break;
+            }
+        }
 
-            case "Enviar mi ubicacion":
+        for(int i =0 ; i<listasTransport.size(); i++)
+        {
+            if (listasTransport.get(i).equals(getCall_data()))
+            {
+                mostrar.add(sacar_url(listasTransport.get(i)));
                 break;
-            default:
-                retornar.add("Buscar la ruta de una linea");
-                retornar.add("Buscar minibuses a mi destino");
+            }
+        }
+
+        if(retornar.size()==0 && mostrar.size()==00) {
+            switch (getCall_data()) {
+                case "Buscar la ruta de una linea":
+                    sacar_TransporteInfo();
+                    break;
+                case "Buscar minibuses a mi destino":
+                    retornar.add("Enviar mi ubicacion");
+                    break;
+                case "Enviar mi ubicacion":
+                    break;
+                default:
+                    retornar.add("Buscar la ruta de una linea");
+                    retornar.add("Buscar minibuses a mi destino");
+            }
         }
         return retornar;
     }
@@ -84,10 +82,15 @@ public class BotOpciones {
 
 
 
-
     private void sacar_TransporteInfo(){
         retornar=transportInfoBl.findAllDescriptiontransportInfo();
     }
+
+    private void sacar_TransportePorInfo(int info_id){
+        retornar=transportBl.findAllDescriptiontransportByInfo(info_id);
+    }
+
+
 
     private String sacar_url(String lugar) {
         String ret = "https://urgente.bo/sites/default/files/Ruta%20San%20Pedro-%20Achumani%201.jpg";
