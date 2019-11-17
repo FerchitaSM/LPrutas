@@ -64,7 +64,6 @@ CREATE TABLE transport (
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
-    nombre varchar(50) NOT NULL,
     description varchar(200) NOT NULL,
     transport_info_id_transport_info int NOT NULL,
     route_image text NOT NULL,

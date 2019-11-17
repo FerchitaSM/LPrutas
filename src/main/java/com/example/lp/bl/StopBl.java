@@ -1,11 +1,6 @@
 package com.example.lp.bl;
-
-import com.example.lp.dao.RouteRepository;
 import com.example.lp.dao.StopRepository;
-import com.example.lp.dao.TransportInfoRepository;
-import com.example.lp.domain.RouteEntity;
 import com.example.lp.domain.StopEntity;
-import com.example.lp.domain.TransportInfoEntity;
 import com.google.gson.Gson;
 import com.google.maps.DistanceMatrixApi;
 import com.google.maps.GeoApiContext;
@@ -18,9 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.print.DocFlavor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,21 +45,21 @@ public class StopBl {
 
     public List<Integer> findAllNearbyLocationStop(String location) {
         List<StopEntity> all = this.stopRepository.findAll();
-        Boolean bandera=false;
+        Boolean flag=false;
         List<Integer> stop_distance = new ArrayList<>();
         for (StopEntity x: all) {
             String latitud=String.valueOf(x.getLatitude());
             String longitud= String.valueOf(x.getLongitude());
             //Colocamos una bandera para saber si la parada cumple con el requisito de distancia
-            bandera=CalculateDistance(x.getIdStop(),location,latitud+","+longitud);
-            if(bandera==true){
+            flag=CalculateDistance(location,latitud+","+longitud);
+            if(flag==true){
                  stop_distance.add(x.getIdStop());
             }
         }
         return stop_distance;
     }
-    public boolean CalculateDistance(int id_stop, String location,String nearby_location){
-        Boolean bandera=false;
+    public boolean CalculateDistance(String location,String nearby_location){
+        Boolean flag=false;
         //aca se obtiene la ubicacion de origen y destino de los datos entrantes
         String origin=location;
         String destination=nearby_location;
@@ -92,7 +84,6 @@ public class StopBl {
         }
         //se genera un Gson
         Gson gson = new Gson();
-        System.out.println("Reading JSON file from Java program");
         //Se busca en el JSON el dato de la duracion en segundos dentro del JSON
         String contents = gson.toJson(distancia);
         JSONObject object=new JSONObject(contents);
@@ -102,13 +93,13 @@ public class StopBl {
         JSONObject second_level=elements.getJSONObject(0);
         JSONObject duration=second_level.getJSONObject("duration");
         //Al encontrar el valor se lo convierte a minutos
-        Integer valor=duration.getInt("inSeconds");
-        Double minutos=((double)valor)/60;
+        Integer value=duration.getInt("inSeconds");
+        Double minutes=((double)value)/60;
         //Si la caminata del origen al destino es menor a 30 minutos se devuelve
-        if(minutos<30){
-            bandera=true;
+        if(minutes<30){
+            flag=true;
         }
-        return bandera;
+        return flag;
     }
 
 

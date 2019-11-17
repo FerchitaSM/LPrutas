@@ -35,3 +35,15 @@ insert into `stop` (`id_stop`,`stop_status`,`tx_host`,`tx_user`,`tx_date`,`latit
 ('8','1','localhost','karen',now(),'-16.534960','-68.084307','Parada Colegio Militar'),
 ('9','1','localhost','karen',now(),'-16.528087','-68.087335','Parada Irpavi'),
 ('10','1','localhost','karen',now(),'-16.541203','-68.091129','Parada Jardin Japones');
+
+insert into `route` (`id_route`,`route_status`,`tx_host`,`tx_user`,`tx_date`,`route_details`,`stop_start`,`stop_finish`) values
+('1','1','localhost','karen',now(),'-16.495920','1','2'),
+('2','1','localhost','karen',now(),'-16.490125','1','3'),
+('3','1','localhost','karen',now(),'-16.490294','1','9'),
+('4','1','localhost','karen',now(),'-16.488641','2','8'),
+('5','1','localhost','karen',now(),'-16.491265','3','7'),
+('6','1','localhost','karen',now(),'-16.545292','4','10'),
+('7','1','localhost','karen',now(),'-16.537792','5','7'),
+('8','1','localhost','karen',now(),'-16.534960','3','10'),
+('9','1','localhost','karen',now(),'-16.528087','2','9'),
+('10','1','localhost','karen',now(),'-16.541203','1','10');

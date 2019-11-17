@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class RouteBl {
-    /*private static final Logger LOGGER = LoggerFactory.getLogger(StopBl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RouteBl.class);
 
     private RouteRepository routeRepository;
 
@@ -36,7 +36,15 @@ public class RouteBl {
         return ret;
     }
 
-    public  List<String> findAllDescriptionroute() {
+    public void findAllDescriptionroute() {
+        List<RouteEntity> all = this.routeRepository.findAll();
+        //List<String> ret = new ArrayList<>();
+        for (RouteEntity x: all) {
+            //LOGGER.info("id route"+x.getIdRoute());
+            LOGGER.info("START+ "+x.getStopStart()+"  FINISH "+x.getStopFinish());
+        }
+    }
+  /*  public  List<String> findAllDescriptionroute() {
         List<RouteEntity> all = this.routeRepository.findAll();
         List<String> ret = new ArrayList<>();
         for (RouteEntity x: all) {

@@ -1,10 +1,7 @@
 package com.example.lp.bot;
 
 
-import com.example.lp.bl.BotBl;
-import com.example.lp.bl.StopBl;
-import com.example.lp.bl.TransportBl;
-import com.example.lp.bl.TransportInfoBl;
+import com.example.lp.bl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,7 @@ public class BotInicializator  {
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
     StopBl stopBl;
+    RouteBl routeBl;
     @Autowired
    /* public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
     {
@@ -33,8 +31,9 @@ public class BotInicializator  {
     public BotInicializator(BotBl botBl) {
         this.botBl = botBl;
     }*/
-    public BotInicializator(StopBl stopBl) {
+    public BotInicializator(StopBl stopBl,RouteBl routeBl) {
         this.stopBl = stopBl;
+        this.routeBl=routeBl;
     }
 
     @PostConstruct
@@ -44,7 +43,7 @@ public class BotInicializator  {
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl));
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl));
-           telegramBotsApi.registerBot(new BotM(stopBl));
+           telegramBotsApi.registerBot(new BotM(stopBl,routeBl));
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");

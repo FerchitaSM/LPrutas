@@ -1,16 +1,12 @@
 package com.example.lp.bot;
 
-import com.example.lp.bl.BotBl;
+import com.example.lp.bl.RouteBl;
 import com.example.lp.bl.StopBl;
-import com.example.lp.bl.TransportBl;
-import com.example.lp.bl.TransportInfoBl;
-import com.example.lp.dao.StopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -18,21 +14,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BotM  extends TelegramLongPollingBot {
 
-    private static final Logger log = LoggerFactory.getLogger(BotMain.class);
+    private static final Logger log = LoggerFactory.getLogger(BotM.class);
+    List<Integer> list_origin=new ArrayList<>();
+    List<Integer> list_destination=new ArrayList<>();
     public static int conversacion=0;
     public static String mensaje="";
     StopBl stopBl;
+    RouteBl routeBl;
     @Autowired
-    public BotM(StopBl stopBl) {
+    public BotM(StopBl stopBl,RouteBl routeBl) {
         this.stopBl=stopBl;
+        this.routeBl=routeBl;
     }
 
     @Override
@@ -58,17 +56,15 @@ public class BotM  extends TelegramLongPollingBot {
        switch (conversation) {
            case 0:
                mensaje="Envia tu ubicacion";
-               log.info("HOLAAAAAAAAAAAAAA");
                conversacion=1;
                break;
            case 1:
                if(update.getMessage().hasLocation()){
                    mensaje="";
-                   List<Integer> list=new ArrayList<>();
                    String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
-                   list=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
-                   mensaje=mensaje+"\nEnvia la ubicacion a donde quieres llegar";
+                   list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+                   mensaje="Envia la ubicacion a donde quieres llegar";
                    conversacion=2;
                }else{
                    conversacion=0;
@@ -77,10 +73,9 @@ public class BotM  extends TelegramLongPollingBot {
                break;
            case 2:
                if(update.getMessage().hasLocation()){
-                   String latitud=String.valueOf(update.getMessage().getLocation().getLatitude());
-                   String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
-                   log.info("LA UBICACION DE LLEGADA ESSSSSSSSSSSSSSSSSSSSS:     "+latitud);
-                   log.info(longitud);
+                   String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
+                   String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
+                   list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
                    mensaje="Grandioso ya tenemos la informacion";
                    conversacion=0;
                }else{
