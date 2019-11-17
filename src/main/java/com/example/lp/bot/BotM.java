@@ -41,73 +41,49 @@ public class BotM  extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if(update.hasMessage()){
+            SendMessage message=new SendMessage();
+            long chat_id = update.getMessage().getChatId();
+            message.setChatId(chat_id);
             respuesta(conversacion,update);
-        }
-        /*SendMessage message=new SendMessage();
-        long chat_id = update.getMessage().getChatId();
-             message.setChatId(chat_id);
-        String call_data=update.getMessage().getText();
-        Location call=update.getMessage().getLocation();
-        if (update.hasMessage()) {
-            if (call_data.equals("1")) {
-                message.setText("1");
-            }
-            if (call_data.equals("2")) {
-                if (call_data.equals("3")) {
-                    message.setText("hola");
-                }
-            }
-
+            message.setText(mensaje);
             try {
                 log.info("mensaje enviado");
-                this.execute(message);
+                execute(message);
             } catch (TelegramApiException e) {
                 log.info("error");
-                e.printStackTrace();
-            }
-        }*/}
+                e.printStackTrace();}
+        }
+        }
 
 
    // }
    public void respuesta(int conversation, Update update){
-       SendMessage message=new SendMessage();
-       long chat_id = update.getMessage().getChatId();
-       message.setChatId(chat_id);
        switch (conversation) {
            case 0:
+               mensaje="Envia tu ubicacion";
                log.info("HOLAAAAAAAAAAAAAA");
                conversacion=1;
                break;
            case 1:
-               String mensaje=update.getMessage().getText();
-               log.info(mensaje);
-               message.setText(mensaje);
-               try {
-                   log.info("mensaje enviado");
-                   execute(message);
-               } catch (TelegramApiException e) {
-                   log.info("error");
-                   e.printStackTrace();}
-               conversacion=2;
-               break;
-           case 2:
                if(update.getMessage().hasLocation()){
                    String latitud=String.valueOf(update.getMessage().getLocation().getLatitude());
                    String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
                    log.info("LA UBICACION ESSSSSSSSSSSSSSSSSSSSS:     "+latitud);
                    log.info(longitud);
-                   conversacion=3;
+                   mensaje="Envia la ubicacion de a donde quieres llegar";
+                   conversacion=2;
                }else{
                    conversacion=0;
                    break;
                }
                break;
-           case 3:
+           case 2:
                if(update.getMessage().hasLocation()){
                    String latitud=String.valueOf(update.getMessage().getLocation().getLatitude());
                    String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
                    log.info("LA UBICACION DE LLEGADA ESSSSSSSSSSSSSSSSSSSSS:     "+latitud);
                    log.info(longitud);
+                   mensaje="Grandioso ya tenemos la informacion";
                }
                break;
        }
