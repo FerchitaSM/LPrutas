@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -62,12 +63,12 @@ public class BotM  extends TelegramLongPollingBot {
                break;
            case 1:
                if(update.getMessage().hasLocation()){
-                   String latitud=String.valueOf(update.getMessage().getLocation().getLatitude());
-                   String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
-                   log.info("LA UBICACION ESSSSSSSSSSSSSSSSSSSSS:     "+latitud);
-                   log.info(longitud);
-                   mensaje="Envia la ubicacion a donde quieres llegar";
-                   stopBl.findAllNearbyLocationStop(latitud+","+longitud);
+                   mensaje="";
+                   List<Integer> list=new ArrayList<>();
+                   String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
+                   String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
+                   list=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+                   mensaje=mensaje+"\nEnvia la ubicacion a donde quieres llegar";
                    conversacion=2;
                }else{
                    conversacion=0;

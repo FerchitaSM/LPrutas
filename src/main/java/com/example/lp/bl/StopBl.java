@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.print.DocFlavor;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,39 +51,37 @@ public class StopBl {
         return ret;
     }
 
-   /* public void findAllNearbyLocationStop() {
+    public List<Integer> findAllNearbyLocationStop(String location) {
         List<StopEntity> all = this.stopRepository.findAll();
+        Boolean bandera=false;
+        List<Integer> stop_distance = new ArrayList<>();
         for (StopEntity x: all) {
             String latitud=String.valueOf(x.getLatitude());
             String longitud= String.valueOf(x.getLongitude());
-            String parada=x.getDescription();
-            LOGGER.info("ubicacion  parada"+parada+"+"+latitud+"/"+longitud);
+            //Colocamos una bandera para saber si la parada cumple con el requisito de distancia
+            bandera=CalculateDistance(x.getIdStop(),location,latitud+","+longitud);
+            if(bandera==true){
+                 stop_distance.add(x.getIdStop());
+            }
         }
-    }*/
-    public  void findAllNearbyLocationStop(String location) {
-        List<StopEntity> all = this.stopRepository.findAll();
-      //  List<Integer> ret = new ArrayList<>();
-        for (StopEntity x: all) {
-            String latitud=String.valueOf(x.getLatitude());
-            String longitud= String.valueOf(x.getLongitude());
-            CalcularDistancia(location,latitud+","+longitud,x.getDescription());
-           // ret.add(x.getIdStop());
-        }
-       // return ret;
+        return stop_distance;
     }
-    public void CalcularDistancia(String location,String nearby_location,String parada){
-        String origen=location;
-        String destino=nearby_location;
+    public boolean CalculateDistance(int id_stop, String location,String nearby_location){
+        Boolean bandera=false;
+        //aca se obtiene la ubicacion de origen y destino de los datos entrantes
+        String origin=location;
+        String destination=nearby_location;
+        //Se utiliza la clave de la API de Google
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyCW_1tL---epCMy6Wix2JrgNWcNjJfqmzg")
                 .build();
-        //se envia las coordenadas para calcular las distancias
+        //se envia las coordenadas para calcular las distancias caminando
         DistanceMatrix distancia= null;
         try {
             distancia = DistanceMatrixApi.getDistanceMatrix(
                     context,
-                    new String[]{origen},
-                    new String[]{destino}
+                    new String[]{origin},
+                    new String[]{destination}
             ).mode(TravelMode.WALKING).await();
         } catch (ApiException e) {
             e.printStackTrace();
@@ -91,21 +90,25 @@ public class StopBl {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //  Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        // System.out.println(gson.toJson(distancia));
+        //se genera un Gson
         Gson gson = new Gson();
         System.out.println("Reading JSON file from Java program");
-        //Se busca en el JSON el datos de la duracion en segundos
+        //Se busca en el JSON el dato de la duracion en segundos dentro del JSON
         String contents = gson.toJson(distancia);
-        JSONObject o=new JSONObject(contents);
-        JSONArray rows=o.getJSONArray("rows");
-        JSONObject nivel_uno =rows.getJSONObject(0);
-        JSONArray elements=nivel_uno.getJSONArray("elements");
-        JSONObject obje=elements.getJSONObject(0);
-        JSONObject b=obje.getJSONObject("duration");
-        Integer valor=b.getInt("inSeconds");
+        JSONObject object=new JSONObject(contents);
+        JSONArray rows=object.getJSONArray("rows");
+        JSONObject first_level =rows.getJSONObject(0);
+        JSONArray elements=first_level.getJSONArray("elements");
+        JSONObject second_level=elements.getJSONObject(0);
+        JSONObject duration=second_level.getJSONObject("duration");
+        //Al encontrar el valor se lo convierte a minutos
+        Integer valor=duration.getInt("inSeconds");
         Double minutos=((double)valor)/60;
-        System.out.println(parada+"           "+minutos+" minutos");
+        //Si la caminata del origen al destino es menor a 30 minutos se devuelve
+        if(minutos<30){
+            bandera=true;
+        }
+        return bandera;
     }
 
 
