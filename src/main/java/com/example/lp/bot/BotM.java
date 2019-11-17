@@ -23,8 +23,10 @@ public class BotM  extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotM.class);
     List<Integer> list_origin=new ArrayList<>();
     List<Integer> list_destination=new ArrayList<>();
-    public static int conversacion=0;
-    public static String mensaje="";
+    private static int conversacion=0;
+    private static String mensaje="";
+    private static String u_origin="";
+    private static String u_destination="";
     StopBl stopBl;
     RouteBl routeBl;
     @Autowired
@@ -63,6 +65,7 @@ public class BotM  extends TelegramLongPollingBot {
                    mensaje="";
                    String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
+                   u_origin=latitude+","+longitude;
                    list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
                    mensaje="Envia la ubicacion a donde quieres llegar";
                    conversacion=2;
@@ -75,9 +78,17 @@ public class BotM  extends TelegramLongPollingBot {
                if(update.getMessage().hasLocation()){
                    String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
+                   u_destination=latitude+","+longitude;
                    list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
-                   mensaje="Grandioso ya tenemos la informacion";
+                 // routeBl.findAllDescriptionroute();
+                   String url="";
+                   url=obtener_url(u_origin,u_destination);
+                   mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
+                   mensaje=mensaje+url;
+
                    conversacion=0;
+
+
                }else{
                    conversacion=0;
                    break;
@@ -85,9 +96,11 @@ public class BotM  extends TelegramLongPollingBot {
                break;
        }
     }
-
-
-
+    public String obtener_url(String origin,String destination){
+        String url="";
+        url="https://www.google.com/maps/dir/?api=1&origin=+"+origin+"&destination="+destination+"&travelmode=driving";
+        return url;
+    }
     @Override
     public String getBotUsername() {
         return "pruebaRLP_bot";
