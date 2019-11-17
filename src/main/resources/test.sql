@@ -28,7 +28,7 @@ insert into `stop` (`id_stop`,`stop_status`,`tx_host`,`tx_user`,`tx_date`,`latit
 ('1','1','localhost','karen',now(),'-16.495920','-68.132994','Parada Murillo'),
 ('2','1','localhost','karen',now(),'-16.490125','-68.137718','Parada Armentia'),
 ('3','1','localhost','karen',now(),'-16.490294','-68.136571','Parada Tel Naranja'),
-('4','1','localhost','karen',now(),'-16.488641','-68141014','Parada Terminal'),
+('4','1','localhost','karen',now(),'-16.488641','-68.141014','Parada Terminal'),
 ('5','1','localhost','karen',now(),'-16.491265','-68.135366','Parada Plaza Riosiño'),
 ('6','1','localhost','karen',now(),'-16.545292','-68.085337','Parada Costanera'),
 ('7','1','localhost','karen',now(),'-16.537792','-68.088295','Parada Teleferico Verde'),

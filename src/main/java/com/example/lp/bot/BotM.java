@@ -67,7 +67,7 @@ public class BotM  extends TelegramLongPollingBot {
                    log.info("LA UBICACION ESSSSSSSSSSSSSSSSSSSSS:     "+latitud);
                    log.info(longitud);
                    mensaje="Envia la ubicacion a donde quieres llegar";
-                   stopBl.findAllNearbyLocationStop();
+                   stopBl.findAllNearbyLocationStop(latitud+","+longitud);
                    conversacion=2;
                }else{
                    conversacion=0;
