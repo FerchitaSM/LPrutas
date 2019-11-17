@@ -78,10 +78,7 @@ public class BootMain  extends TelegramLongPollingBot {
         for (int i=0; i<opciones.size();i++)
         {
             List<InlineKeyboardButton> rowInline = new ArrayList<>();
-            for (int j=i;j<=i;j++)
-            {
-                rowInline.add(new InlineKeyboardButton().setText(opciones.get(j)).setCallbackData(opciones.get(j)));
-            }
+                rowInline.add(new InlineKeyboardButton().setText(opciones.get(i)).setCallbackData(opciones.get(i)));
             rowsInline.add(rowInline);
         }
         markupInline.setKeyboard(rowsInline);
@@ -90,43 +87,50 @@ public class BootMain  extends TelegramLongPollingBot {
 
     private String responderTexto(Update update) {
         String mensaje="Elige una opcion ";
-        if(opciones.size()>0) {
-            if (opciones.get(0).equals("Enviar mi ubicacion")) {
-                mensaje = "Tengo tu ubicacion";
-                String latitud = String.valueOf(update.getMessage().getLocation().getLatitude());
-                String longitud = String.valueOf(update.getMessage().getLocation().getLongitude());
-                mensaje += " latitud:" + latitud + " longitud: " + longitud;
-            }
-        }
         List<String> mostrar = op.getMostrar();
-            if (mostrar.size() > 0) {
-                try {
-                    URL url = new URL(mostrar.get(0));
-                    mensaje = url + "\n";
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            }
 
+        if(opciones.size()>0 && opciones.get(0).equals("Mi ubicacion"))
+            mensaje = "Debes enviarme tu lugar de origen atravez de google maps \n Si deseas que tu ubicaion actual sea el origen presiona en 'Mi ubicaion'";
+        if (opciones.size()==0 && mostrar.size()==0 )
+            mensaje = sacar_ubicacion(update);
+        if (mostrar.size() > 0)
+            mensaje = mandar_url(mostrar.get(0));
 
-        return mensaje;
+       return mensaje;
+    }
+
+    private String mandar_url(String ur) {
+        String ret="";
+        try {
+            URL url = new URL(ur);
+            ret = url + "\n";
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+
+    }
+
+    public String sacar_ubicacion(Update update) {
+        String ret = "Tengo tu ubicacion";
+        String latitud = String.valueOf(update.getCallbackQuery().getMessage().getLocation().getLatitude()); // sale nulo
+        String longitud =String.valueOf(update.getCallbackQuery().getMessage().getLocation().getLongitude()); //sale nulo
+        ret += " latitud:" + latitud + " longitud: " + longitud;
+        return ret;
+
     }
 
 
 
     @Override
     public String getBotUsername() {
-        return "pruebaRLP_bot";
-        //return "Rutas_La_Paz_Bot";
+        return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
-        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
-        //return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo
+        return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo
         //992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4
-        // creence su chat bot para que podamos correr en conjunto si
-
     }
 }
 

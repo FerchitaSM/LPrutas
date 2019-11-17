@@ -10,7 +10,6 @@ public class TransportInfoEntity {
     private String txHosts;
     private String txUser;
     private Date txDate;
-    private int type;
     private String infoDescription;
 
     @Id
@@ -54,16 +53,6 @@ public class TransportInfoEntity {
     }
 
     @Basic
-    @Column(name = "type")
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    @Basic
     @Column(name = "info_description")
     public String getInfoDescription() {
         return infoDescription;
@@ -81,7 +70,6 @@ public class TransportInfoEntity {
         TransportInfoEntity that = (TransportInfoEntity) o;
 
         if (idTransportInfo != that.idTransportInfo) return false;
-        if (type != that.type) return false;
         if (txHosts != null ? !txHosts.equals(that.txHosts) : that.txHosts != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
@@ -94,7 +82,6 @@ public class TransportInfoEntity {
         result = 31 * result + (txHosts != null ? txHosts.hashCode() : 0);
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
-        result = 31 * result + type;
         result = 31 * result + (infoDescription != null ? infoDescription.hashCode() : 0);
         return result;
     }
