@@ -69,7 +69,7 @@ public class BootMain  extends TelegramLongPollingBot {
         if(update.hasCallbackQuery()) {
             call_data=update.getCallbackQuery().getData();
         }
-        op= new BotOpciones(call_data,transportBl,transportInfoBl);
+        op= new BotOpciones(call_data,transportBl,transportInfoBl,update);
         opciones = op.getRetornar();
         //lista con opciones
 

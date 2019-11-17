@@ -4,7 +4,7 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/lpbus_bot</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3307/lpbus_bot</property>
         <mapping class="com.example.lp.domai.RideDataEntity"/>
         <mapping class="com.example.lp.domai.RouteEntity"/>
         <mapping class="com.example.lp.domai.RouteStopEntity"/>

@@ -41,7 +41,7 @@ public class BotMain extends TelegramLongPollingBot {
     }
     @Override
     public String getBotToken() {
-        return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo
+        return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";  // chat Grupo
         //Luis 992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4
         // creence su chat bot para que podamos correr en conjunto si
 
