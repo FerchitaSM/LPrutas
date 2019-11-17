@@ -1,8 +1,10 @@
 package com.example.lp.bot;
 
 import com.example.lp.bl.BotBl;
+import com.example.lp.bl.StopBl;
 import com.example.lp.bl.TransportBl;
 import com.example.lp.bl.TransportInfoBl;
+import com.example.lp.dao.StopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +26,12 @@ import java.util.List;
 public class BotM  extends TelegramLongPollingBot {
 
     private static final Logger log = LoggerFactory.getLogger(BotMain.class);
-    SendMessage message = new SendMessage();
-    BotOpciones op;
-    List<String> opciones;
-    TransportBl transportBl;
-    TransportInfoBl transportInfoBl;
     public static int conversacion=0;
     public static String mensaje="";
-
+    StopBl stopBl;
     @Autowired
-    public BotM(TransportBl transportBl, TransportInfoBl transportInfoBl) {
-        this.transportBl =transportBl;
-        this.transportInfoBl=transportInfoBl;
+    public BotM(StopBl stopBl) {
+        this.stopBl=stopBl;
     }
 
     @Override
@@ -70,7 +66,8 @@ public class BotM  extends TelegramLongPollingBot {
                    String longitud=String.valueOf(update.getMessage().getLocation().getLongitude());
                    log.info("LA UBICACION ESSSSSSSSSSSSSSSSSSSSS:     "+latitud);
                    log.info(longitud);
-                   mensaje="Envia la ubicacion de a donde quieres llegar";
+                   mensaje="Envia la ubicacion a donde quieres llegar";
+                   stopBl.findAllNearbyLocationStop();
                    conversacion=2;
                }else{
                    conversacion=0;
@@ -84,6 +81,10 @@ public class BotM  extends TelegramLongPollingBot {
                    log.info("LA UBICACION DE LLEGADA ESSSSSSSSSSSSSSSSSSSSS:     "+latitud);
                    log.info(longitud);
                    mensaje="Grandioso ya tenemos la informacion";
+                   conversacion=0;
+               }else{
+                   conversacion=0;
+                   break;
                }
                break;
        }

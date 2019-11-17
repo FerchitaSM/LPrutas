@@ -2,6 +2,7 @@ package com.example.lp.bot;
 
 
 import com.example.lp.bl.BotBl;
+import com.example.lp.bl.StopBl;
 import com.example.lp.bl.TransportBl;
 import com.example.lp.bl.TransportInfoBl;
 import org.slf4j.Logger;
@@ -21,17 +22,21 @@ public class BotInicializator  {
     BotBl   botBl;
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
+    StopBl stopBl;
     @Autowired
-    public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
+   /* public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
     {
         this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
-    }
+    }*/
     /*
     public BotInicializator(BotBl botBl) {
         this.botBl = botBl;
+    }*/
+    public BotInicializator(StopBl stopBl) {
+        this.stopBl = stopBl;
     }
-*/
+
     @PostConstruct
    public void levantando_bot() {
        ApiContextInitializer.init();
@@ -39,7 +44,7 @@ public class BotInicializator  {
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl));
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl));
-           telegramBotsApi.registerBot(new BotM(transportBl,transportInfoBl));
+           telegramBotsApi.registerBot(new BotM(stopBl));
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");
