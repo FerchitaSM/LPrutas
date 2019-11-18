@@ -25,11 +25,13 @@ public class BotInicializator  {
         this.transportInfoBl=transportInfoBl;
     }*/
     /*
+    //Inicializ
     public BotInicializator(BotBl botBl) {
         this.botBl = botBl;
     }*/
     //Inicializacion Karen
-    public BotInicializator(StopBl stopBl,RouteBl routeBl) {
+    public BotInicializator(BotBl botBl,StopBl stopBl,RouteBl routeBl) {
+        this.botBl = botBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
     }
@@ -42,7 +44,7 @@ public class BotInicializator  {
            //telegramBotsApi.registerBot(new BotMain(botBl));
            //Inicializacion Fer
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl));
-           telegramBotsApi.registerBot(new BotM(stopBl,routeBl));
+           telegramBotsApi.registerBot(new BotMain(botBl));
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");

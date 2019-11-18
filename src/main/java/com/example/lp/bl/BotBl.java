@@ -56,10 +56,15 @@ public class BotBl {
         // Ver donde se quedo el Usuario
         // continuear co conversacion
     }
-
+    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
     private boolean initUser(User users) {
         boolean result = false;
         UsersEntity usersEntity = usersRepository.findByUserName(users.getId().toString());
+        java.util.Date uDate = new java.util.Date();
+        java.sql.Date sDate = convertUtilToSql(uDate);
         if (usersEntity == null) {
             UserInfoEntity userInfoEntity = new UserInfoEntity();
             userInfoEntity.setUserInfoStatus(Status.ACTIVE.getStatus());
@@ -67,14 +72,14 @@ public class BotBl {
             userInfoEntity.setLastName(users.getLastName());
             userInfoEntity.setTxHost("localhost");
             userInfoEntity.setTxUser("admin");
-            userInfoEntity.setTxDate((java.sql.Date) new Date());
+            userInfoEntity.setTxDate(sDate);
             userInfoRepository.save(userInfoEntity);
             usersEntity = new UsersEntity();
             usersEntity.setUserName(users.getId().toString());
             usersEntity.setuStatus(Status.ACTIVE.getStatus());
             usersEntity.setTxHost("localhost");
             usersEntity.setTxUser("admin");
-            usersEntity.setTxDate((java.sql.Date) new Date());
+            usersEntity.setTxDate(sDate);
             usersEntity.setUserName("xd");
             usersRepository.save(usersEntity);
             result = true;
