@@ -1,10 +1,7 @@
 package com.example.lp.bot;
-
-
 import com.example.lp.bl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -31,6 +28,7 @@ public class BotInicializator  {
     public BotInicializator(BotBl botBl) {
         this.botBl = botBl;
     }*/
+    //Inicializacion Karen
     public BotInicializator(StopBl stopBl,RouteBl routeBl) {
         this.stopBl = stopBl;
         this.routeBl=routeBl;
@@ -42,6 +40,7 @@ public class BotInicializator  {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl));
+           //Inicializacion Fer
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl));
            telegramBotsApi.registerBot(new BotM(stopBl,routeBl));
            log.info("Bot levantado");

@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +22,14 @@ public class BotM  extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotM.class);
     List<Integer> list_origin=new ArrayList<>();
     List<Integer> list_destination=new ArrayList<>();
+    private static final String tinyUrl = "http://tinyurl.com/api-create.php?url=";
     private static int conversacion=0;
     private static String mensaje="";
     private static String u_origin="";
     private static String u_destination="";
     StopBl stopBl;
     RouteBl routeBl;
+
     @Autowired
     public BotM(StopBl stopBl,RouteBl routeBl) {
         this.stopBl=stopBl;
@@ -54,10 +55,11 @@ public class BotM  extends TelegramLongPollingBot {
 
 
    // }
-   public void respuesta(int conversation, Update update){
+   public void respuesta(int conversation, Update update) {
        switch (conversation) {
            case 0:
                mensaje="Envia tu ubicacion";
+
                conversacion=1;
                break;
            case 1:
@@ -83,9 +85,14 @@ public class BotM  extends TelegramLongPollingBot {
                  // routeBl.findAllDescriptionroute();
                    String url="";
                    url=obtener_url(u_origin,u_destination);
+                   String url_short= null;
+                   try {
+                       url_short = shorter(url);
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
                    mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
-                   mensaje=mensaje+url;
-
+                   mensaje=mensaje+url_short;
                    conversacion=0;
 
 
@@ -100,6 +107,12 @@ public class BotM  extends TelegramLongPollingBot {
         String url="";
         url="https://www.google.com/maps/dir/?api=1&origin=+"+origin+"&destination="+destination+"&travelmode=driving";
         return url;
+    }
+    public static String shorter(String url) throws IOException {
+        String tinyUrlLookup = tinyUrl + url;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(tinyUrlLookup).openStream()));
+        String tinyUrl = reader.readLine();
+        return tinyUrl;
     }
     @Override
     public String getBotUsername() {
