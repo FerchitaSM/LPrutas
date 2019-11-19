@@ -1,5 +1,5 @@
 CREATE TABLE ride_data (
-    id_ride int NOT NULL,
+    id_ride int NOT NULL auto_increment,
     users_id_user int NOT NULL,
     transport_id_transport int NOT NULL,
     tx_host varchar(200) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE ride_data (
 
 -- Table: route
 CREATE TABLE route (
-    id_route int NOT NULL,
+    id_route int NOT NULL auto_increment,
     route_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE route (
 
 -- Table: route_stop
 CREATE TABLE route_stop (
-    id_route_stop int NOT NULL,
+    id_route_stop int NOT NULL auto_increment,
     route_id_route int NOT NULL,
     stop_id_stop int NOT NULL,
     tx_user varchar(200) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE route_stop (
 
 -- Table: route_stop_transport
 CREATE TABLE route_stop_transport (
-    id_route_stop_transport int NOT NULL,
+    id_route_stop_transport int NOT NULL auto_increment,
     transport_id_transport int NOT NULL,
     route_id_route int NOT NULL,
     tx_host varchar(200) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE route_stop_transport (
 
 -- Table: stop
 CREATE TABLE stop (
-    id_stop int NOT NULL,
+    id_stop int NOT NULL auto_increment,
     stop_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE stop (
 
 -- Table: transport
 CREATE TABLE transport (
-    id_transport int NOT NULL,
+    id_transport int NOT NULL auto_increment,
     transport_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE transport (
 
 -- Table: transport_info
 CREATE TABLE transport_info (
-    id_transport_info int NOT NULL,
+    id_transport_info int NOT NULL auto_increment,
     tx_hosts varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE transport_info (
 
 -- Table: user_address
 CREATE TABLE user_address (
-    id_user_address int NOT NULL,
+    id_user_address int NOT NULL auto_increment,
     address_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE user_address (
 
 -- Table: user_info
 CREATE TABLE user_info (
-    id_user int NOT NULL,
+    id_user int NOT NULL auto_increment,
     user_info_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE user_info (
 
 -- Table: users
 CREATE TABLE users (
-    id_user int NOT NULL,
+    id_user int NOT NULL auto_increment,
     u_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
