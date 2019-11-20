@@ -50,8 +50,9 @@ public class BotM  extends TelegramLongPollingBot {
             respuesta(point_conversation,update);
             message.setText(mensaje);
             try {
-                log.info("mensaje enviado");
                 execute(message);
+                log.info("mensaje enviado");
+
             } catch (TelegramApiException e) {
                 log.info("error");
                 e.printStackTrace();}

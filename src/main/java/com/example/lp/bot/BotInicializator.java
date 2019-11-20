@@ -19,13 +19,14 @@ public class BotInicializator  {
     StopBl stopBl;
     RouteBl routeBl;
     @Autowired
+
     public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
     {
         this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
     }
-    /*
-    //Inicializ
+
+    /*//Inicializ
     public BotInicializator(BotBl botBl) {
         this.botBl = botBl;
     }*/

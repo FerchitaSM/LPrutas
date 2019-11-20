@@ -9,6 +9,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -37,19 +38,22 @@ public class BotMainBotones extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         String chatId ="";
-        if(update.hasCallbackQuery())
-        {chatId = update.getCallbackQuery().getFrom().getId().toString();}
-        else
-        { chatId = update.getMessage().getFrom().getId().toString();}
+       chatId = update.getMessage().getFrom().getId().toString();
 
         ReplyKeyboardMarkup  respuesta_botones = null;
         respuesta_botones= (ReplyKeyboardMarkup) responderBotones(update);
-        String respuesta_texto=responderTexto(update);
+        String respuesta_texto=responderTexto();
 
-        message
-                .setChatId(chatId)
-                .setText(respuesta_texto)
-                .setReplyMarkup(respuesta_botones);
+            message
+                    .setChatId(chatId)
+                    .setText(respuesta_texto)
+                    .setReplyMarkup(respuesta_botones);
+        if(opciones.size()==0)
+        {
+            ReplyKeyboardRemove keyboardMarkupRemove = new ReplyKeyboardRemove();
+            message.setReplyMarkup(keyboardMarkupRemove);
+        }
+
 
 
         try {
@@ -62,37 +66,38 @@ public class BotMainBotones extends TelegramLongPollingBot {
     }
 
 
-    private ReplyKeyboard responderBotones(Update update) {
-        String call_data=update.getMessage().getText();
-        op= new BotOpciones(call_data,transportBl,transportInfoBl);
-        opciones = op.getRetornar();
-        //lista con opciones
+    private ReplyKeyboard responderBotones(Update update ) {
 
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        for (int i=0; i<opciones.size();i++)
-        {
-            KeyboardRow row = new KeyboardRow();
-            row.add(opciones.get(i));
-            keyboard.add(row);
-        }
-        keyboardMarkup.setKeyboard(keyboard);
-        return keyboardMarkup;
+            String call_data = update.getMessage().getText();
+            op = new BotOpciones(call_data, transportBl, transportInfoBl);
+            opciones = op.getRetornar();
+            //lista con opciones
+
+            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+            List<KeyboardRow> keyboard = new ArrayList<>();
+            for (int i = 0; i < opciones.size(); i++) {
+                KeyboardRow row = new KeyboardRow();
+                row.add(opciones.get(i));
+                keyboard.add(row);
+            }
+            keyboardMarkup.setKeyboard(keyboard);
+            return keyboardMarkup;
+
     }
 
-    private String responderTexto(Update update) {
+    private String responderTexto() {
         String mensaje="Elige una opcion ";
         List<String> mostrar = op.getMostrar();
-
-        if(opciones.size()>0 && opciones.get(0).equals("Mi ubicacion"))
-            mensaje = "Debes enviarme tu lugar de origen atravez de google maps \n Si deseas que tu ubicaion actual sea el origen presiona en 'Mi ubicaion'";
-        if (opciones.size()==0 && mostrar.size()==0 )
-            mensaje = sacar_ubicacion(update);
+        if(opciones.size()==0 && mostrar.size() == 0) {
+            mensaje = "Debes enviarme tu lugar de origen atravez de google maps";
+        }
         if (mostrar.size() > 0)
             mensaje = mandar_url(mostrar.get(0));
 
         return mensaje;
     }
+
+
 
     private String mandar_url(String ur) {
         String ret="";
@@ -106,14 +111,6 @@ public class BotMainBotones extends TelegramLongPollingBot {
 
     }
 
-    public String sacar_ubicacion(Update update) {
-        String ret = "Tengo tu ubicacion";
-        String latitud = String.valueOf(update.getCallbackQuery().getMessage().getLocation().getLatitude()); // sale nulo
-        String longitud =String.valueOf(update.getCallbackQuery().getMessage().getLocation().getLongitude()); //sale nulo
-        ret += " latitud:" + latitud + " longitud: " + longitud;
-        return ret;
-
-    }
 
 
     @Override

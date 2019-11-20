@@ -55,9 +55,6 @@ public class BotOpciones {
                     sacar_TransporteInfo();
                     break;
                 case "Buscar minibuses a mi destino":
-                    retornar.add("Mi ubicacion");
-                    break;
-                case "Mi ubicacion":
                     break;
                 default:
                     retornar.add("Buscar la ruta de una linea");
