@@ -1,7 +1,5 @@
 package com.example.lp.bot;
 import com.example.lp.bl.*;
-import com.example.lp.dao.RouteStopRepository;
-import okhttp3.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +19,11 @@ public class BotInicializator  {
     StopBl stopBl;
     RouteBl routeBl;
     @Autowired
-   /* public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
+    public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
     {
         this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
-    }*/
+    }
     /*
     //Inicializ
     public BotInicializator(BotBl botBl) {
@@ -36,12 +34,12 @@ public class BotInicializator  {
         this.botBl = botBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
-    }*/
+    }*//*
     //Inicializacion Karen
     public BotInicializator(StopBl stopBl, RouteBl routeBl) {
         this.stopBl = stopBl;
         this.routeBl=routeBl;
-    }
+    }*/
     @PostConstruct
    public void levantando_bot() {
        ApiContextInitializer.init();
@@ -50,7 +48,8 @@ public class BotInicializator  {
            //telegramBotsApi.registerBot(new BotMain(botBl));
            //Inicializacion Fer
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl));
-           telegramBotsApi.registerBot(new BotM(stopBl,routeBl));
+           //telegramBotsApi.registerBot(new BotM(stopBl,routeBl));
+           telegramBotsApi.registerBot(new BotMainBotones(transportBl,transportInfoBl));
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");
