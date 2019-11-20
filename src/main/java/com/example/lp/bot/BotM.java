@@ -2,6 +2,7 @@ package com.example.lp.bot;
 
 import com.example.lp.bl.RouteBl;
 import com.example.lp.bl.StopBl;
+import com.example.lp.dao.RouteStopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,13 @@ public class BotM  extends TelegramLongPollingBot {
     private static String u_destination="";
     StopBl stopBl;
     RouteBl routeBl;
+    RouteStopRepository routeStopRepository;
 
     @Autowired
-    public BotM(StopBl stopBl,RouteBl routeBl) {
+    public BotM(StopBl stopBl,RouteBl routeBl,RouteStopRepository routeStopRepository) {
         this.stopBl=stopBl;
         this.routeBl=routeBl;
+        this.routeStopRepository=routeStopRepository;
     }
 
     @Override
@@ -59,7 +62,6 @@ public class BotM  extends TelegramLongPollingBot {
        switch (conversation) {
            case 0:
                mensaje="Envia tu ubicacion";
-
                conversacion=1;
                break;
            case 1:
@@ -83,6 +85,8 @@ public class BotM  extends TelegramLongPollingBot {
                    u_destination=latitude+","+longitude;
                    list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
                  // routeBl.findAllDescriptionroute();
+                   int codigo=routeBl.findRoute(list_origin,list_destination);
+                   log.info(":3"+codigo);
                    String url="";
                    url=obtener_url(u_origin,u_destination);
                    String url_short= null;

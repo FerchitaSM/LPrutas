@@ -1,10 +1,12 @@
 package com.example.lp.domain;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
-
 @Entity
 @Table(name = "route", schema = "dbtest_lpbus2", catalog = "")
+
+
 public class RouteEntity {
     private int idRoute;
     private int routeStatus;

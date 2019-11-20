@@ -29,19 +29,6 @@ public class StopBl {
         this.stopRepository = stopRepository;
     }
 
-    public StopEntity findStopById(int id) {
-        Optional<StopEntity> optional = this.stopRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
-        } else {
-            throw new RuntimeException("Record cannot found for CpPerson with ID: " + id);
-        }
-    }
-
-    public List<StopEntity> findAllrouteInfo() {
-        List<StopEntity> ret = this.stopRepository.findAll();
-        return ret;
-    }
 
     public List<Integer> findAllNearbyLocationStop(String location) {
         List<StopEntity> all = this.stopRepository.findAll();

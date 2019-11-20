@@ -51,3 +51,6 @@ insert into `route` (`id_route`,`route_status`,`tx_host`,`tx_user`,`tx_date`,`ro
 insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_user`,`tx_host`,`tx_date`)values
 ('1','9','3','karen','localhost',now()),
 ('2','9','1','karen','localhost',now());
+insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_user`,`tx_host`,`tx_date`)values
+('3','9','7','karen','localhost',now()),
+('4','9','8','karen','localhost',now());
