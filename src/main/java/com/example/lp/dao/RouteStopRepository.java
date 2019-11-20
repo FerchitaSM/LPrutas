@@ -11,4 +11,5 @@ import java.util.List;
 public interface RouteStopRepository extends JpaRepository <RouteStopEntity,Integer> {
     List<RouteStopEntity> findRoute(int stopIdStop);
     List<RouteStopEntity> findRouteFinish(@Param("routeIdRoute") int idRouteStop,@Param("stopIdStop") int stopIdStop);
+
 }

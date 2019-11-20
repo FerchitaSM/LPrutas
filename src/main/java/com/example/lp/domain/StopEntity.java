@@ -5,6 +5,12 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "stop", schema = "dbtest_lpbus2", catalog = "")
+@NamedQueries({
+        @NamedQuery(name = "StopEntity.findPointsRoute", query = "SELECT a FROM RouteStopEntity c,StopEntity a WHERE c.routeIdRoute = :routeIdRoute and a.idStop = c.stopIdStop"),
+        @NamedQuery(name = "StopEntity.findStartPosition", query = "SELECT a FROM RouteEntity c,StopEntity a WHERE c.stopStart = a.idStop and c.idRoute = :idRoute"),
+        @NamedQuery(name = "StopEntity.findFinishPosition", query = "SELECT a FROM RouteEntity c,StopEntity a WHERE c.stopFinish = a.idStop and c.idRoute =: idRoute"),
+
+})
 public class StopEntity {
     private int idStop;
     private int stopStatus;

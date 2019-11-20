@@ -23,7 +23,6 @@ public class BotM  extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(BotM.class);
     List<Integer> list_origin=new ArrayList<>();
     List<Integer> list_destination=new ArrayList<>();
-    private static final String tinyUrl = "http://tinyurl.com/api-create.php?url=";
     private static int conversacion=0;
     private static String mensaje="";
     private static String u_origin="";
@@ -84,19 +83,16 @@ public class BotM  extends TelegramLongPollingBot {
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
                    u_destination=latitude+","+longitude;
                    list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
-                 // routeBl.findAllDescriptionroute();
                    int codigo=routeBl.findRoute(list_origin,list_destination);
                    log.info(":3"+codigo);
-                   String url="";
-                   url=obtener_url(u_origin,u_destination);
-                   String url_short= null;
+                   String url= null;
                    try {
-                       url_short = shorter(url);
+                       url = routeBl.drawMap(codigo);
                    } catch (IOException e) {
                        e.printStackTrace();
                    }
                    mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
-                   mensaje=mensaje+url_short;
+                   mensaje=mensaje+url;
                    conversacion=0;
 
 
@@ -106,17 +102,6 @@ public class BotM  extends TelegramLongPollingBot {
                }
                break;
        }
-    }
-    public String obtener_url(String origin,String destination){
-        String url="";
-        url="https://www.google.com/maps/dir/?api=1&origin=+"+origin+"&destination="+destination+"&travelmode=driving";
-        return url;
-    }
-    public static String shorter(String url) throws IOException {
-        String tinyUrlLookup = tinyUrl + url;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(tinyUrlLookup).openStream()));
-        String tinyUrl = reader.readLine();
-        return tinyUrl;
     }
     @Override
     public String getBotUsername() {

@@ -2,37 +2,36 @@ package com.example.lp.bl;
 
 import com.example.lp.dao.RouteRepository;
 import com.example.lp.dao.RouteStopRepository;
+import com.example.lp.dao.StopRepository;
 import com.example.lp.domain.RouteEntity;
 import com.example.lp.domain.RouteStopEntity;
+import com.example.lp.domain.StopEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RouteBl {
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteBl.class);
-
+    private static final String tinyUrl = "http://tinyurl.com/api-create.php?url=";
     private RouteRepository routeRepository;
     private RouteStopRepository routeStopRepository;
+    private StopRepository stopRepository;
 
 
     @Autowired
-    public RouteBl( RouteRepository routeRepository,RouteStopRepository routeStopRepository) {
+    public RouteBl( RouteRepository routeRepository,RouteStopRepository routeStopRepository,StopRepository stopRepository) {
         this.routeRepository = routeRepository;
         this.routeStopRepository=routeStopRepository;
-    }
-
-    public void findAllroute() {
-        List<RouteStopEntity> all = this.routeStopRepository.findRouteFinish(9,3);
-        LOGGER.info("LLEGUEEEEEEEEEEEEEEE 1");
-        for (RouteStopEntity x: all) {
-            LOGGER.info("llegueeeeeeeeeee 2 ");
-            //LOGGER.info("id route"+x.getIdRoute());
-            LOGGER.info("La ruta "+x.getRouteIdRoute()+" Stop "+x.getStopIdStop()+"");
-        }
+        this.stopRepository=stopRepository;
     }
 
     public int findRoute(List<Integer> start_points, List<Integer> finish_points){
@@ -56,34 +55,52 @@ public class RouteBl {
         }
         return route;
     }
-
-
-
-    public void findAllDescriptionroute() {
-        List<RouteEntity> all = this.routeRepository.findAll();
-        //List<String> ret = new ArrayList<>();
-        for (RouteEntity x: all) {
-            //LOGGER.info("id route"+x.getIdRoute());
-           // LOGGER.info("START+ "+x.getStopStart()+"  FINISH "+x.getStopFinish());
-        }
+    public String drawMap(int route) throws IOException {
+        List<String> coordinates=new ArrayList<>();
+            List<StopEntity> all = this.stopRepository.findPointsRoute(route);
+            for(StopEntity x:all){
+                float latitude= (float) x.getLatitude();
+                float longitude= (float) x.getLongitude();
+                coordinates.add(latitude+","+longitude);
+                LOGGER.info(latitude+","+longitude);
+            }
+        String url=get_url(route,coordinates);
+        String short_url=shorter(url);
+        return short_url;
     }
-  /*  public  List<String> findAllDescriptionroute() {
-        List<RouteEntity> all = this.routeRepository.findAll();
-        List<String> ret = new ArrayList<>();
-        for (RouteEntity x: all) {
-            ret.add(x.getRouteDetails());
+    public String origin_and_destin(int route){
+        String origin="";
+        List<StopEntity> all = this.stopRepository.findStartPosition(route);
+        for(StopEntity x:all){
+            origin=x.getLatitude()+","+x.getLongitude();
         }
-        return ret;
-    }
-    /*public int findIdTransportInfoByName(String name) {
-        int ret=0;
-        List<RouteEntity> list = this.routeRepository.findAll();
-        for ( RouteEntity x: list) {
-            if(x.getIdRoute().equals(name))
-                ret=x.get();
+        String destination="";
+        List<StopEntity> two_all = this.stopRepository.findFinishPosition(route);
+        for(StopEntity x:two_all){
+            destination=x.getLatitude()+","+x.getLongitude();
         }
-        return ret;
+        return origin+"/"+destination;
     }
-*/
 
+    public String get_url(int route,List<String> coordinates){
+        String waypoint="";
+        String ubication=origin_and_destin(route);
+        String points[]=ubication.split("/");
+        String origin=points[0];
+        String destination=points[1];
+        String url="https://www.google.com/maps/dir/?api=1&origin=+"+origin+"&destination="+destination+"&travelmode=driving&waypoints=";
+       // https://www.google.com/maps/dir/?api=1&origin=Paris,France&destination=Cherbourg,France&travelmode=driving&waypoints=Versailles,France%7CCaen,France%7CLe+Mans,France%7CChartres,France
+        for(int i=0;i<coordinates.size();i++){
+            String coordin=coordinates.get(i);
+            waypoint=waypoint+coordin+"%7C";
+        }
+        url=url+waypoint;
+        return url;
+    }
+    public String shorter(String url) throws IOException {
+        String tinyUrlLookup = tinyUrl + url;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(tinyUrlLookup).openStream()));
+        String tinyUrl = reader.readLine();
+        return tinyUrl;
+    }
 }
