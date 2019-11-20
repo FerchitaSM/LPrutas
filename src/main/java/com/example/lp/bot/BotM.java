@@ -21,21 +21,24 @@ import java.util.List;
 public class BotM  extends TelegramLongPollingBot {
 
     private static final Logger log = LoggerFactory.getLogger(BotM.class);
+    //Lista de paradas cercanas al origen
     List<Integer> list_origin=new ArrayList<>();
+    //Lista de paradas cercanas al destino
     List<Integer> list_destination=new ArrayList<>();
-    private static int conversacion=0;
+    //punto en el que se encuentra la conversacion
+    private static int point_conversation=0;
+    //mensaje a enviar al usuario
     private static String mensaje="";
     private static String u_origin="";
     private static String u_destination="";
+
     StopBl stopBl;
     RouteBl routeBl;
-    RouteStopRepository routeStopRepository;
 
     @Autowired
-    public BotM(StopBl stopBl,RouteBl routeBl,RouteStopRepository routeStopRepository) {
+    public BotM(StopBl stopBl,RouteBl routeBl) {
         this.stopBl=stopBl;
         this.routeBl=routeBl;
-        this.routeStopRepository=routeStopRepository;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class BotM  extends TelegramLongPollingBot {
             SendMessage message=new SendMessage();
             long chat_id = update.getMessage().getChatId();
             message.setChatId(chat_id);
-            respuesta(conversacion,update);
+            respuesta(point_conversation,update);
             message.setText(mensaje);
             try {
                 log.info("mensaje enviado");
@@ -61,43 +64,47 @@ public class BotM  extends TelegramLongPollingBot {
        switch (conversation) {
            case 0:
                mensaje="Envia tu ubicacion";
-               conversacion=1;
+               point_conversation=1;
                break;
            case 1:
                if(update.getMessage().hasLocation()){
                    mensaje="";
+                   //Se obtiene la latitud y longitud del usuario
                    String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
                    u_origin=latitude+","+longitude;
+                   //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
                    list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
                    mensaje="Envia la ubicacion a donde quieres llegar";
-                   conversacion=2;
+                   point_conversation=2;
                }else{
-                   conversacion=0;
+                   point_conversation=0;
                    break;
                }
                break;
            case 2:
                if(update.getMessage().hasLocation()){
+                   //Obteniendo la ubicacion del lugar al que el usuario quiere llegar
                    String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
                    u_destination=latitude+","+longitude;
+                   //Obteniendo los puntos mas cercanos a mi destino
                    list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+                   //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
                    int codigo=routeBl.findRoute(list_origin,list_destination);
-                   log.info(":3"+codigo);
+                   //Generando la url (dibujando el mapa que se enviara)
                    String url= null;
                    try {
                        url = routeBl.drawMap(codigo);
                    } catch (IOException e) {
                        e.printStackTrace();
                    }
+                   //Devolviendo la url corta
                    mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
                    mensaje=mensaje+url;
-                   conversacion=0;
-
-
+                   point_conversation=0;
                }else{
-                   conversacion=0;
+                   point_conversation=0;
                    break;
                }
                break;
@@ -106,7 +113,6 @@ public class BotM  extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return "pruebaRLP_bot";
-        //return "Rutas_La_Paz_Bot";
     }
 
     @Override

@@ -20,7 +20,6 @@ public class BotInicializator  {
     TransportInfoBl transportInfoBl;
     StopBl stopBl;
     RouteBl routeBl;
-    RouteStopRepository routeStopRepository;
     @Autowired
    /* public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl)
     {
@@ -39,10 +38,9 @@ public class BotInicializator  {
         this.routeBl=routeBl;
     }*/
     //Inicializacion Karen
-    public BotInicializator(StopBl stopBl, RouteBl routeBl, RouteStopRepository routeStopRepository) {
+    public BotInicializator(StopBl stopBl, RouteBl routeBl) {
         this.stopBl = stopBl;
         this.routeBl=routeBl;
-        this.routeStopRepository=routeStopRepository;
     }
     @PostConstruct
    public void levantando_bot() {
@@ -52,7 +50,7 @@ public class BotInicializator  {
            //telegramBotsApi.registerBot(new BotMain(botBl));
            //Inicializacion Fer
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl));
-           telegramBotsApi.registerBot(new BotM(stopBl,routeBl,routeStopRepository));
+           telegramBotsApi.registerBot(new BotM(stopBl,routeBl));
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");

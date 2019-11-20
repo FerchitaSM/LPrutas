@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StopBl {
@@ -31,6 +30,7 @@ public class StopBl {
 
 
     public List<Integer> findAllNearbyLocationStop(String location) {
+        //Se obtiene todas las paradas para luego compararlas con la posicion enviada
         List<StopEntity> all = this.stopRepository.findAll();
         Boolean flag=false;
         List<Integer> stop_distance = new ArrayList<>();
@@ -45,6 +45,7 @@ public class StopBl {
         }
         return stop_distance;
     }
+    //Funcion que calcula la distancia
     public boolean CalculateDistance(String location,String nearby_location){
         Boolean flag=false;
         //aca se obtiene la ubicacion de origen y destino de los datos entrantes
