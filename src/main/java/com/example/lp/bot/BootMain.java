@@ -162,6 +162,7 @@ public class BootMain extends TelegramLongPollingBot {
                     list_destination=llenar_lista(u_destination);//Obteniendo los puntos mas cercanos a mi destino
                     mensaje=mandar_url_dibujo(list_origin, list_destination);
                     point_conversation=0;
+                    menu= true;
                 }else{
                     point_conversation=0;
                     break;

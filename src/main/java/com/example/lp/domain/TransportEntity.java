@@ -65,7 +65,6 @@ public class TransportEntity {
         this.txDate = txDate;
     }
 
-
     @Basic
     @Column(name = "description", nullable = false, length = 200)
     public String getDescription() {
@@ -74,34 +73,6 @@ public class TransportEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TransportEntity that = (TransportEntity) o;
-
-        if (idTransport != that.idTransport) return false;
-        if (transportStatus != that.transportStatus) return false;
-        if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
-        if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
-        if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = idTransport;
-        result = 31 * result + transportStatus;
-        result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
-        result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
-        result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
     }
 
     @Basic
@@ -122,5 +93,37 @@ public class TransportEntity {
 
     public void setRouteImage(String routeImage) {
         this.routeImage = routeImage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TransportEntity that = (TransportEntity) o;
+
+        if (idTransport != that.idTransport) return false;
+        if (transportStatus != that.transportStatus) return false;
+        if (transportInfoIdTransportInfo != that.transportInfoIdTransportInfo) return false;
+        if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
+        if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
+        if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (routeImage != null ? !routeImage.equals(that.routeImage) : that.routeImage != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = idTransport;
+        result = 31 * result + transportStatus;
+        result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
+        result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
+        result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + transportInfoIdTransportInfo;
+        result = 31 * result + (routeImage != null ? routeImage.hashCode() : 0);
+        return result;
     }
 }

@@ -18,16 +18,26 @@ public class BotInicializator  {
     TransportInfoBl transportInfoBl;
     StopBl stopBl;
     RouteBl routeBl;
+    UsersBl usersBl;
     @Autowired
-    /*
+/*
     //Inicializacion Fer
-    public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl) {
+    public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl) {
         this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
+        this.usersBl=usersBl;
 
-    }*/
+    }
+*/
+    public BotInicializator( UsersBl usersBl) {
+        this.usersBl=usersBl;
+
+    }
+
+
+
 
     /*//Inicializ
     public BotInicializator(BotBl botBl) {
@@ -40,12 +50,13 @@ public class BotInicializator  {
         this.stopBl = stopBl;
         this.routeBl=routeBl;
     }*/
-
+/*
     //Inicializacion Karen
     public BotInicializator(StopBl stopBl, RouteBl routeBl) {
         this.stopBl = stopBl;
         this.routeBl=routeBl;
     }
+    */
     @PostConstruct
    public void levantando_bot() {
        ApiContextInitializer.init();
@@ -53,9 +64,10 @@ public class BotInicializator  {
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl)); //Registro Usuario Nuevo Cavero
            //telegramBotsApi.registerBot(new BotMain(botBl)); //Nuevo Lucho
-           telegramBotsApi.registerBot(new BotM(stopBl,routeBl)); //Inicializacion Karen
+            //telegramBotsApi.registerBot(new BotM(stopBl,routeBl)); //Inicializacion Karen
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl,stopBl,routeBl)); //Inicializacion Fer
-           //log.info("Bot levantado");
+           telegramBotsApi.registerBot(new BootUsuarios(usersBl));
+           log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");
            e.printStackTrace();
