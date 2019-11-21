@@ -46,6 +46,7 @@ public class TransportInfoBl {
         }
         return ret;
     }
+
     public int findIdTransportInfoByName(String name) {
         int ret=0;
         List<TransportInfoEntity> list = this.transportInfoRepository.findAll();
