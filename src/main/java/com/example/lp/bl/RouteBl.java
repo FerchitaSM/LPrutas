@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 public class RouteBl {
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteBl.class);
-    private static final String tinyUrl = "http://tinyurl.com/api-create.php?url=";
     private RouteRepository routeRepository;
     private RouteStopRepository routeStopRepository;
     private StopRepository stopRepository;
@@ -104,9 +103,10 @@ public class RouteBl {
     }
     //Al obtener la url de inicio se la acorta
     public String shorter(String url) throws IOException {
+        String tinyUrl = "http://tinyurl.com/api-create.php?url=";
         String tinyUrlLookup = tinyUrl + url;
         BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(tinyUrlLookup).openStream()));
-        String tinyUrl = reader.readLine();
+        tinyUrl = reader.readLine();
         return tinyUrl;
     }
     //Se genera la lista de rutas intermedias con la ruta enviada

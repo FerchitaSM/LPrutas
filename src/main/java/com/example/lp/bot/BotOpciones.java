@@ -26,7 +26,6 @@ public class BotOpciones {
 
     public List<String> lista_opciones ()
     {
-
         List<String> listasTransportInfo =transportInfoBl.findAllDescriptiontransportInfo();
         List<String> listasTransport  =transportBl.findAllDescriptiontransport();
 

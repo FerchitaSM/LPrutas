@@ -52,10 +52,10 @@ public class BotInicializator  {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl)); //Registro Usuario Nuevo Cavero
-           telegramBotsApi.registerBot(new BotMain(botBl)); //Nuevo Lucho
-           //telegramBotsApi.registerBot(new BotM(stopBl,routeBl)); //Inicializacion Karen
+           //telegramBotsApi.registerBot(new BotMain(botBl)); //Nuevo Lucho
+           telegramBotsApi.registerBot(new BotM(stopBl,routeBl)); //Inicializacion Karen
            //telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl,stopBl,routeBl)); //Inicializacion Fer
-           log.info("Bot levantado");
+           //log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");
            e.printStackTrace();

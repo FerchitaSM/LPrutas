@@ -141,7 +141,6 @@ public class BootMain extends TelegramLongPollingBot {
         String mensaje="Envia tu ubicacion";
         List<Integer> list_origin=new ArrayList<>();//Lista de paradas cercanas al origen
         List<Integer> list_destination=new ArrayList<>();//Lista de paradas cercanas al destino
-
         switch (conversation) {
             case 0:
                 point_conversation=1;
@@ -198,7 +197,7 @@ public class BootMain extends TelegramLongPollingBot {
 
     private List<Integer> llenar_lista(String ubicacion ){
         List<Integer> retorno =new ArrayList<>();
-        retorno=stopBl.findAllNearbyLocationStop(ubicacion);//Obteniendo los puntos mas cercanos a mi destino
+       // retorno=stopBl.findAllNearbyLocationStop(ubicacion);//Obteniendo los puntos mas cercanos a mi destino
         return retorno;
     }
 
