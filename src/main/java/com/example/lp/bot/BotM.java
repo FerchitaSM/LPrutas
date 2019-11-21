@@ -118,9 +118,8 @@ public class BotM  extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
-        //return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo
-        //992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4
+        //return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
+        return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
         // creence su chat bot para que podamos correr en conjunto si
 
     }
