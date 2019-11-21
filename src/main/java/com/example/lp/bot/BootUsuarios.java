@@ -1,17 +1,19 @@
 package com.example.lp.bot;
 
 
-import com.example.lp.bl.RouteBl;
-import com.example.lp.bl.StopBl;
 import com.example.lp.bl.UsersBl;
-import com.example.lp.dto.User;
+import com.example.lp.domain.UsersEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BootUsuarios extends TelegramLongPollingBot {
 
@@ -46,14 +48,16 @@ public class BootUsuarios extends TelegramLongPollingBot {
     private String responder(Update update) {
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         if(usersBl.existingUser(chat_id)){
-
-            return "te conozco";
+            UsersEntity usersEntity = usersBl.findUserById(chat_id);
+            List<String> chatResponse= new ArrayList<>();
+            int km=0;
+            usersBl.continueWhitUser(update, chatResponse , km);
+            return "te conozco x"+chatResponse.get(chatResponse.size()-1);
         }else {
-            String name=  update.getMessage().getFrom().getFirstName();
-            User user = new User(chat_id,name);
-            usersBl.registrerUser(user);
+            usersBl.registrerUser(update.getMessage().getFrom());
             return "no te conozco";
         }
+
 
     }
 

@@ -20,7 +20,6 @@ public class BotInicializator  {
     RouteBl routeBl;
     UsersBl usersBl;
     @Autowired
-/*
     //Inicializacion Fer
     public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl) {
         this.transportBl=transportBl;
@@ -30,14 +29,6 @@ public class BotInicializator  {
         this.usersBl=usersBl;
 
     }
-*/
-    public BotInicializator( UsersBl usersBl) {
-        this.usersBl=usersBl;
-
-    }
-
-
-
 
     /*//Inicializ
     public BotInicializator(BotBl botBl) {
