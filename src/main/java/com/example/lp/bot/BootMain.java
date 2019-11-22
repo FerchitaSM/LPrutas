@@ -1,7 +1,10 @@
 package com.example.lp.bot;
 
 import com.example.lp.bl.*;
+import com.example.lp.domain.UserChatEntity;
 import com.example.lp.domain.UsersEntity;
+import com.example.lp.dto.UserChatDto;
+import com.example.lp.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ public class BootMain extends TelegramLongPollingBot {
     StopBl stopBl;
     RouteBl routeBl;
 
+    UserChatDto userChatDto; //para la relacion de los puntos esto de abajo
     private static int point_conversation=0; //punto en el que se encuentra la conversacion
     boolean menu= true;
 
@@ -78,31 +82,23 @@ public class BootMain extends TelegramLongPollingBot {
 
     }
 
-    private String guardarEnviarMensajeEntrada(Update update) {
+    private UserChatDto guardarEnviarMensajeEntrada(Update update) {
         String ret="";
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
-        if(usersBl.existingUser(chat_id)){
-            UsersEntity usersEntity = usersBl.findUserById(chat_id);
-            List<String> chatResponse= new ArrayList<>();
-            usersBl.continueWhitUser(update, chatResponse);
-            ret= chatResponse.get(chatResponse.size()-1);
-        }else {
-            usersBl.registrerUser(update.getMessage().getFrom());
+        if(!usersBl.existingUser(chat_id)){
+            UserDto UserDto =  usersBl.registrerUser(update.getMessage().getFrom());
             ret= "Eres nuevo";
         }
-
-        if(ret==null){
-            ret="Buscar minibuses a mi destino";
-        }
-
-         return ret;
+        List<String> chatResponse= new ArrayList<>();
+        UserChatDto userChatDto = usersBl.continueWhitUser(update, chatResponse);
+         return userChatDto;
     }
 
     private ReplyKeyboard responderBotones(Update update ) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
-            String mensaje_entrada = guardarEnviarMensajeEntrada(update);
+            String mensaje_entrada = guardarEnviarMensajeEntrada(update).getInMessage();
             op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl);
             opciones = op.getRetornar();
             //lista con opciones
@@ -146,14 +142,15 @@ public class BootMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "pruebaRLP_bot";
+       // return "pruebaRLP_bot";
+        return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
-        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
-        //return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo
-        //992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4
+        //return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
+        return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+
 
     }
 
@@ -168,8 +165,7 @@ public class BootMain extends TelegramLongPollingBot {
                 break;
             case 1:
                 if(update.getMessage().hasLocation()){
-                    String u_origin=obteber_ubicacion(update);//Se obtiene la latitud y longitud del usuario
-                    list_origin=llenar_lista(u_origin);//Obteniendo una lista con los lugares mas cercanos a mi ubicacion
+                    list_origin=llenar_lista(obtener_latitud(update),obtener_longitud(update) );//Obteniendo los puntos mas cercanos a mi destino
                     mensaje="Envia la ubicacion a donde quieres llegar";
                     point_conversation=2;
                 }else{
@@ -179,8 +175,7 @@ public class BootMain extends TelegramLongPollingBot {
                 break;
             case 2:
                 if(update.getMessage().hasLocation()){
-                    String u_destination=obteber_ubicacion(update);//Obteniendo la ubicacion del lugar al que el usuario quiere llegar
-                    list_destination=llenar_lista(u_destination);//Obteniendo los puntos mas cercanos a mi destino
+                    list_destination=llenar_lista(obtener_latitud(update),obtener_longitud(update) );//Obteniendo los puntos mas cercanos a mi destino
                     mensaje=mandar_url_dibujo(list_origin, list_destination);
                     point_conversation=0;
                     menu= true;
@@ -193,12 +188,13 @@ public class BootMain extends TelegramLongPollingBot {
         return mensaje;
     }
 
-    private String obteber_ubicacion (Update update) {
-        String   ubicacion= "";
+    private String obtener_latitud (Update update) {
         String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
+        return latitude;
+    }
+    private String obtener_longitud (Update update) {
         String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
-        ubicacion =latitude+","+longitude;
-        return ubicacion;
+        return longitude;
     }
 
     private String mandar_url_dibujo(List<Integer> list_origin, List<Integer> list_destination  ) {
@@ -208,6 +204,7 @@ public class BootMain extends TelegramLongPollingBot {
         try {
             url = routeBl.drawMap(codigo);
         } catch (IOException e) {
+            log.info("ACA ESTA EL NULL EN LA LINEA 212");
             e.printStackTrace();
         }
         //Devolviendo la url corta
@@ -217,9 +214,13 @@ public class BootMain extends TelegramLongPollingBot {
 
     }
 
-    private List<Integer> llenar_lista(String ubicacion ){
+    private List<Integer> llenar_lista(String latitude, String longitude ){
         List<Integer> retorno =new ArrayList<>();
-       // retorno=stopBl.findAllNearbyLocationStop(ubicacion);//Obteniendo los puntos mas cercanos a mi destino
+        try {
+            retorno=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return retorno;
     }
 

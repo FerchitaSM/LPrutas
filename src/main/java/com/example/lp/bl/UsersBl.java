@@ -6,6 +6,7 @@ import com.example.lp.domain.TransportEntity;
 import com.example.lp.domain.UserChatEntity;
 import com.example.lp.domain.UsersEntity;
 import com.example.lp.dto.Status;
+import com.example.lp.dto.UserChatDto;
 import com.example.lp.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class UsersBl {
         }
     }
 
-    public UsersEntity registrerUser (User users) {
+    public UserDto registrerUser (User users) {
         Date sDate = getDate();
         UsersEntity usersEntity = new UsersEntity();
         usersEntity = new UsersEntity();
@@ -66,31 +67,36 @@ public class UsersBl {
         usersEntity.setTxDate(sDate);
         usersEntity.setUserName(users.getFirstName());
         usersRepository.save(usersEntity);
-        return usersEntity;
+        UserDto userDto = new UserDto(usersEntity);
+        return userDto;
     }
 
-    public void continueWhitUser (Update update, List<String> chatResponse){
+    public UserChatDto continueWhitUser (Update update, List<String> chatResponse){
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         UsersEntity usersEntity = findUserById(chat_id);
+
         UserChatEntity lastmessage =userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
         String response ="Inicio";
+
+        if( lastmessage!=null)
+            response = String.valueOf(lastmessage.getInMessage());
+
         Date sDate= getDate();
 
         UserChatEntity userChatEntity = new UserChatEntity();
         userChatEntity.setIdUser(usersEntity.getIdUser());
         userChatEntity.setInMessage(update.getMessage().getText());
-        userChatEntity.setOutMessage(response);
+        userChatEntity.setOutMessage(response); //TODO FALATA PONER EL DATO DE RESPUESTA
         userChatEntity.setMsgDate(sDate);
         userChatEntity.setTxUser(update.getMessage().getFrom().getId().toString());
         userChatEntity.setTxHost(update.getMessage().getChatId().toString());
         userChatEntity.setTxDate(sDate);
         // Guardamos en base dedatos
         userChatRepository.save(userChatEntity);
+        UserChatDto userChatDto = new UserChatDto(userChatEntity);
 
-        if( lastmessage!=null)
-            response = String.valueOf(lastmessage.getInMessage());
         chatResponse.add(userChatEntity.getInMessage());
-        //return chatResponse;
+        return userChatDto;
     }
 
 
