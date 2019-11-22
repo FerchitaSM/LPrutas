@@ -4,41 +4,36 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "stop", schema = "dbtest_lpbus2", catalog = "")
-@NamedQueries({
-        @NamedQuery(name = "StopEntity.findPointsRoute", query = "SELECT a FROM RouteStopEntity c,StopEntity a WHERE c.routeIdRoute = :routeIdRoute and a.idStop = c.stopIdStop"),
-        @NamedQuery(name = "StopEntity.findStartPosition", query = "SELECT a FROM RouteEntity c,StopEntity a WHERE c.stopStart = a.idStop and c.idRoute = :idRoute"),
-        @NamedQuery(name = "StopEntity.findFinishPosition", query = "SELECT a FROM RouteEntity c,StopEntity a WHERE c.stopFinish = a.idStop and c.idRoute =: idRoute"),
-
-})
-public class StopEntity {
-    private int idStop;
-    private int stopStatus;
+@Table(name = "user_address", schema = "dbtest_lpbus2", catalog = "")
+public class UserAddressEntity {
+    private int idUserAddress;
+    private int addressStatus;
     private String txHost;
     private String txUser;
     private Date txDate;
     private double latitude;
     private double longitude;
-    private String description;
+    private String addressName;
+    private int addressDescription;
 
     @Id
-    @Column(name = "id_stop")
-    public int getIdStop() {
-        return idStop;
+    @Column(name = "id_user_address")
+    public int getIdUserAddress() {
+        return idUserAddress;
     }
 
-    public void setIdStop(int idStop) {
-        this.idStop = idStop;
+    public void setIdUserAddress(int idUserAddress) {
+        this.idUserAddress = idUserAddress;
     }
 
     @Basic
-    @Column(name = "stop_status")
-    public int getStopStatus() {
-        return stopStatus;
+    @Column(name = "address_status")
+    public int getAddressStatus() {
+        return addressStatus;
     }
 
-    public void setStopStatus(int stopStatus) {
-        this.stopStatus = stopStatus;
+    public void setAddressStatus(int addressStatus) {
+        this.addressStatus = addressStatus;
     }
 
     @Basic
@@ -92,13 +87,23 @@ public class StopEntity {
     }
 
     @Basic
-    @Column(name = "description")
-    public String getDescription() {
-        return description;
+    @Column(name = "address_name")
+    public String getAddressName() {
+        return addressName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAddressName(String addressName) {
+        this.addressName = addressName;
+    }
+
+    @Basic
+    @Column(name = "address_description")
+    public int getAddressDescription() {
+        return addressDescription;
+    }
+
+    public void setAddressDescription(int addressDescription) {
+        this.addressDescription = addressDescription;
     }
 
     @Override
@@ -106,26 +111,25 @@ public class StopEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        StopEntity that = (StopEntity) o;
+        UserAddressEntity that = (UserAddressEntity) o;
 
-        if (idStop != that.idStop) return false;
-        if (stopStatus != that.stopStatus) return false;
+        if (idUserAddress != that.idUserAddress) return false;
+        if (addressStatus != that.addressStatus) return false;
         if (Double.compare(that.latitude, latitude) != 0) return false;
         if (Double.compare(that.longitude, longitude) != 0) return false;
+        if (addressDescription != that.addressDescription) return false;
         if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-
-        return true;
+        return addressName != null ? addressName.equals(that.addressName) : that.addressName == null;
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = idStop;
-        result = 31 * result + stopStatus;
+        result = idUserAddress;
+        result = 31 * result + addressStatus;
         result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
@@ -133,7 +137,8 @@ public class StopEntity {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(longitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (addressName != null ? addressName.hashCode() : 0);
+        result = 31 * result + addressDescription;
         return result;
     }
 }

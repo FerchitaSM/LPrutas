@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "transport", schema = "dbtest_lpbus2", catalog = "")
+@Table(name = "transport", schema = "lpbus_bot", catalog = "")
 public class TransportEntity {
     private int idTransport;
     private int transportStatus;
@@ -12,10 +12,11 @@ public class TransportEntity {
     private String txUser;
     private Date txDate;
     private String description;
+    private int transportInfoIdTransportInfo;
     private String routeImage;
 
     @Id
-    @Column(name = "id_transport")
+    @Column(name = "id_transport", nullable = false)
     public int getIdTransport() {
         return idTransport;
     }
@@ -25,7 +26,7 @@ public class TransportEntity {
     }
 
     @Basic
-    @Column(name = "transport_status")
+    @Column(name = "transport_status", nullable = false)
     public int getTransportStatus() {
         return transportStatus;
     }
@@ -35,7 +36,7 @@ public class TransportEntity {
     }
 
     @Basic
-    @Column(name = "tx_host")
+    @Column(name = "tx_host", nullable = false, length = 200)
     public String getTxHost() {
         return txHost;
     }
@@ -45,7 +46,7 @@ public class TransportEntity {
     }
 
     @Basic
-    @Column(name = "tx_user")
+    @Column(name = "tx_user", nullable = false, length = 200)
     public String getTxUser() {
         return txUser;
     }
@@ -55,7 +56,7 @@ public class TransportEntity {
     }
 
     @Basic
-    @Column(name = "tx_date")
+    @Column(name = "tx_date", nullable = false)
     public Date getTxDate() {
         return txDate;
     }
@@ -65,7 +66,7 @@ public class TransportEntity {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = false, length = 200)
     public String getDescription() {
         return description;
     }
@@ -75,7 +76,17 @@ public class TransportEntity {
     }
 
     @Basic
-    @Column(name = "route_image")
+    @Column(name = "transport_info_id_transport_info", nullable = false)
+    public int getTransportInfoIdTransportInfo() {
+        return transportInfoIdTransportInfo;
+    }
+
+    public void setTransportInfoIdTransportInfo(int transportInfoIdTransportInfo) {
+        this.transportInfoIdTransportInfo = transportInfoIdTransportInfo;
+    }
+
+    @Basic
+    @Column(name = "route_image", nullable = false, length = -1)
     public String getRouteImage() {
         return routeImage;
     }
@@ -93,6 +104,7 @@ public class TransportEntity {
 
         if (idTransport != that.idTransport) return false;
         if (transportStatus != that.transportStatus) return false;
+        if (transportInfoIdTransportInfo != that.transportInfoIdTransportInfo) return false;
         if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
@@ -110,6 +122,7 @@ public class TransportEntity {
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + transportInfoIdTransportInfo;
         result = 31 * result + (routeImage != null ? routeImage.hashCode() : 0);
         return result;
     }
