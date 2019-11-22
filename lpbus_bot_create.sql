@@ -113,6 +113,17 @@ CREATE TABLE exception (
     CONSTRAINT ride_data_pk PRIMARY KEY (id_exception)
 );
 
+
+CREATE TABLE user_type(
+    id_user_type int  NOT NULL auto_increment,
+    type varchar(400) NOT NULL,
+    token text NULL,
+    tx_user varchar(50)  NOT NULL,
+    tx_host varchar(100)  NOT NULL,
+    tx_date date  NOT NULL,
+    CONSTRAINT user_type_pk PRIMARY KEY (id_user_type) 
+);
+
 -- foreign keys
 -- Reference: ride_data_route (table: ride_data)
 ALTER TABLE ride_data ADD CONSTRAINT ride_data_route FOREIGN KEY ride_data_route (route_id_route)

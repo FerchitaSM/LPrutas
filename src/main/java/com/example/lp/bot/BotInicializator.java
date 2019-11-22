@@ -50,7 +50,9 @@ public class BotInicializator  {
     */
     @PostConstruct
    public void levantando_bot() {
-       ApiContextInitializer.init();
+
+
+        ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl)); //Registro Usuario Nuevo Cavero
