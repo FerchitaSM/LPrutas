@@ -81,46 +81,29 @@ CREATE TABLE transport_info (
     CONSTRAINT transport_info_pk PRIMARY KEY (id_transport_info)
 );
 
--- Table: user_address
-CREATE TABLE user_address (
-    id_user_address int NOT NULL auto_increment,
-    address_status int NOT NULL,
-    tx_host varchar(200) NOT NULL,
-    tx_user varchar(200) NOT NULL,
-    tx_date date NOT NULL,
-    latitude float NOT NULL,
-    longitude float NOT NULL,
-    address_name varchar(100) NOT NULL,
-    address_description int NOT NULL,
-    users_id_user int NOT NULL,
-    CONSTRAINT user_address_pk PRIMARY KEY (id_user_address)
-);
-
--- Table: user_info
-CREATE TABLE user_info (
-    id_user int NOT NULL auto_increment,
-    user_info_status int NOT NULL,
-    tx_host varchar(200) NOT NULL,
-    tx_user varchar(200) NOT NULL,
-    tx_date date NOT NULL,
-    first_name varchar(200) NOT NULL,
-    last_name varchar(200) NOT NULL,
-    phone_number int NOT NULL,
-    age int NOT NULL,
-    CONSTRAINT user_info_pk PRIMARY KEY (id_user)
-);
 
 -- Table: users
 CREATE TABLE users (
     id_user int NOT NULL auto_increment,
+    id_user_bot int NOT NULL,
     u_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
     user_name varchar(100) NOT NULL,
-    last_chat varchar(100) NOT NULL,
-    user_info_id_user int NOT NULL,
     CONSTRAINT users_pk PRIMARY KEY (id_user)
+);
+
+CREATE TABLE user_chat (
+    id_user_chat int  NOT NULL,
+    id_user int  NOT NULL,
+    in_message varchar(400)  NULL,
+    out_message varchar(400)  NULL,
+    msg_date date  NOT NULL,
+    tx_user varchar(50)  NOT NULL,
+    tx_host varchar(100)  NOT NULL,
+    tx_date date  NOT NULL,
+    CONSTRAINT user_chat_pk PRIMARY KEY (id_user_chat)
 );
 
 -- foreign keys
@@ -164,15 +147,11 @@ ALTER TABLE route ADD CONSTRAINT stop_start FOREIGN KEY stop_start (stop_start)
 ALTER TABLE transport ADD CONSTRAINT transport_transport_info FOREIGN KEY transport_transport_info (transport_info_id_transport_info)
     REFERENCES transport_info (id_transport_info);
 
--- Reference: user_address_users (table: user_address)
-ALTER TABLE user_address ADD CONSTRAINT user_address_users FOREIGN KEY user_address_users (users_id_user)
-    REFERENCES users (id_user);
+
 
 -- Reference: users_user_info (table: users)
-ALTER TABLE users ADD CONSTRAINT users_user_info FOREIGN KEY users_user_info (user_info_id_user)
-    REFERENCES user_info (id_user);
+ALTER TABLE user_chat ADD CONSTRAINT user_chat_users FOREIGN KEY user_chat_users (id_user)
+    REFERENCES users (id_user);
 
 -- End of file.
-
-
 
