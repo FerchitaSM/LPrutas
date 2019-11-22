@@ -1,12 +1,10 @@
 package com.example.lp.domain;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
+
 @Entity
 @Table(name = "route", schema = "dbtest_lpbus2", catalog = "")
-
-
 public class RouteEntity {
     private int idRoute;
     private int routeStatus;
@@ -14,8 +12,6 @@ public class RouteEntity {
     private String txUser;
     private Date txDate;
     private String routeDetails;
-    private int stopStart;
-    private int stopFinish;
 
     @Id
     @Column(name = "id_route")
@@ -77,25 +73,6 @@ public class RouteEntity {
         this.routeDetails = routeDetails;
     }
 
-    @Basic
-    @Column(name = "stop_start")
-    public int getStopStart() {
-        return stopStart;
-    }
-
-    public void setStopStart(int stopStart) {
-        this.stopStart = stopStart;
-    }
-
-    @Basic
-    @Column(name = "stop_finish")
-    public int getStopFinish() { return stopFinish; }
-
-    public void setStopFinish(int stopFinish) {
-        this.stopFinish = stopFinish;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -109,8 +86,6 @@ public class RouteEntity {
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
         if (routeDetails != null ? !routeDetails.equals(that.routeDetails) : that.routeDetails != null) return false;
-        if (stopStart != that.stopStart) return false;
-        if (stopFinish != that.stopFinish) return false;
 
         return true;
     }
@@ -123,8 +98,6 @@ public class RouteEntity {
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
         result = 31 * result + (routeDetails != null ? routeDetails.hashCode() : 0);
-        result = 31 * result + stopStart;
-        result = 31 * result + stopFinish;
         return result;
     }
 }

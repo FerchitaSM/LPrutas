@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "transport_info", schema = "lpbus_bot", catalog = "")
+@Table(name = "transport_info", schema = "dbtest_lpbus2", catalog = "")
 public class TransportInfoEntity {
     private int idTransportInfo;
     private String txHosts;
@@ -14,7 +14,7 @@ public class TransportInfoEntity {
     private String infoDescription;
 
     @Id
-    @Column(name = "id_transport_info", nullable = false)
+    @Column(name = "id_transport_info")
     public int getIdTransportInfo() {
         return idTransportInfo;
     }
@@ -24,7 +24,7 @@ public class TransportInfoEntity {
     }
 
     @Basic
-    @Column(name = "tx_hosts", nullable = false, length = 200)
+    @Column(name = "tx_hosts")
     public String getTxHosts() {
         return txHosts;
     }
@@ -34,7 +34,7 @@ public class TransportInfoEntity {
     }
 
     @Basic
-    @Column(name = "tx_user", nullable = false, length = 200)
+    @Column(name = "tx_user")
     public String getTxUser() {
         return txUser;
     }
@@ -44,7 +44,7 @@ public class TransportInfoEntity {
     }
 
     @Basic
-    @Column(name = "tx_date", nullable = false)
+    @Column(name = "tx_date")
     public Date getTxDate() {
         return txDate;
     }
@@ -54,7 +54,7 @@ public class TransportInfoEntity {
     }
 
     @Basic
-    @Column(name = "type", nullable = false)
+    @Column(name = "type")
     public int getType() {
         return type;
     }
@@ -64,7 +64,7 @@ public class TransportInfoEntity {
     }
 
     @Basic
-    @Column(name = "info_description", nullable = false, length = 200)
+    @Column(name = "info_description")
     public String getInfoDescription() {
         return infoDescription;
     }

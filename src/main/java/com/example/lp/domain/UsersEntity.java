@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "users", schema = "lpbus_bot", catalog = "")
+@Table(name = "users", schema = "dbtest_lpbus2", catalog = "")
 public class UsersEntity {
     private int idUser;
     private int idUserBot;
@@ -15,7 +15,7 @@ public class UsersEntity {
     private String userName;
 
     @Id
-    @Column(name = "id_user", nullable = false)
+    @Column(name = "id_user")
     public int getIdUser() {
         return idUser;
     }
@@ -25,7 +25,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "id_user_bot", nullable = false)
+    @Column(name = "id_user_bot")
     public int getIdUserBot() {
         return idUserBot;
     }
@@ -35,7 +35,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "u_status", nullable = false)
+    @Column(name = "u_status")
     public int getuStatus() {
         return uStatus;
     }
@@ -45,7 +45,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "tx_host", nullable = false, length = 200)
+    @Column(name = "tx_host")
     public String getTxHost() {
         return txHost;
     }
@@ -55,7 +55,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "tx_user", nullable = false, length = 200)
+    @Column(name = "tx_user")
     public String getTxUser() {
         return txUser;
     }
@@ -65,7 +65,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "tx_date", nullable = false)
+    @Column(name = "tx_date")
     public Date getTxDate() {
         return txDate;
     }
@@ -75,7 +75,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "user_name", nullable = false, length = 100)
+    @Column(name = "user_name")
     public String getUserName() {
         return userName;
     }

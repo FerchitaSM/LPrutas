@@ -4,10 +4,9 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "user_chat", schema = "lpbus_bot", catalog = "")
+@Table(name = "user_chat", schema = "dbtest_lpbus2", catalog = "")
 public class UserChatEntity {
     private int idUserChat;
-    private int idUser;
     private String inMessage;
     private String outMessage;
     private Date msgDate;
@@ -16,7 +15,7 @@ public class UserChatEntity {
     private Date txDate;
 
     @Id
-    @Column(name = "id_user_chat", nullable = false)
+    @Column(name = "id_user_chat")
     public int getIdUserChat() {
         return idUserChat;
     }
@@ -26,17 +25,7 @@ public class UserChatEntity {
     }
 
     @Basic
-    @Column(name = "id_user", nullable = false)
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    @Basic
-    @Column(name = "in_message", nullable = true, length = 400)
+    @Column(name = "in_message")
     public String getInMessage() {
         return inMessage;
     }
@@ -46,7 +35,7 @@ public class UserChatEntity {
     }
 
     @Basic
-    @Column(name = "out_message", nullable = true, length = 400)
+    @Column(name = "out_message")
     public String getOutMessage() {
         return outMessage;
     }
@@ -56,7 +45,7 @@ public class UserChatEntity {
     }
 
     @Basic
-    @Column(name = "msg_date", nullable = false)
+    @Column(name = "msg_date")
     public Date getMsgDate() {
         return msgDate;
     }
@@ -66,7 +55,7 @@ public class UserChatEntity {
     }
 
     @Basic
-    @Column(name = "tx_user", nullable = false, length = 50)
+    @Column(name = "tx_user")
     public String getTxUser() {
         return txUser;
     }
@@ -76,7 +65,7 @@ public class UserChatEntity {
     }
 
     @Basic
-    @Column(name = "tx_host", nullable = false, length = 100)
+    @Column(name = "tx_host")
     public String getTxHost() {
         return txHost;
     }
@@ -86,7 +75,7 @@ public class UserChatEntity {
     }
 
     @Basic
-    @Column(name = "tx_date", nullable = false)
+    @Column(name = "tx_date")
     public Date getTxDate() {
         return txDate;
     }
@@ -103,7 +92,6 @@ public class UserChatEntity {
         UserChatEntity that = (UserChatEntity) o;
 
         if (idUserChat != that.idUserChat) return false;
-        if (idUser != that.idUser) return false;
         if (inMessage != null ? !inMessage.equals(that.inMessage) : that.inMessage != null) return false;
         if (outMessage != null ? !outMessage.equals(that.outMessage) : that.outMessage != null) return false;
         if (msgDate != null ? !msgDate.equals(that.msgDate) : that.msgDate != null) return false;
@@ -117,7 +105,6 @@ public class UserChatEntity {
     @Override
     public int hashCode() {
         int result = idUserChat;
-        result = 31 * result + idUser;
         result = 31 * result + (inMessage != null ? inMessage.hashCode() : 0);
         result = 31 * result + (outMessage != null ? outMessage.hashCode() : 0);
         result = 31 * result + (msgDate != null ? msgDate.hashCode() : 0);
