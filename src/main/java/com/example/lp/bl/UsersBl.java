@@ -65,7 +65,7 @@ public class UsersBl {
         usersEntity.setTxHost("localhost");
         usersEntity.setTxUser("fer");
         usersEntity.setTxDate(sDate);
-        usersEntity.setUserName(users.getFirstName());
+        usersEntity.setUserName(users.getFirstName()+"_"+ users.getLastName());
         usersRepository.save(usersEntity);
         UserDto userDto = new UserDto(usersEntity);
         return userDto;

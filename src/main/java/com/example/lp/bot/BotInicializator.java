@@ -29,14 +29,14 @@ public class BotInicializator  {
         this.usersBl=usersBl;
 
     }
-
+/*
     //Inicializacion Lucho
     public BotInicializator(BotBl botBl,StopBl stopBl,RouteBl routeBl) {
         this.botBl = botBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
     }
-
+*/
 
 
     /*//Inicializ
@@ -72,7 +72,7 @@ public class BotInicializator  {
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl)); //Registro Usuario Nuevo Cavero
 
-           telegramBotsApi.registerBot(new BotMainLucho(botBl)); //Nuevo Lucho
+        //   telegramBotsApi.registerBot(new BotMainLucho(botBl)); //Nuevo Lucho
            //telegramBotsApi.registerBot(new BotM(stopBl,routeBl)); //Inicializacion Karen
            // telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl,stopBl,routeBl)); //Inicializacion Fer
 

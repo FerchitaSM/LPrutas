@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 public class BotMainLucho extends TelegramLongPollingBot {
 
     private static final Logger log = LoggerFactory.getLogger(BootMain.class);
@@ -173,7 +173,7 @@ public class BotMainLucho extends TelegramLongPollingBot {
 
     }
 
-    private List<Integer> llenar_lista(String ubicacion ){
+    private List<Integer> llenar_lista(String ubicacion ) throws IOException {
         List<Integer> retorno =new ArrayList<>();
         retorno=stopBl.findAllNearbyLocationStop(ubicacion);//Obteniendo los puntos mas cercanos a mi destino
         return retorno;
@@ -192,5 +192,5 @@ public class BotMainLucho extends TelegramLongPollingBot {
 
     }
 }
-
+*/
 
