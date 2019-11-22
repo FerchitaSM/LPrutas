@@ -75,7 +75,11 @@ public class BotM  extends TelegramLongPollingBot {
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
                    u_origin=latitude+","+longitude;
                    //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
-                   list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+                   try {
+                       list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
                    mensaje="Envia la ubicacion a donde quieres llegar";
                    point_conversation=2;
                }else{
@@ -90,7 +94,11 @@ public class BotM  extends TelegramLongPollingBot {
                    String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
                    u_destination=latitude+","+longitude;
                    //Obteniendo los puntos mas cercanos a mi destino
-                   list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+                   try {
+                       list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
                    //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
                    int codigo=routeBl.findRoute(list_origin,list_destination);
                    //Generando la url (dibujando el mapa que se enviara)
@@ -118,8 +126,9 @@ public class BotM  extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        //return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
-        return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
+        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
+
+       // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
         // creence su chat bot para que podamos correr en conjunto si
 
     }

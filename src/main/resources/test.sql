@@ -1,9 +1,9 @@
-/*
+
 INSERT INTO `transport_info` (`id_transport_info`, `tx_hosts`, `tx_user`, `tx_date`,`type`, `info_description`) VALUES
 ('0', 'loclahost', 'fer', '2019-11-15', '1',  'Puma Katari'),
 ('1', 'loclahost', 'fer', '2019-11-15', '1',  'Teleferico');
 
-*/
+
 INSERT INTO `transport` (`id_transport`, `transport_status`, `tx_host`, `tx_user`, `tx_date`, `description`, `transport_info_id_transport_info`, `route_image`) VALUES
 ('0', '1', 'localhost', 'fer', '2019-11-15', 'Inca Llojeta', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutaincallojeta.pdf'),
 ('1', '1', 'localhost', 'fer', '2019-11-15', 'Villa Salome', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutavillasalome.pdf'),
@@ -55,5 +55,4 @@ insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_us
 insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_user`,`tx_host`,`tx_date`)values
 ('3','9','7','karen','localhost',now()),
 ('4','9','8','karen','localhost',now());
-
 

@@ -2,7 +2,6 @@ package com.example.lp.bl;
 
 
 import com.example.lp.dao.TransportInfoRepository;
-import com.example.lp.domain.TransportEntity;
 import com.example.lp.domain.TransportInfoEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

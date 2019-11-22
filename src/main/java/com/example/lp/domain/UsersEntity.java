@@ -7,12 +7,12 @@ import java.sql.Date;
 @Table(name = "users", schema = "dbtest_lpbus2", catalog = "")
 public class UsersEntity {
     private int idUser;
+    private int idUserBot;
     private int uStatus;
     private String txHost;
     private String txUser;
     private Date txDate;
     private String userName;
-    private String lastChat;
 
     @Id
     @Column(name = "id_user")
@@ -22,6 +22,16 @@ public class UsersEntity {
 
     public void setIdUser(int idUser) {
         this.idUser = idUser;
+    }
+
+    @Basic
+    @Column(name = "id_user_bot")
+    public int getIdUserBot() {
+        return idUserBot;
+    }
+
+    public void setIdUserBot(int idUserBot) {
+        this.idUserBot = idUserBot;
     }
 
     @Basic
@@ -74,16 +84,6 @@ public class UsersEntity {
         this.userName = userName;
     }
 
-    @Basic
-    @Column(name = "last_chat")
-    public String getLastChat() {
-        return lastChat;
-    }
-
-    public void setLastChat(String lastChat) {
-        this.lastChat = lastChat;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,23 +92,25 @@ public class UsersEntity {
         UsersEntity that = (UsersEntity) o;
 
         if (idUser != that.idUser) return false;
+        if (idUserBot != that.idUserBot) return false;
         if (uStatus != that.uStatus) return false;
         if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
         if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
-        return lastChat != null ? lastChat.equals(that.lastChat) : that.lastChat == null;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = idUser;
+        result = 31 * result + idUserBot;
         result = 31 * result + uStatus;
         result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (lastChat != null ? lastChat.hashCode() : 0);
         return result;
     }
 }
