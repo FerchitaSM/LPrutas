@@ -36,7 +36,7 @@ public class UserChatEntity {
     }
 
     @Basic
-    @Column(name = "in_message", nullable = false, length = 400)
+    @Column(name = "in_message", nullable = true, length = 400)
     public String getInMessage() {
         return inMessage;
     }

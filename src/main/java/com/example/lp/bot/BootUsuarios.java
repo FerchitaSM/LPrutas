@@ -50,15 +50,12 @@ public class BootUsuarios extends TelegramLongPollingBot {
         if(usersBl.existingUser(chat_id)){
             UsersEntity usersEntity = usersBl.findUserById(chat_id);
             List<String> chatResponse= new ArrayList<>();
-            int km=0;
-            usersBl.continueWhitUser(update, chatResponse , km);
-            return "te conozco x"+chatResponse.get(chatResponse.size()-1);
+            usersBl.continueWhitUser(update, chatResponse);
+            return chatResponse.get(chatResponse.size()-1);
         }else {
             usersBl.registrerUser(update.getMessage().getFrom());
-            return "no te conozco";
+            return "Eres nuevo";
         }
-
-
     }
 
 

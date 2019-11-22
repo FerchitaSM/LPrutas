@@ -1,9 +1,7 @@
 package com.example.lp.bot;
 
-import com.example.lp.bl.RouteBl;
-import com.example.lp.bl.StopBl;
-import com.example.lp.bl.TransportBl;
-import com.example.lp.bl.TransportInfoBl;
+import com.example.lp.bl.*;
+import com.example.lp.domain.UsersEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,7 @@ public class BootMain extends TelegramLongPollingBot {
     BotOpciones op; // para invocar a la clase opciones del bot
     List<String> opciones; // lista de opciones del menu
 
+    UsersBl usersBl;
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
     StopBl stopBl;
@@ -40,11 +39,12 @@ public class BootMain extends TelegramLongPollingBot {
 
 
     @Autowired
-    public BootMain(TransportBl transportBl, TransportInfoBl transportInfoBl, StopBl stopBl, RouteBl routeBl) {
-        this.transportBl =transportBl;
+    public BootMain(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl) {
+        this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
-        this.stopBl=stopBl;
+        this.stopBl = stopBl;
         this.routeBl=routeBl;
+        this.usersBl=usersBl;
     }
 
     @Override
@@ -62,9 +62,11 @@ public class BootMain extends TelegramLongPollingBot {
         if(opciones.size()==0) {
             ReplyKeyboardRemove keyboardMarkupRemove = new ReplyKeyboardRemove();
             message.setReplyMarkup(keyboardMarkupRemove);
-            menu= false;
         } // para borrar el menu
-
+        if(op.getMostrar()==null)
+            menu= false;
+        else
+            menu= true;
 
         try {
             this.execute(message);
@@ -76,13 +78,32 @@ public class BootMain extends TelegramLongPollingBot {
 
     }
 
+    private String guardarEnviarMensajeEntrada(Update update) {
+        String ret="";
+        int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
+        if(usersBl.existingUser(chat_id)){
+            UsersEntity usersEntity = usersBl.findUserById(chat_id);
+            List<String> chatResponse= new ArrayList<>();
+            usersBl.continueWhitUser(update, chatResponse);
+            ret= chatResponse.get(chatResponse.size()-1);
+        }else {
+            usersBl.registrerUser(update.getMessage().getFrom());
+            ret= "Eres nuevo";
+        }
+
+        if(ret==null){
+            ret="Buscar minibuses a mi destino";
+        }
+
+         return ret;
+    }
 
     private ReplyKeyboard responderBotones(Update update ) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
-            String call_data = update.getMessage().getText();
-            op = new BotOpciones(call_data, transportBl, transportInfoBl);
+            String mensaje_entrada = guardarEnviarMensajeEntrada(update);
+            op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl);
             opciones = op.getRetornar();
             //lista con opciones
             for (int i = 0; i < opciones.size(); i++) {

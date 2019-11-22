@@ -69,20 +69,13 @@ public class UsersBl {
         return usersEntity;
     }
 
-    public void continueWhitUser (Update update, List<String> chatResponse, int k){
+    public void continueWhitUser (Update update, List<String> chatResponse){
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         UsersEntity usersEntity = findUserById(chat_id);
         UserChatEntity lastmessage =userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
-        String response ="1";
+        String response ="Inicio";
         Date sDate= getDate();
-        if( lastmessage==null)
-        {
-            chatResponse.add(response);
-        }else {
-            int lastmessageInt = Integer.parseInt(lastmessage.getOutMessage())+1;
-            response = String.valueOf(lastmessageInt);
-            chatResponse.add(response);
-        }
+
         UserChatEntity userChatEntity = new UserChatEntity();
         userChatEntity.setIdUser(usersEntity.getIdUser());
         userChatEntity.setInMessage(update.getMessage().getText());
@@ -93,6 +86,10 @@ public class UsersBl {
         userChatEntity.setTxDate(sDate);
         // Guardamos en base dedatos
         userChatRepository.save(userChatEntity);
+
+        if( lastmessage!=null)
+            response = String.valueOf(lastmessage.getInMessage());
+        chatResponse.add(userChatEntity.getInMessage());
         //return chatResponse;
     }
 
