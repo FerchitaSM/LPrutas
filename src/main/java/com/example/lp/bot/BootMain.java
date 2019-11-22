@@ -99,7 +99,7 @@ public class BootMain extends TelegramLongPollingBot {
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
             String mensaje_entrada = guardarEnviarMensajeEntrada(update).getInMessage();
-            op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl);
+            op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl,usersBl);
             opciones = op.getRetornar();
             //lista con opciones
             for (int i = 0; i < opciones.size(); i++) {
@@ -142,14 +142,14 @@ public class BootMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-       // return "pruebaRLP_bot";
-        return "Rutas_La_Paz_Bot";
+       return "pruebaRLP_bot";
+       // return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
-        //return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
-        return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
+        //return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
 
 
     }

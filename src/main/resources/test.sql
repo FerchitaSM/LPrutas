@@ -1,3 +1,6 @@
+INSERT INTO `user_type` (`id_user_type`, `type`, `token`, `tx_user`, `tx_host`, `tx_date`) VALUES
+(NULL, 'Administrador', '992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4', 'fer', 'localhost', '2019-11-22'),
+(NULL, 'Usuario', NULL, 'fer', 'localhost', '2019-11-22');
 
 INSERT INTO `transport_info` (`id_transport_info`, `tx_hosts`, `tx_user`, `tx_date`,`type`, `info_description`) VALUES
 ('0', 'loclahost', 'fer', '2019-11-15', '1',  'Puma Katari'),

@@ -18,8 +18,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-
+import javax.transaction.Transactional;
 import java.security.SecureRandom;
+
+
+
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -119,36 +123,42 @@ public class UsersBl {
     }
 
     public UserTypeEntity getTypeAdministrador() {
-        UserTypeEntity userTypeEntity = this.userTypeTepository.findByType("administrador");
+        UserTypeEntity userTypeEntity = this.userTypeTepository.findByType("Administrador");
         return userTypeEntity;
     }
-
 
     public void changeTypeUser(UserDto userDto, String tokenUser) {
         UserTypeEntity userTypeEntity = getTypeAdministrador();
         if(tokenUser.equals(userTypeEntity.getToken())) {
             //cambiar a admi
-            String token = tokenGenerator();
-            userTypeEntity.setToken(token);
-            userTypeTepository.save(userTypeEntity);
+            changeToken(userTypeEntity);
             //Date.from(Instant.now());
         }else {
             // decir que no existe el token EXECPCION
         }
     }
 
+    @Transactional
+    public void changeToken(UserTypeEntity userTypeEntity) {
+        String token = tokenGenerator();
+        userTypeEntity.setToken(token);
+        userTypeTepository.delete(userTypeEntity);
+        userTypeTepository.save(userTypeEntity);
+
+    }
 
 
-
-
-
-
-        public String tokenGenerator (){
+    public String tokenGenerator (){
         String token = "";
         SecureRandom random = new SecureRandom();
-        byte bytes[] = new byte[256];
+        byte bytes[] = new byte[20];
         random.nextBytes(bytes);
-        token = bytes.toString();
+        try {
+            token = new String(bytes, "UTF-8"); // for UTF-8 encoding
+        } catch (UnsupportedEncodingException e) {
+            token = "0";
+            e.printStackTrace();
+        }
         return token;
     }
 

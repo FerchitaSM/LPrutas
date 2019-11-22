@@ -2,7 +2,10 @@ package com.example.lp.bot;
 
 import com.example.lp.bl.TransportBl;
 import com.example.lp.bl.TransportInfoBl;
+import com.example.lp.bl.UsersBl;
+import com.example.lp.domain.UserTypeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +18,14 @@ public class BotOpciones {
 
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
+    UsersBl usersBl;
 
     @Autowired
-    public BotOpciones(String call_data,TransportBl transportBl, TransportInfoBl transportInfoBl) {
+    public BotOpciones(String call_data,TransportBl transportBl, TransportInfoBl transportInfoBl, UsersBl usersBl) {
         this.call_data = call_data;
         this.transportBl=transportBl;
         this.transportInfoBl= transportInfoBl;
+        this.usersBl=usersBl;
         lista_opciones();
     }
 
@@ -50,6 +55,9 @@ public class BotOpciones {
 
         if(retornar.size()==0 && mostrar.size()==00) {
             switch (getCall_data()) {
+                case "Token":
+                    sacar_token();
+                    break;
                 case "Buscar la ruta de una linea":
                     sacar_TransporteInfo();
                     break;
@@ -67,6 +75,11 @@ public class BotOpciones {
         return retornar;
     }
 
+    private void sacar_token() {
+        UserTypeEntity userTypeEntity = usersBl.getTypeAdministrador();
+        retornar.add(userTypeEntity.getToken());
+    }
+
 
     public String getCall_data() {
         return call_data;
@@ -80,14 +93,13 @@ public class BotOpciones {
     }
 
 
-    private String sacar_preguntas() {
+    private void sacar_preguntas() {
         String respuesta= "Debes sacar la respuesta de la BD";
         //AQUI SACAS LA RESPUESTA
         // en el bl de excepciones haces un metodo buscar por question y devuelves la respuesta
         // es como la funcion  sacar_TransporteInfo();
         //retornar =exceptionBl.findAllQuestionMessage();
         retornar.add("lllllllllll");
-        return respuesta;
     }
 
 
