@@ -95,7 +95,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE user_chat (
-    id_user_chat int  NOT NULL,
+    id_user_chat int  NOT NULL auto_increment,
     id_user int  NOT NULL,
     in_message varchar(400)  NULL,
     out_message varchar(400)  NULL,
