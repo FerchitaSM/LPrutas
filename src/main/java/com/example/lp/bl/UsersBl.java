@@ -63,7 +63,7 @@ public class UsersBl {
         usersEntity.setIdUserBot(users.getId());
         usersEntity.setuStatus(Status.ACTIVE.getStatus());
         usersEntity.setTxHost("localhost");
-        usersEntity.setTxUser("fer");
+        usersEntity.setTxUser("admin");
         usersEntity.setTxDate(sDate);
         usersEntity.setUserName(users.getFirstName()+"_"+ users.getLastName());
         usersRepository.save(usersEntity);
@@ -86,7 +86,7 @@ public class UsersBl {
         UserChatEntity userChatEntity = new UserChatEntity();
         userChatEntity.setIdUser(usersEntity.getIdUser());
         userChatEntity.setInMessage(update.getMessage().getText());
-        userChatEntity.setOutMessage(response); //TODO FALATA PONER EL DATO DE RESPUESTA
+        userChatEntity.setOutMessage(response); //TODO FALTABA PONER EL DATO DE RESPUESTA
         userChatEntity.setMsgDate(sDate);
         userChatEntity.setTxUser(update.getMessage().getFrom().getId().toString());
         userChatEntity.setTxHost(update.getMessage().getChatId().toString());

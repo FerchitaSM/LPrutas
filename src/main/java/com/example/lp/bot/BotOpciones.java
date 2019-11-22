@@ -55,9 +55,12 @@ public class BotOpciones {
                     break;
                 case "Buscar minibuses a mi destino":
                     break;
+                case "Ayuda":
+                    break;
                 default:
                     retornar.add("Buscar la ruta de una linea");
                     retornar.add("Buscar minibuses a mi destino");
+                    retornar.add("Ayuda");
             }
         }
         return retornar;
