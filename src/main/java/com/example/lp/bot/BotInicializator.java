@@ -29,58 +29,35 @@ public class BotInicializator  {
         this.usersBl=usersBl;
 
     }
-/*
-    //Inicializacion Lucho
-    public BotInicializator(BotBl botBl,StopBl stopBl,RouteBl routeBl) {
-        this.botBl = botBl;
-        this.stopBl = stopBl;
-        this.routeBl=routeBl;
-    }
-*/
-
 
     /*//Inicializ
     public BotInicializator(BotBl botBl) {
-
         this.botBl = botBl;
-        this.stopBl = stopBl;
-        this.routeBl=routeBl;
-    }
-    /*
-    //Inicializacion Cavero
-    public BotInicializator(BotBl botBl,StopBl stopBl,RouteBl routeBl) {
-        this.botBl = botBl;
-        this.stopBl = stopBl;
-        this.routeBl=routeBl;
-
-    }
-*/
-
-/*
->>>>>>> 35080a3416357a20cbbe716ce2cb2f06c9798c2d
-    //Inicializacion Karen
-    /*public BotInicializator(StopBl stopBl, RouteBl routeBl) {
-        this.stopBl = stopBl;
-        this.routeBl=routeBl;
-<<<<<<< HEAD
     }*/
 
+    //Inicializacion Cavero
+   /* public BotInicializator(BotBl botBl,StopBl stopBl,RouteBl routeBl) {
+        this.botBl = botBl;
+        this.stopBl = stopBl;
+        this.routeBl=routeBl;
+    }*/
+/*
+    //Inicializacion Karen
+    public BotInicializator(StopBl stopBl, RouteBl routeBl) {
+        this.stopBl = stopBl;
+        this.routeBl=routeBl;
+    }
+    */
     @PostConstruct
    public void levantando_bot() {
        ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
            //telegramBotsApi.registerBot(new BotMain(botBl)); //Registro Usuario Nuevo Cavero
-
-        //   telegramBotsApi.registerBot(new BotMainLucho(botBl)); //Nuevo Lucho
-           //telegramBotsApi.registerBot(new BotM(stopBl,routeBl)); //Inicializacion Karen
-           // telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl,stopBl,routeBl)); //Inicializacion Fer
-
            //telegramBotsApi.registerBot(new BotMain(botBl)); //Nuevo Luch
            // telegramBotsApi.registerBot(new BotM(stopBl,routeBl)); //Inicializacion Karen
            telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl,stopBl,routeBl,usersBl)); //Inicializacion Fer
            //telegramBotsApi.registerBot(new BootUsuarios(usersBl));
-
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");

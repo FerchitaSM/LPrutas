@@ -37,11 +37,11 @@ public class BotMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "LP_Rutascc_bot";
+        return "LP_PRUEBALUIS_bot";
     }
     @Override
     public String getBotToken() {
-        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chat Grupo 1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0
+        return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chat Grupo 1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0
         //Luis 992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4
         // creence su chat bot para que podamos correr en conjunto si
 

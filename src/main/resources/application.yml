@@ -4,8 +4,8 @@ spring:
   datasource:
     plataform: MySQL
     url: jdbc:mysql://localhost:3306/lpbus_bot?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: fer
-    password: root
+    username: root
+    password:
   jpa:
     hibernate:
       ddl-auto: none

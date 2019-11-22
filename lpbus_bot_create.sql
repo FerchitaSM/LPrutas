@@ -106,6 +106,13 @@ CREATE TABLE user_chat (
     CONSTRAINT user_chat_pk PRIMARY KEY (id_user_chat)
 );
 
+CREATE TABLE exception (
+    id_exception int NOT NULL auto_increment,
+    question_message varchar(400) NOT NULL,
+    answer_message varchar(400) NOT NULL,
+    CONSTRAINT ride_data_pk PRIMARY KEY (id_exception)
+);
+
 -- foreign keys
 -- Reference: ride_data_route (table: ride_data)
 ALTER TABLE ride_data ADD CONSTRAINT ride_data_route FOREIGN KEY ride_data_route (route_id_route)

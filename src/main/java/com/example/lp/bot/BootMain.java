@@ -143,13 +143,13 @@ public class BootMain extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
        // return "pruebaRLP_bot";
-        return "LP_Rutascc_bot";
+        return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
         //return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
-        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chat Grupo
+        return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
 
 
     }

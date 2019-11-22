@@ -64,13 +64,21 @@ public class BotBl {
         java.util.Date uDate = new java.util.Date();
         java.sql.Date sDate = convertUtilToSql(uDate);
         if (usersEntity == null) {
+            UserInfoEntity userInfoEntity = new UserInfoEntity();
+            userInfoEntity.setUserInfoStatus(Status.ACTIVE.getStatus());
+            userInfoEntity.setFirstName(users.getFirstName());
+            userInfoEntity.setLastName(users.getLastName());
+            userInfoEntity.setTxHost("localhost");
+            userInfoEntity.setTxUser("admin");
+            userInfoEntity.setTxDate(sDate);
+            userInfoRepository.save(userInfoEntity);
             usersEntity = new UsersEntity();
-          //  usersEntity.setIdUserBot();
+            usersEntity.setUserName(users.getId().toString());
             usersEntity.setuStatus(Status.ACTIVE.getStatus());
             usersEntity.setTxHost("localhost");
             usersEntity.setTxUser("admin");
             usersEntity.setTxDate(sDate);
-          //  usersEntity.setUserName();
+            usersEntity.setUserName("xd");
             usersRepository.save(usersEntity);
             result = true;
         }

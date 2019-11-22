@@ -56,6 +56,7 @@ public class BotOpciones {
                 case "Buscar minibuses a mi destino":
                     break;
                 case "Ayuda":
+                    sacar_preguntas();
                     break;
                 default:
                     retornar.add("Buscar la ruta de una linea");
@@ -79,6 +80,15 @@ public class BotOpciones {
     }
 
 
+    private String sacar_preguntas() {
+        String respuesta= "Debes sacar la respuesta de la BD";
+        //AQUI SACAS LA RESPUESTA
+        // en el bl de excepciones haces un metodo buscar por question y devuelves la respuesta
+        // es como la funcion  sacar_TransporteInfo();
+        //retornar =exceptionBl.findAllQuestionMessage();
+        retornar.add("lllllllllll");
+        return respuesta;
+    }
 
 
     private void sacar_TransporteInfo(){
