@@ -1,7 +1,6 @@
 package com.example.lp.bot;
 
 import com.example.lp.bl.*;
-import com.example.lp.domain.UserChatEntity;
 import com.example.lp.domain.UsersEntity;
 import com.example.lp.dto.UserChatDto;
 import com.example.lp.dto.UserDto;
@@ -115,16 +114,25 @@ public class BootMain extends TelegramLongPollingBot {
     private String responderTexto(Update update) {
         String mensaje="Elige una opcion ";
 
-        List<String> mostrar = op.getMostrar();
-        if (mostrar.size() > 0)
-            mensaje = mandar_url_imagen(mostrar.get(0));
-
-        if(opciones.size()==0 && mostrar.size() == 0) {
-            //mensaje = "Debes enviarme tu lugar de origen atravez de google maps";
-            mensaje=respuesta(point_conversation, update);
+        String mostrar = op.getMostrar();
+        if (!mostrar.equals(""))
+        {
+            switch (mostrar) {
+                case "Karen":
+                    mensaje=respuesta(point_conversation, update);
+                    break;
+                case "Token":
+                    UsersEntity usersEntity =usersBl.findByIdUser(userChatDto.getIdUser());
+                    usersBl.changeTypeUser(usersEntity,"��H>u��ȟ�\u0018�%�a��D<U");
+                    break;
+                default:
+                    mensaje = mandar_url_imagen(mostrar);
+            }
         }
+
         return mensaje;
     }
+
 
     private String mandar_url_imagen(String ur) {
         String ret="";
@@ -137,8 +145,6 @@ public class BootMain extends TelegramLongPollingBot {
         return ret;
 
     }
-
-
 
     @Override
     public String getBotUsername() {

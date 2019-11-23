@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class BootUsuarios extends TelegramLongPollingBot {
     private String responder(Update update) {
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         if(usersBl.existingUser(chat_id)){
-            UsersEntity usersEntity = usersBl.findUserById(chat_id);
+            UsersEntity usersEntity = usersBl.findByIdUserBot(chat_id);
             List<String> chatResponse= new ArrayList<>();
             usersBl.continueWhitUser(update, chatResponse);
             return chatResponse.get(chatResponse.size()-1);

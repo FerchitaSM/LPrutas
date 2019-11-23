@@ -85,7 +85,8 @@ CREATE TABLE transport_info (
 -- Table: users
 CREATE TABLE users (
     id_user int NOT NULL auto_increment,
-    id_user_bot int NOT NULL,
+    id_user_type int NOT NULL,
+    id_token int NOT NULL,
     u_status int NOT NULL,
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
@@ -112,7 +113,6 @@ CREATE TABLE exception (
     answer_message varchar(400) NOT NULL,
     CONSTRAINT ride_data_pk PRIMARY KEY (id_exception)
 );
-
 
 CREATE TABLE user_type(
     id_user_type int  NOT NULL auto_increment,
@@ -165,11 +165,13 @@ ALTER TABLE route ADD CONSTRAINT stop_start FOREIGN KEY stop_start (stop_start)
 ALTER TABLE transport ADD CONSTRAINT transport_transport_info FOREIGN KEY transport_transport_info (transport_info_id_transport_info)
     REFERENCES transport_info (id_transport_info);
 
-
-
 -- Reference: users_user_info (table: users)
 ALTER TABLE user_chat ADD CONSTRAINT user_chat_users FOREIGN KEY user_chat_users (id_user)
     REFERENCES users (id_user);
+    
+    -- Reference: users_user_info (table: users)
+ALTER TABLE users ADD CONSTRAINT users_user_type FOREIGN KEY users_user_type (id_user_type)
+    REFERENCES user_type (id_user_type);
 
 -- End of file.
 

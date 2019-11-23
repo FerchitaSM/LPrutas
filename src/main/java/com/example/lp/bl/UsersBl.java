@@ -3,14 +3,12 @@ package com.example.lp.bl;
 import com.example.lp.dao.UserChatRepository;
 import com.example.lp.dao.UserTypeTepository;
 import com.example.lp.dao.UsersRepository;
-import com.example.lp.domain.TransportEntity;
 import com.example.lp.domain.UserChatEntity;
 import com.example.lp.domain.UserTypeEntity;
 import com.example.lp.domain.UsersEntity;
 import com.example.lp.dto.Status;
 import com.example.lp.dto.UserChatDto;
 import com.example.lp.dto.UserDto;
-import com.example.lp.dto.UserTypeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +23,7 @@ import java.security.SecureRandom;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsersBl {
@@ -50,7 +44,6 @@ public class UsersBl {
         boolean ret = false;
         List<UsersEntity> list = this.usersRepository.findAll();
         for (UsersEntity x : list) {
-            LOGGER.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!....................................................................");
             if (x.getIdUserBot() == (chat_id_bot))
                 ret = true;
         }
@@ -58,7 +51,18 @@ public class UsersBl {
     }
 
 
-    public UsersEntity findUserById(int id) {
+
+    public UsersEntity findByIdUser(int id) {
+        LOGGER.info("findByIdUser.........................");
+        UsersEntity usersEntity = this.usersRepository.findByIdUser(id);
+        if (usersEntity != null) {
+            return usersEntity;
+        } else {
+            throw new RuntimeException("Record cannot found for UsersEntity with ID: " + id);
+        }
+    }
+
+    public UsersEntity findByIdUserBot(int id) {
         UsersEntity usersEntity = this.usersRepository.findByIdUserBot(id);
         if (usersEntity != null) {
             return usersEntity;
@@ -84,7 +88,7 @@ public class UsersBl {
 
     public UserChatDto continueWhitUser(Update update, List<String> chatResponse) {
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
-        UsersEntity usersEntity = findUserById(chat_id);
+        UsersEntity usersEntity = findByIdUserBot(chat_id);
 
         UserChatEntity lastmessage = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
         String response = "Inicio";
@@ -127,10 +131,13 @@ public class UsersBl {
         return userTypeEntity;
     }
 
-    public void changeTypeUser(UserDto userDto, String tokenUser) {
+    @Transactional
+    public void changeTypeUser(UsersEntity usersEntity, String tokenUser) {
         UserTypeEntity userTypeEntity = getTypeAdministrador();
         if(tokenUser.equals(userTypeEntity.getToken())) {
-            //cambiar a admi
+            usersEntity.setIdUserType(0);
+            usersRepository.delete(usersEntity);
+            usersRepository.save(usersEntity);
             changeToken(userTypeEntity);
             //Date.from(Instant.now());
         }else {

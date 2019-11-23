@@ -14,7 +14,7 @@ public class BotOpciones {
 
     String call_data;
     List<String> retornar = new ArrayList();
-    List<String> mostrar = new ArrayList();
+    String mostrar ="";
 
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
@@ -48,21 +48,21 @@ public class BotOpciones {
         {
             if (listasTransport.get(i).equals(getCall_data()))
             {
-                mostrar.add(sacar_url(listasTransport.get(i)));
+                mostrar = (sacar_url(listasTransport.get(i)));
                 break;
             }
         }
 
-        if(retornar.size()==0 && mostrar.size()==00) {
+        if(retornar.size()==0 && mostrar.equals("")) {
             switch (getCall_data()) {
                 case "Token":
-                    sacar_token();
+                    mostrar=("Token");
                     break;
                 case "Buscar la ruta de una linea":
                     sacar_TransporteInfo();
                     break;
                 case "Buscar minibuses a mi destino":
-                    break;
+                    mostrar=("Karen");
                 case "Ayuda":
                     sacar_preguntas();
                     break;
@@ -75,11 +75,6 @@ public class BotOpciones {
         return retornar;
     }
 
-    private void sacar_token() {
-        UserTypeEntity userTypeEntity = usersBl.getTypeAdministrador();
-        retornar.add(userTypeEntity.getToken());
-    }
-
 
     public String getCall_data() {
         return call_data;
@@ -88,7 +83,7 @@ public class BotOpciones {
         return retornar;
     }
 
-    public List<String> getMostrar() {
+    public String getMostrar() {
         return mostrar;
     }
 

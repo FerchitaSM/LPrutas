@@ -8,6 +8,7 @@ import java.sql.Date;
 public class UsersEntity {
     private int idUser;
     private int idUserBot;
+    private int idUserType;
     private int uStatus;
     private String txHost;
     private String txUser;
@@ -32,6 +33,16 @@ public class UsersEntity {
 
     public void setIdUserBot(int idUserBot) {
         this.idUserBot = idUserBot;
+    }
+
+    @Basic
+    @Column(name = "id_user_type", nullable = false)
+    public int getIdUserType() {
+        return idUserType;
+    }
+
+    public void setIdUserType(int idUserType) {
+        this.idUserType = idUserType;
     }
 
     @Basic
@@ -93,6 +104,7 @@ public class UsersEntity {
 
         if (idUser != that.idUser) return false;
         if (idUserBot != that.idUserBot) return false;
+        if (idUserType != that.idUserType) return false;
         if (uStatus != that.uStatus) return false;
         if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
@@ -106,6 +118,7 @@ public class UsersEntity {
     public int hashCode() {
         int result = idUser;
         result = 31 * result + idUserBot;
+        result = 31 * result + idUserType;
         result = 31 * result + uStatus;
         result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
