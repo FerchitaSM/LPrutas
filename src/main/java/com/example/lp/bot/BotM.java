@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,11 +29,14 @@ public class BotM  extends TelegramLongPollingBot {
     //Lista de paradas cercanas al destino
     List<Integer> list_destination=new ArrayList<>();
     //punto en el que se encuentra la conversacion
-    private static int point_conversation=0;
+    //punto universal donde se encontraria la persona
+    private static String universal_point="0";
     //mensaje a enviar al usuario
-    private static String mensaje="";
+    private static String mensaje="HOLA";
     private static String u_origin="";
     private static String u_destination="";
+    private static int level_two=0;
+
 
     StopBl stopBl;
     RouteBl routeBl;
@@ -44,6 +50,29 @@ public class BotM  extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if(update.hasMessage()){
+            long chat_id = update.getMessage().getChatId();
+            SendMessage message = new SendMessage()// Create a message object object
+                    .setChatId(chat_id)
+                    .setText(mensaje);
+            procesandoMensaje(update);
+            punto(universal_point,update);
+           // ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+            // Creando el teclado inicial (list of keyboard rows)
+            /*List<KeyboardRow> keyboard_inicial = new ArrayList<>();
+            keyboard_inicial=point(point_conversation,update,mensaje);
+            keyboardMarkup.setKeyboard(keyboard_inicial);*/
+            // Add it to the message
+            //message.setReplyMarkup(keyboardMarkup);
+            message.setText(mensaje);
+           try {
+                execute(message); // Sending our message object to user
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+
+
+
+/*
             SendMessage message=new SendMessage();
             long chat_id = update.getMessage().getChatId();
             message.setChatId(chat_id);
@@ -55,13 +84,103 @@ public class BotM  extends TelegramLongPollingBot {
 
             } catch (TelegramApiException e) {
                 log.info("error");
-                e.printStackTrace();}
+                e.printStackTrace();}*/
         }
         }
+
+   public void punto(String conversacion,Update update){
+       switch (conversacion){
+           case "0":
+               mensaje="OPCIONES PARTE 1";
+               break;
+           case "1":
+               mensaje="LIN";
+               universal_point="0";
+               break;
+           case "2":
+               mensaje="ESCOGISTE MOV";
+               mensaje=mensaje+"Envia tu ubicacion";
+               universal_point="3";
+               break;
+           case "3":
+               mensaje="Envia tu destino";
+               universal_point="0";
+               break;
+           case "4":
+               universal_point="0";
+               break;
+           case "5":
+
+               break;
+       }
+      // return punto;
+   }
+  /* public int numero(Update update){
+       int numero=0;
+       if()
+       return numero;
+   }*/
+   public void procesandoMensaje(Update update){
+
+       if(update.getMessage().hasText()==true){
+           String m=update.getMessage().getText();
+           switch (m){
+               case "LIN":
+                   universal_point="1";
+                   break;
+               case "MOV":
+                   universal_point="2";
+                   break;
+               default:
+                   if((update.getMessage().getText()).equals("ubi") && universal_point=="2" || universal_point=="3"){
+                       log.info("EL MENSAJE ES ADMITIDO");
+                   }else{
+                       universal_point="0";
+                   }
+           }
+       }
+       if(update.getMessage().hasLocation()==true){
+           if((update.getMessage().hasLocation()) && universal_point=="2" || universal_point=="3"){
+               log.info("EL MENSAJE ES ADMITIDO");
+           }else{
+               universal_point="0";
+           }
+       }
+
+   }
+
+
+
+    public List<KeyboardRow> inicio(List<KeyboardRow> keyboard){
+        KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
+        // Set each button, you can also use KeyboardButton objects if you need something else than text
+        row.add("Buscar una línea específica");
+        keyboard.add(row);  //primera linea
+        row = new KeyboardRow();// Creando otra linea
+        row.add("Buscar movilidad a mi destino"); // segunda linea
+        keyboard.add(row);// Adicionando la segunda linea
+        row = new KeyboardRow();
+        row.add("Excepciones");
+        keyboard.add(row);
+        return keyboard;
+    }
+    public List<KeyboardRow> nivel_two(List<KeyboardRow> keyboard){
+        KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
+        // Set each button, you can also use KeyboardButton objects if you need something else than text
+        row.add("Buscar ");
+        keyboard.add(row);  //primera linea
+        row = new KeyboardRow();// Creando otra linea
+        row.add("Buscar movilidado"); // segunda linea
+        keyboard.add(row);// Adicionando la segunda linea
+        row = new KeyboardRow();
+        row.add("Excep");
+        keyboard.add(row);
+        return keyboard;
+    }
 
 
    // }
-   public void respuesta(int conversation, Update update) {
+   /*public void respuesta(int conversation, Update update) {
        switch (conversation) {
            case 0:
                mensaje="Envia tu ubicacion";
@@ -118,7 +237,7 @@ public class BotM  extends TelegramLongPollingBot {
                }
                break;
        }
-    }
+    }*/
     @Override
     public String getBotUsername() {
         return "pruebaRLP_bot";
@@ -126,7 +245,8 @@ public class BotM  extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
+        return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
+       // return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
 
        // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
         // creence su chat bot para que podamos correr en conjunto si

@@ -5,14 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.maps.DistanceMatrixApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,35 +30,39 @@ public class StopBl {
     }
 
     public List<Integer> findAllNearbyLocationStop(String location) throws IOException {
+        Integer contador=0;
         //Se obtiene todas las paradas para luego compararlas con la posicion enviada
         List<StopEntity> all = this.stopRepository.findAll();
         List<Integer> stop_distance = new ArrayList<>();
         String destinos="";
+        //En String destinos se almacena las coordenadas que se enviara al url
         for (StopEntity x: all) {
             String latitud=String.valueOf(x.getLatitude());
             String longitud= String.valueOf(x.getLongitude());
             destinos=destinos+latitud+","+longitud+"|";
         }
-        Integer contador=0;
+        //se lo envia a distancematrix y obtiene una lista con enteros de en que ubicacion se encuentran las locaciones cercanas
         List<Integer> locaciones=distancematrix(location,destinos);
         for(StopEntity y:all){
             for(int i=0;i<locaciones.size();i++){
                 if(contador == locaciones.get(i)){
+                    //se almacena en stop_distance los id`s de las paradas cercanas
                     stop_distance.add(y.getIdStop());
                 }
             }
             contador++;
         }
+        //se retorna la lista de paradas
         return stop_distance;
     }
     public List<Integer> distancematrix(String origen,String destinos) throws IOException {
-        String url="";
+        //se abre el contexto para construir la consulta
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyCW_1tL---epCMy6Wix2JrgNWcNjJfqmzg")
                 .build();
-        //se envia las coordenadas para calcular las distancias
         DistanceMatrix distancia= null;
         //LA URL ADMITE UNOS 100 DATOS ENTRANTES
+        // se envia la consulta con el origen y las paradas para medir la distancia
         try {
             distancia = DistanceMatrixApi.getDistanceMatrix(
                     context,
@@ -77,13 +78,13 @@ public class StopBl {
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println("Reading JSON file from Java program");
-        //Se busca en el JSON el datos de la duracion en segundos
         String contents = gson.toJson(distancia);
         ObjectMapper mapper=new ObjectMapper();
+        //se comienza a manejar el JSON por nodos para obtener el valor de la distancia
         JsonNode jsonNode=mapper.readTree(contents);
         JsonNode rows=jsonNode.path("rows");
         List<Integer> locaciones=new ArrayList<>();
-        //es para saber cual es la ubicacion del el destino en Drresee destination
+        //el contador sirve para saber en que locacion se encuentra las direcciones que tiene distancias menores a 30 minutos
         int contador=0;
         for(JsonNode node: rows){
             JsonNode elements=node.path("elements");
@@ -93,22 +94,14 @@ public class StopBl {
                 Double minutes=((double)tiempo)/60;
                 //Si la caminata del origen al destino es menor a 30 minutos se devuelve
                 if(minutes<30){
-                   // locaciones.add(1,"htrtfdfdg");
-                   // locaciones.add(jsonNode.get("destinationAddresses").get(contador).asText());
                     locaciones.add(contador);
-                    System.out.println(jsonNode.get("destinationAddresses").get(contador).asText());
                 }
                 contador++;
             }
         }
-
+        //se retorna la lista de posiciones en la que se encuentran las direcciones las cuales su distancia es menor a 30 minutos
         return locaciones;
     }
-    public void sqlygson(List<StopEntity> list, String json){
-
-    }
-
-
 
     /*
     public List<Integer> findAllNearbyLocationStop(String location) {
