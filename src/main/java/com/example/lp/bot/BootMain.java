@@ -53,7 +53,7 @@ public class BootMain extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         long chat_id = update.getMessage().getChatId(); //id del ususario
-
+        guardarEnviarMensajeEntrada( update);
         ReplyKeyboardMarkup respuesta_botones = (ReplyKeyboardMarkup) responderBotones(update); // para los botones
         String respuesta_texto=responderTexto(update); // parael texto
 
@@ -81,7 +81,7 @@ public class BootMain extends TelegramLongPollingBot {
 
     }
 
-    private UserChatDto guardarEnviarMensajeEntrada(Update update) {
+    private void guardarEnviarMensajeEntrada(Update update) {
         String ret="";
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         if(!usersBl.existingUser(chat_id)){
@@ -89,15 +89,14 @@ public class BootMain extends TelegramLongPollingBot {
             ret= "Eres nuevo";
         }
         List<String> chatResponse= new ArrayList<>();
-        UserChatDto userChatDto = usersBl.continueWhitUser(update, chatResponse);
-         return userChatDto;
+        userChatDto = usersBl.continueWhitUser(update, chatResponse);
     }
 
     private ReplyKeyboard responderBotones(Update update ) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
-            String mensaje_entrada = guardarEnviarMensajeEntrada(update).getInMessage();
+            String mensaje_entrada = userChatDto.getInMessage();
             op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl,usersBl);
             opciones = op.getRetornar();
             //lista con opciones

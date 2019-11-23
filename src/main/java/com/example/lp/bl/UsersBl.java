@@ -127,20 +127,24 @@ public class UsersBl {
     }
 
     public UserTypeEntity getTypeAdministrador() {
+        LOGGER.info("UserTypeEntity.........................");
         UserTypeEntity userTypeEntity = this.userTypeTepository.findByType("Administrador");
         return userTypeEntity;
     }
 
     @Transactional
     public void changeTypeUser(UsersEntity usersEntity, String tokenUser) {
+        LOGGER.info("changeTypeUser.........................");
         UserTypeEntity userTypeEntity = getTypeAdministrador();
+        LOGGER.info("getTypeAdministrador.........................");
         if(tokenUser.equals(userTypeEntity.getToken())) {
+            LOGGER.info("token accepted.........................");
             usersEntity.setIdUserType(0);
-            usersRepository.delete(usersEntity);
             usersRepository.save(usersEntity);
             changeToken(userTypeEntity);
             //Date.from(Instant.now());
         }else {
+            LOGGER.info("token denied.........................");
             // decir que no existe el token EXECPCION
         }
     }
