@@ -36,6 +36,7 @@ public class BootMain extends TelegramLongPollingBot {
     StopBl stopBl;
     RouteBl routeBl;
 
+
     UserChatDto userChatDto; //para la relacion de los puntos esto de abajo
     private static int point_conversation=0; //punto en el que se encuentra la conversacion
     boolean menu= true;
@@ -53,8 +54,8 @@ public class BootMain extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         long chat_id = update.getMessage().getChatId(); //id del ususario
-        guardarEnviarMensajeEntrada( update);
-        ReplyKeyboardMarkup respuesta_botones = (ReplyKeyboardMarkup) responderBotones(update); // para los botones
+        UserDto userDto = saveMessageAndUser( update);
+        ReplyKeyboardMarkup respuesta_botones = (ReplyKeyboardMarkup) responderBotones(userDto, update); // para los botones
         String respuesta_texto=responderTexto(update); // parael texto
 
         message
@@ -81,23 +82,28 @@ public class BootMain extends TelegramLongPollingBot {
 
     }
 
-    private void guardarEnviarMensajeEntrada(Update update) {
+    private UserDto saveMessageAndUser(Update update) {
         String ret="";
+        UsersEntity usersEntity= null;
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         if(!usersBl.existingUser(chat_id)){
-            UserDto UserDto =  usersBl.registrerUser(update.getMessage().getFrom());
+            usersEntity =  usersBl.registrerUser(update.getMessage().getFrom());
             ret= "Eres nuevo";
+        } else {
+            usersEntity =  usersBl.findByIdUserBot(update.getMessage().getFrom().getId());
         }
         List<String> chatResponse= new ArrayList<>();
         userChatDto = usersBl.continueWhitUser(update, chatResponse);
+        UserDto userDto = new UserDto(usersEntity);
+        return userDto;
     }
 
-    private ReplyKeyboard responderBotones(Update update ) {
+    private ReplyKeyboard responderBotones(UserDto userDto ,Update update ) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
             String mensaje_entrada = userChatDto.getInMessage();
-            op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl,usersBl);
+            op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl,usersBl,userDto);
             opciones = op.getRetornar();
             //lista con opciones
             for (int i = 0; i < opciones.size(); i++) {
@@ -120,16 +126,27 @@ public class BootMain extends TelegramLongPollingBot {
                 case "Karen":
                     mensaje=respuesta(point_conversation, update);
                     break;
-                case "Token":
-                    UsersEntity usersEntity =usersBl.findByIdUser(userChatDto.getIdUser());
-                    usersBl.changeTypeUser(usersEntity,"��H>u��ȟ�\u0018�%�a��D<U");
-                    break;
                 default:
-                    mensaje = mandar_url_imagen(mostrar);
+                    String token =usersBl.getTokenAdministrador();
+                    if(mostrar.equals(token)) {
+                        mensaje= cambioTipoUsuario(token);
+                        break;
+                    }else{
+                        mensaje = mandar_url_imagen(mostrar);
+                        break;}
             }
+
+
         }
 
         return mensaje;
+    }
+
+    private String cambioTipoUsuario(String token) {
+        String ret = "";
+        UsersEntity usersEntity =usersBl.findByIdUser(userChatDto.getIdUser());
+        ret= usersBl.changeTypeUser(usersEntity,token);
+        return ret;
     }
 
 
@@ -139,6 +156,7 @@ public class BootMain extends TelegramLongPollingBot {
             URL url = new URL(ur);
             ret = url + "\n";
         } catch (MalformedURLException e) {
+            ret = ur;
             e.printStackTrace();
         }
         return ret;

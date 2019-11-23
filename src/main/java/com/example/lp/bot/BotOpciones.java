@@ -4,6 +4,7 @@ import com.example.lp.bl.TransportBl;
 import com.example.lp.bl.TransportInfoBl;
 import com.example.lp.bl.UsersBl;
 import com.example.lp.domain.UserTypeEntity;
+import com.example.lp.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -19,18 +20,39 @@ public class BotOpciones {
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
     UsersBl usersBl;
+    UserDto userDto;
 
     @Autowired
-    public BotOpciones(String call_data,TransportBl transportBl, TransportInfoBl transportInfoBl, UsersBl usersBl) {
+    public BotOpciones(String call_data,TransportBl transportBl, TransportInfoBl transportInfoBl, UsersBl usersBl, UserDto userDto) {
         this.call_data = call_data;
         this.transportBl=transportBl;
         this.transportInfoBl= transportInfoBl;
         this.usersBl=usersBl;
+        this.userDto = userDto;
         lista_opciones();
     }
 
     public List<String> lista_opciones ()
     {
+        opcionesUsuario();
+        if(userDto.getIdUserType()==0) {// admi
+            opcionesadmi();
+        }
+        return retornar;
+    }
+
+    private void opcionesadmi() {
+        if ((getCall_data().equals("Altas")) || getCall_data().equals("Bajas") || getCall_data().equals("Modificaciones")){
+            mostrar = "Escriba lo siguiente: Nombre de la tabla / Atributo a cambiar / Nuevo dato";
+        }else{
+            retornar.add("Altas");
+            retornar.add("Bajas");
+            retornar.add("Modificaciones");
+        }
+
+    }
+
+    private void opcionesUsuario() {
         List<String> listasTransportInfo =transportInfoBl.findAllDescriptiontransportInfo();
         List<String> listasTransport  =transportBl.findAllDescriptiontransport();
 
@@ -55,9 +77,6 @@ public class BotOpciones {
 
         if(retornar.size()==0 && mostrar.equals("")) {
             switch (getCall_data()) {
-                case "Token":
-                    mostrar=("Token");
-                    break;
                 case "Buscar la ruta de una linea":
                     sacar_TransporteInfo();
                     break;
@@ -67,12 +86,23 @@ public class BotOpciones {
                     sacar_preguntas();
                     break;
                 default:
-                    retornar.add("Buscar la ruta de una linea");
-                    retornar.add("Buscar minibuses a mi destino");
-                    retornar.add("Ayuda");
+                    String token =usersBl.getTokenAdministrador();
+                    if(getCall_data().equals(token)){ //TODO AUNQUE SON IGUALES SALE FALSO
+                        mostrar= token;
+                        break;
+                    }else {
+                        retornar.add("Buscar la ruta de una linea");
+                        retornar.add("Buscar minibuses a mi destino");
+                        retornar.add("Ayuda");
+                        /*
+                        retornar.add(String.valueOf(getCall_data().equals(token)));
+                        retornar.add(getCall_data());
+                        retornar.add(token);
+                         */
+                        break;
+                    }
             }
         }
-        return retornar;
     }
 
 

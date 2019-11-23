@@ -71,19 +71,19 @@ public class UsersBl {
         }
     }
 
-    public UserDto registrerUser(User users) {
+    public UsersEntity registrerUser(User users) {
         Date sDate = getDate();
         UsersEntity usersEntity = new UsersEntity();
         usersEntity = new UsersEntity();
         usersEntity.setIdUserBot(users.getId());
+        usersEntity.setIdUserType(1);
         usersEntity.setuStatus(Status.ACTIVE.getStatus());
         usersEntity.setTxHost("localhost");
         usersEntity.setTxUser("fer");
         usersEntity.setTxDate(sDate);
         usersEntity.setUserName(users.getFirstName());
         usersRepository.save(usersEntity);
-        UserDto userDto = new UserDto(usersEntity);
-        return userDto;
+        return usersEntity;
     }
 
     public UserChatDto continueWhitUser(Update update, List<String> chatResponse) {
@@ -132,8 +132,16 @@ public class UsersBl {
         return userTypeEntity;
     }
 
+
+    public String getTokenAdministrador(){
+        String ret="";
+        UserTypeEntity userTypeEntity = getTypeAdministrador();
+        ret= userTypeEntity.getToken();
+        return ret;
+    }
     @Transactional
-    public void changeTypeUser(UsersEntity usersEntity, String tokenUser) {
+    public String changeTypeUser(UsersEntity usersEntity, String tokenUser) {
+        String ret="";
         LOGGER.info("changeTypeUser.........................");
         UserTypeEntity userTypeEntity = getTypeAdministrador();
         LOGGER.info("getTypeAdministrador.........................");
@@ -142,11 +150,13 @@ public class UsersBl {
             usersEntity.setIdUserType(0);
             usersRepository.save(usersEntity);
             changeToken(userTypeEntity);
+            ret="Usted ya es un administrador";
             //Date.from(Instant.now());
         }else {
             LOGGER.info("token denied.........................");
-            // decir que no existe el token EXECPCION
+            ret="El token ingresado es incorrecto intente nuevamente";
         }
+        return ret;
     }
 
     @Transactional
