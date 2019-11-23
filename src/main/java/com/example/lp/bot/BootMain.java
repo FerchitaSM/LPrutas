@@ -126,6 +126,9 @@ public class BootMain extends TelegramLongPollingBot {
                 case "Karen":
                     mensaje=respuesta(point_conversation, update);
                     break;
+                case "Escriba lo siguiente: Nombre de la tabla / Atributo a cambiar / Nuevo dato":
+                    mensaje= "Escriba lo siguiente: Nombre de la tabla / Atributo a cambiar / Nuevo dato";
+                    break;
                 default:
                     String token =usersBl.getTokenAdministrador();
                     if(mostrar.equals(token)) {

@@ -32,13 +32,13 @@ public class BotOpciones {
         lista_opciones();
     }
 
-    public List<String> lista_opciones ()
+    public void lista_opciones ()
     {
-        opcionesUsuario();
         if(userDto.getIdUserType()==0) {// admi
             opcionesadmi();
+        }else {
+            opcionesUsuario();
         }
-        return retornar;
     }
 
     private void opcionesadmi() {
