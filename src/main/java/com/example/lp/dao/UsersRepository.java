@@ -10,4 +10,5 @@ public interface UsersRepository extends JpaRepository<UsersEntity,Integer>{
     UsersEntity findByIdUserBot(int botUserId);
     UsersEntity findByIdUser(int userId);
 
+
 }

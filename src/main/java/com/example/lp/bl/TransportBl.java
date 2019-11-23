@@ -1,6 +1,8 @@
 package com.example.lp.bl;
+import com.example.lp.dao.TransportInfoRepository;
 import com.example.lp.dao.TransportRepository;
 import com.example.lp.domain.TransportEntity;
+import com.example.lp.dto.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,15 @@ public class TransportBl {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransportBl.class);
 
     private TransportRepository transportRepository;
+    private TransportInfoRepository transportInfoRepository;
 
     @Autowired
-    public TransportBl(TransportRepository transportRepository) {
+    public TransportBl(TransportRepository transportRepository, TransportInfoRepository transportInfoRepository) {
         this.transportRepository = transportRepository;
+        this.transportInfoRepository = transportInfoRepository;
     }
+
+
 
     public TransportEntity findTransportById(int id) {
         Optional<TransportEntity> optional = this.transportRepository.findById(id);
@@ -30,36 +36,37 @@ public class TransportBl {
             throw new RuntimeException("Record cannot found for CpPerson with ID: " + id);
         }
     }
+
+    // funcion para devolver la descripcion de los atributos de la tabla transporte
     public  List<String> findAllDescriptiontransport() {
-        List<TransportEntity> all = this.transportRepository.findAll();
-        List<String> ret = new ArrayList<>();
-        for (TransportEntity x: all) {
-            ret.add(x.getDescription());
+        List<String> ret = this.transportRepository.findDescriptionByTransportStatus(Status.ACTIVE.getStatus());
+        if (ret != null) {
+            return ret;
+        } else {
+            LOGGER.info("Descriptiontransport null");
+            throw new RuntimeException("There is no transport with active status");
         }
-        return ret;
     }
+
+
+    // funcion para devolver la descripcion de los atributos de la tabla transporte por id_info
     public  List<String> findAllDescriptiontransportByInfo(int info_id) {
-        List<TransportEntity> all = this.transportRepository.findAll();
-        List<String> ret = new ArrayList<>();
-        for (TransportEntity x: all) {
-            if(x.getTransportInfoIdTransportInfo()==info_id)
-            ret.add(x.getDescription());
+        List<String> ret = this.transportRepository.findAllDescriptiontransportByInfoAndStatus(info_id, Status.ACTIVE.getStatus());
+        if (ret != null) {
+            return ret;
+        } else {
+            LOGGER.info("findAllDescriptiontransportByInfo null");
+            throw new RuntimeException("There is no transport with active status and transpor_info ID:" + info_id);
         }
-        return ret;
     }
+
 
 
     public String findURLTransportByName(String name) {
-        String ret = "https://urgente.bo/sites/default/files/Ruta%20San%20Pedro-%20Achumani%201.jpg";
-        List<TransportEntity> list = this.transportRepository.findAll();
-        for ( TransportEntity x: list) {
-            LOGGER.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!....................................................................");
-            LOGGER.info(String.valueOf(x.getDescription()));
-            if(x.getDescription().equals(name))
-                ret=x.getRouteImage();
-        }
+        String ret = this.transportRepository.findRouteImagetransportByDescription(name);
         return ret;
     }
+
 
 
 }

@@ -87,13 +87,13 @@ public class BootMain extends TelegramLongPollingBot {
         UsersEntity usersEntity= null;
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         if(!usersBl.existingUser(chat_id)){
-            usersEntity =  usersBl.registrerUser(update.getMessage().getFrom());
+            usersEntity =  usersBl.registerUser(update.getMessage().getFrom());
             ret= "Eres nuevo";
         } else {
             usersEntity =  usersBl.findByIdUserBot(update.getMessage().getFrom().getId());
         }
         List<String> chatResponse= new ArrayList<>();
-        userChatDto = usersBl.continueWhitUser(update, chatResponse);
+        userChatDto = usersBl.continueWhitUser(update);
         UserDto userDto = new UserDto(usersEntity);
         return userDto;
     }
@@ -148,7 +148,7 @@ public class BootMain extends TelegramLongPollingBot {
     private String cambioTipoUsuario(String token) {
         String ret = "";
         UsersEntity usersEntity =usersBl.findByIdUser(userChatDto.getIdUser());
-        ret= usersBl.changeTypeUser(usersEntity,token);
+        ret= usersBl.changeUserTypeToAdministrator(usersEntity,token);
         return ret;
     }
 

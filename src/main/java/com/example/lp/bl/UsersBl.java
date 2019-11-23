@@ -1,14 +1,14 @@
 package com.example.lp.bl;
 
 import com.example.lp.dao.UserChatRepository;
-import com.example.lp.dao.UserTypeTepository;
+import com.example.lp.dao.UserTypeRepository;
 import com.example.lp.dao.UsersRepository;
 import com.example.lp.domain.UserChatEntity;
 import com.example.lp.domain.UserTypeEntity;
 import com.example.lp.domain.UsersEntity;
 import com.example.lp.dto.Status;
 import com.example.lp.dto.UserChatDto;
-import com.example.lp.dto.UserDto;
+import com.example.lp.dto.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,53 +30,61 @@ public class UsersBl {
     private static final Logger LOGGER = LoggerFactory.getLogger(UsersBl.class);
     private UsersRepository usersRepository;
     private UserChatRepository userChatRepository;
-    private UserTypeTepository userTypeTepository;
+    private UserTypeRepository userTypeRepository;
 
     @Autowired
-    public UsersBl(UsersRepository usersRepository, UserChatRepository userChatRepository, UserTypeTepository userTypeTepository) {
+    public UsersBl(UsersRepository usersRepository, UserChatRepository userChatRepository, UserTypeRepository userTypeRepository) {
         this.usersRepository = usersRepository;
         this.userChatRepository = userChatRepository;
-        this.userTypeTepository = userTypeTepository;
+        this.userTypeRepository = userTypeRepository;
     }
 
 
+    //Funciones de User
+
+    //funcion para ver si existe el usuario con el id del bot
     public boolean existingUser(int chat_id_bot) {
-        boolean ret = false;
-        List<UsersEntity> list = this.usersRepository.findAll();
-        for (UsersEntity x : list) {
-            if (x.getIdUserBot() == (chat_id_bot))
-                ret = true;
+        LOGGER.info("existingUser.........................");
+        boolean ret = true;
+        UsersEntity usersEntity = this.usersRepository.findByIdUserBot(chat_id_bot);
+        if (usersEntity == null) {
+            ret =false;
         }
         return ret;
     }
 
-
-
+    //funcion para buscar usuario por el id
     public UsersEntity findByIdUser(int id) {
         LOGGER.info("findByIdUser.........................");
         UsersEntity usersEntity = this.usersRepository.findByIdUser(id);
         if (usersEntity != null) {
             return usersEntity;
         } else {
+            LOGGER.info("usersEntity null");
             throw new RuntimeException("Record cannot found for UsersEntity with ID: " + id);
         }
     }
 
+    //funcion para buscar usuario por el id del bot
     public UsersEntity findByIdUserBot(int id) {
+        LOGGER.info("findByIdUserBot.........................");
         UsersEntity usersEntity = this.usersRepository.findByIdUserBot(id);
         if (usersEntity != null) {
             return usersEntity;
         } else {
+            LOGGER.info("usersEntity null");
             throw new RuntimeException("Record cannot found for UsersEntity with ID: " + id);
         }
+
     }
 
-    public UsersEntity registrerUser(User users) {
+    //funcion para registrar a un nuevo usuario
+    public UsersEntity registerUser(User users) {
+        LOGGER.info("registrerUser.........................");
         Date sDate = getDate();
         UsersEntity usersEntity = new UsersEntity();
-        usersEntity = new UsersEntity();
         usersEntity.setIdUserBot(users.getId());
-        usersEntity.setIdUserType(1);
+        usersEntity.setIdUserType(UserType.USERS.getUserType());
         usersEntity.setuStatus(Status.ACTIVE.getStatus());
         usersEntity.setTxHost("localhost");
         usersEntity.setTxUser("fer");
@@ -86,10 +94,14 @@ public class UsersBl {
         return usersEntity;
     }
 
-    public UserChatDto continueWhitUser(Update update, List<String> chatResponse) {
+
+    //Funciones de UserChat
+
+    //funcion para registrar un nuevo chat del usuario previamente crado
+    public UserChatDto continueWhitUser(Update update ) {
+        LOGGER.info("continueWhitUser.........................");
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         UsersEntity usersEntity = findByIdUserBot(chat_id);
-
         UserChatEntity lastmessage = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
         String response = "Inicio";
 
@@ -97,7 +109,6 @@ public class UsersBl {
             response = String.valueOf(lastmessage.getInMessage());
 
         Date sDate = getDate();
-
         UserChatEntity userChatEntity = new UserChatEntity();
         userChatEntity.setIdUser(usersEntity.getIdUser());
         userChatEntity.setInMessage(update.getMessage().getText());
@@ -109,45 +120,64 @@ public class UsersBl {
         // Guardamos en base dedatos
         userChatRepository.save(userChatEntity);
         UserChatDto userChatDto = new UserChatDto(userChatEntity);
-
-        chatResponse.add(userChatEntity.getInMessage());
         return userChatDto;
     }
 
 
-    private Date getDate() {
-        java.util.Date uDate = new java.util.Date();
-        Date sDate = convertUtilToSql(uDate);
-        return sDate;
-    }
+    //Funciones de UserType
 
-    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
-        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
-        return sDate;
-    }
-
+    //funcion para devolver el tipo "Administrador"
     public UserTypeEntity getTypeAdministrador() {
         LOGGER.info("UserTypeEntity.........................");
-        UserTypeEntity userTypeEntity = this.userTypeTepository.findByType("Administrador");
-        return userTypeEntity;
+        UserTypeEntity userTypeEntity = this.userTypeRepository.findByType("Administrador");
+
+        if (userTypeEntity != null) {
+            return userTypeEntity;
+        } else {
+            LOGGER.info("userTypeEntity null");
+            throw new RuntimeException("Record cannot found for userTypeEntity with type: Administrador ");
+        }
     }
 
-
+    //funcion para devolver el token del tipo "Administrador"
     public String getTokenAdministrador(){
-        String ret="";
+        LOGGER.info("getTokenAdministrador.........................");
+        String ret= null;
         UserTypeEntity userTypeEntity = getTypeAdministrador();
         ret= userTypeEntity.getToken();
-        return ret;
+        if (ret != null) {
+            return ret;
+        } else {
+            LOGGER.info("null administrator token ");
+            throw new RuntimeException("Token ");
+        }
     }
+
+    //funcion para generar un nuevo token
+    public String tokenGenerator (){
+        String token = "";
+        SecureRandom random = new SecureRandom();
+        byte bytes[] = new byte[20];
+        random.nextBytes(bytes);
+        try {
+            token = new String(bytes, "UTF-8"); // for UTF-8 encoding
+        } catch (UnsupportedEncodingException e) {
+            token = random.toString();
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+
+    //funcion para cambiar del usuario el tipo de usuario por Administrador en la BDD
     @Transactional
-    public String changeTypeUser(UsersEntity usersEntity, String tokenUser) {
-        String ret="";
+    public String changeUserTypeToAdministrator(UsersEntity usersEntity, String tokenUser) {
         LOGGER.info("changeTypeUser.........................");
+        String ret="";
         UserTypeEntity userTypeEntity = getTypeAdministrador();
-        LOGGER.info("getTypeAdministrador.........................");
         if(tokenUser.equals(userTypeEntity.getToken())) {
             LOGGER.info("token accepted.........................");
-            usersEntity.setIdUserType(0);
+            usersEntity.setIdUserType(UserType.ADMINISTRADOR.getUserType());
             usersRepository.save(usersEntity);
             changeToken(userTypeEntity);
             ret="Usted ya es un administrador";
@@ -159,30 +189,24 @@ public class UsersBl {
         return ret;
     }
 
+    //funcion para cambiar el token del tipo de usuario Administrador de la BDD
     @Transactional
     public void changeToken(UserTypeEntity userTypeEntity) {
         String token = tokenGenerator();
         userTypeEntity.setToken(token);
-        userTypeTepository.delete(userTypeEntity);
-        userTypeTepository.save(userTypeEntity);
+        userTypeRepository.delete(userTypeEntity);
+        userTypeRepository.save(userTypeEntity);
 
     }
 
 
-    public String tokenGenerator (){
-        String token = "";
-        SecureRandom random = new SecureRandom();
-        byte bytes[] = new byte[20];
-        random.nextBytes(bytes);
-        try {
-            token = new String(bytes, "UTF-8"); // for UTF-8 encoding
-        } catch (UnsupportedEncodingException e) {
-            token = "0";
-            e.printStackTrace();
-        }
-        return token;
-    }
 
+    //extras
+    private Date getDate() {
+        java.util.Date uDate = new java.util.Date();
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
 
 
 }

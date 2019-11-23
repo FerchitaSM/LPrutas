@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface UserTypeTepository extends JpaRepository<UserTypeEntity,Integer> {
-
+public interface UserTypeRepository extends JpaRepository<UserTypeEntity,Integer> {
     UserTypeEntity findByType(String type);
-
 
 }

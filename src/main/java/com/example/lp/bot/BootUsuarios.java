@@ -49,10 +49,10 @@ public class BootUsuarios extends TelegramLongPollingBot {
         if(usersBl.existingUser(chat_id)){
             UsersEntity usersEntity = usersBl.findByIdUserBot(chat_id);
             List<String> chatResponse= new ArrayList<>();
-            usersBl.continueWhitUser(update, chatResponse);
+            usersBl.continueWhitUser(update);
             return chatResponse.get(chatResponse.size()-1);
         }else {
-            usersBl.registrerUser(update.getMessage().getFrom());
+            usersBl.registerUser(update.getMessage().getFrom());
             return "Eres nuevo";
         }
     }
