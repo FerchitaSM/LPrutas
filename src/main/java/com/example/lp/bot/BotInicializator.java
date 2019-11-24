@@ -19,16 +19,18 @@ public class BotInicializator  {
     StopBl stopBl;
     RouteBl routeBl;
     UsersBl usersBl;
+    ExceptionBl exceptionBl;
+
     @Autowired
 
     //Inicializacion Fer
-    public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl) {
+    public BotInicializator(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl, ExceptionBl exceptionBl) {
         this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
         this.usersBl=usersBl;
-
+        this.exceptionBl=exceptionBl;
     }
 
 
@@ -47,7 +49,7 @@ public class BotInicializator  {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
         //    telegramBotsApi.registerBot(new BotM(stopBl,routeBl,transportBl,transportInfoBl)); //Inicializacion Karen
-          telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl,stopBl,routeBl,usersBl)); //Inicializacion Fer
+          telegramBotsApi.registerBot(new BootMain(transportBl,transportInfoBl,stopBl,routeBl,usersBl,exceptionBl)); //Inicializacion Fer
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");

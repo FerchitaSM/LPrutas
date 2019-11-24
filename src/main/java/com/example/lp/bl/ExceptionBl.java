@@ -22,12 +22,11 @@ public class ExceptionBl {
     public ExceptionBl(ExceptionRepository exceptionRepository){
         this.exceptionRepository = exceptionRepository;
     }
+
+
+
     public List<String> findAllQuestionMessage() {
-        List<ExceptionEntity> all = this.exceptionRepository.findAll();
-        List<String> ret = new ArrayList<>();
-        for (ExceptionEntity x: all) {
-            ret.add(x.getQuestionMessage());
-        }
+        List<String> ret = this.exceptionRepository.findAllQuestionMessage();
         return ret;
     }
 

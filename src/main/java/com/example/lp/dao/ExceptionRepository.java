@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ExceptionRepository extends JpaRepository<ExceptionEntity,Integer> {
     @Query( value  =  " SELECT question_message FROM exception" , nativeQuery  =  true )
-    List<ExceptionEntity> findAll();
+    List<String> findAllQuestionMessage();
 
 
 }

@@ -112,7 +112,10 @@ CREATE TABLE exception (
     id_exception int NOT NULL auto_increment,
     question_message varchar(400) NOT NULL,
     answer_message varchar(400) NOT NULL,
-    CONSTRAINT ride_data_pk PRIMARY KEY (id_exception)
+    tx_user varchar(50)  NOT NULL,
+    tx_host varchar(100)  NOT NULL,
+    tx_date date  NOT NULL,
+    CONSTRAINT exception PRIMARY KEY (id_exception)
 );
 
 CREATE TABLE user_type(

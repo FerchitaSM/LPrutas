@@ -44,13 +44,14 @@ public class BootMain extends TelegramLongPollingBot {
 
 
     @Autowired
-    public BootMain(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl) {
+    public BootMain(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl) {
 
         this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
         this.usersBl=usersBl;
+        this.exceptionBl=exceptionBl;
     }
     public String requestContact(boolean requestContact) {
         request_contact = requestContact;
@@ -182,7 +183,7 @@ public class BootMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Fernanda
+        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Cavero
         //return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
 
 
