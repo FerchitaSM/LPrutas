@@ -32,7 +32,6 @@ public class BootMain extends TelegramLongPollingBot {
     ExceptionBl exceptionBl;
     UsersBl usersBl;
     TransportBl transportBl;
-    TransportInfoBl transportInfoBl;
     StopBl stopBl;
     RouteBl routeBl;
 
@@ -44,10 +43,9 @@ public class BootMain extends TelegramLongPollingBot {
 
 
     @Autowired
-    public BootMain(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl) {
+    public BootMain(TransportBl transportBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl) {
 
         this.transportBl=transportBl;
-        this.transportInfoBl=transportInfoBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
         this.usersBl=usersBl;
@@ -112,7 +110,7 @@ public class BootMain extends TelegramLongPollingBot {
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
             String mensaje_entrada = userChatDto.getInMessage();
-            op = new BotOpciones(mensaje_entrada, transportBl,exceptionBl,transportInfoBl,usersBl,userDto);
+            op = new BotOpciones(mensaje_entrada, transportBl,exceptionBl,usersBl,userDto);
             opciones = op.getRetornar();
             //lista con opciones
             for (int i = 0; i < opciones.size(); i++) {

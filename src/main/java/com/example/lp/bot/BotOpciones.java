@@ -2,14 +2,11 @@ package com.example.lp.bot;
 
 import com.example.lp.bl.ExceptionBl;
 import com.example.lp.bl.TransportBl;
-import com.example.lp.bl.TransportInfoBl;
 import com.example.lp.bl.UsersBl;
-import com.example.lp.domain.UserTypeEntity;
 import com.example.lp.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 
 
 import java.util.ArrayList;
@@ -23,16 +20,14 @@ public class BotOpciones {
     String mostrar ="";
     ExceptionBl exceptionBl;
     TransportBl transportBl;
-    TransportInfoBl transportInfoBl;
     UsersBl usersBl;
     UserDto userDto;
 
     @Autowired
-    public BotOpciones(String call_data,TransportBl transportBl, ExceptionBl exceptionBl,TransportInfoBl transportInfoBl, UsersBl usersBl, UserDto userDto) {
+    public BotOpciones(String call_data,TransportBl transportBl, ExceptionBl exceptionBl, UsersBl usersBl, UserDto userDto) {
         this.call_data = call_data;
         this.transportBl=transportBl;
         this.exceptionBl=exceptionBl;
-        this.transportInfoBl= transportInfoBl;
         this.usersBl=usersBl;
         this.userDto = userDto;
         lista_opciones();
@@ -62,14 +57,14 @@ public class BotOpciones {
     }
 
     private void opcionesUsuario() {
-        List<String> listasTransportInfo =transportInfoBl.findAllDescriptiontransportInfo();
+        List<String> listasTransportInfo =transportBl.findAllDescriptiontransportInfo();
         List<String> listasTransport  =transportBl.findAllDescriptiontransport();
 
         for(int i =0 ; i<listasTransportInfo.size(); i++)
         {
             if (listasTransportInfo.get(i).equals(getCall_data()))
             {
-                int id= transportInfoBl.findIdTransportInfoByName(listasTransportInfo.get(i));
+                int id= transportBl.findIdTransportInfoByName(listasTransportInfo.get(i));
                 sacar_TransportePorInfo(id);
                 break;
             }
@@ -130,7 +125,7 @@ public class BotOpciones {
     private void sacar_Preguntas() { retornar=exceptionBl.findAllQuestionMessage(); }
 
     private void sacar_TransporteInfo(){
-        retornar=transportInfoBl.findAllDescriptiontransportInfo();
+        retornar=transportBl.findAllDescriptiontransportInfo();
     }
 
     private void sacar_TransportePorInfo(int info_id){

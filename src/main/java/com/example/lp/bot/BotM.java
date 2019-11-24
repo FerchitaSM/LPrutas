@@ -3,8 +3,6 @@ package com.example.lp.bot;
 import com.example.lp.bl.RouteBl;
 import com.example.lp.bl.StopBl;
 import com.example.lp.bl.TransportBl;
-import com.example.lp.bl.TransportInfoBl;
-import com.example.lp.dao.RouteStopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +28,11 @@ public class BotM  extends TelegramLongPollingBot {
     StopBl stopBl;
     RouteBl routeBl;
     TransportBl transportBl;
-    TransportInfoBl transportInfoBl;
     @Autowired
-    public BotM(StopBl stopBl,RouteBl routeBl,TransportBl transportBl,TransportInfoBl transportInfoBl) {
+    public BotM(StopBl stopBl,RouteBl routeBl,TransportBl transportBl) {
         this.stopBl=stopBl;
         this.routeBl=routeBl;
         this.transportBl=transportBl;
-        this.transportInfoBl=transportInfoBl;
     }
 
     @Override
@@ -77,7 +68,7 @@ public class BotM  extends TelegramLongPollingBot {
            case "1":
                //Se muestra los tipos de transporte que hay
                mensaje="Elige una opcion";
-               keyboardMarkup=transportInfoBl.DescriptiontransportInfo(keyboardMarkup);
+               keyboardMarkup=transportBl.DescriptiontransportInfo(keyboardMarkup);
                universal_point="2";
                break;
            case "2":
@@ -97,7 +88,7 @@ public class BotM  extends TelegramLongPollingBot {
            case "4":
                //Se muestra los tipos de transporte que hay
                mensaje="Elige una opcion";
-               keyboardMarkup=transportInfoBl.DescriptiontransportInfo(keyboardMarkup);
+               keyboardMarkup=transportBl.DescriptiontransportInfo(keyboardMarkup);
                universal_point="5";
                break;
            case "5":
