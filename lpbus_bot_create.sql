@@ -85,6 +85,7 @@ CREATE TABLE transport_info (
 -- Table: users
 CREATE TABLE users (
     id_user int NOT NULL auto_increment,
+    id_user_bot int NOT NULL,
     id_user_type int NOT NULL,
     id_token int NOT NULL,
     u_status int NOT NULL,
