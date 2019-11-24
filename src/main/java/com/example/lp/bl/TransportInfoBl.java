@@ -66,6 +66,10 @@ public class TransportInfoBl {
       return keyboardMarkup;
   }
 
+
+
+
+
 ///////////////////////////////////////////////////////////////////
     public  List<String> findAllDescriptiontransportInfo() {
         List<TransportInfoEntity> all = this.transportInfoRepository.findAll();

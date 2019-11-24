@@ -65,7 +65,7 @@ public class TransportBl {
             throw new RuntimeException("There is no transport with active status");
         }
     }
-    //MODIFICACION KAREN
+    //MODIFICACION KAREN-----------------------------------------------------------------------------------------
     public ReplyKeyboardMarkup findAllDescriptiontransport(ReplyKeyboardMarkup keyboardMarkup, Update update) {
         List<KeyboardRow> keyboard = new ArrayList<>();
         String type_transport=update.getMessage().getText();
@@ -87,6 +87,17 @@ public class TransportBl {
         keyboardMarkup.setKeyboard(keyboard);
         LOGGER.info("findAllDescriptiontransportByInfo.........................");
         return keyboardMarkup;
+    }
+    public String findURLTransportByName2(Update update) {
+        String message=update.getMessage().getText();
+        LOGGER.info("findURLTransportByName.........................");
+        String ret = this.transportRepository.findRouteImagetransportByDescription(message);
+        if (ret != null) {
+            return ret;
+        } else {
+            LOGGER.info("findURLTransportByName null");
+            throw new RuntimeException("There is no transport with name:" + message);
+        }
     }
 
 /////////////////////////////////////////////////////

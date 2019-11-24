@@ -57,7 +57,7 @@ public class BotM  extends TelegramLongPollingBot {
             SendMessage message = new SendMessage()// Create a message object object
                     .setChatId(chat_id)
                     .setText(mensaje);
-            procesandoMensaje(update);
+            getMessage(update);
             ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
             keyboardMarkup=punto(universal_point,update,keyboardMarkup);
             message.setText(mensaje);
@@ -86,24 +86,29 @@ public class BotM  extends TelegramLongPollingBot {
            case "2":
                mensaje="Elige una opcion";
                keyboardMarkup=transportBl.findAllDescriptiontransport(keyboardMarkup,update);
-               universal_point="0";
+               universal_point="3";
                break;
            case "3":
-               keyboardMarkup=null;
-               mensaje="Envia tu ubicacion";
-               universal_point="4";
+               mensaje="Elige una opcion\n";
+               mensaje=transportBl.findURLTransportByName2(update);
+               universal_point="0";
                break;
            case "4":
                keyboardMarkup=null;
-               mensaje=casodos(update);
+               mensaje="Envia tu ubicacion";
                universal_point="5";
                break;
            case "5":
                keyboardMarkup=null;
+               mensaje=casodos(update);
+               universal_point="6";
+               break;
+           case "6":
+               keyboardMarkup=null;
                mensaje=casotres(update);
                universal_point="0";
                break;
-           case "6":
+           case "7":
                keyboardMarkup=null;
                mensaje="Escogiste excepciones";
                universal_point="0";
@@ -111,7 +116,7 @@ public class BotM  extends TelegramLongPollingBot {
        }
        return keyboardMarkup;
    }
-   public void procesandoMensaje(Update update){
+   public void getMessage (Update update){
        if(update.getMessage().hasText()==true){
            String message=update.getMessage().getText();
            switch (message){
@@ -119,13 +124,13 @@ public class BotM  extends TelegramLongPollingBot {
                    universal_point="1";
                    break;
                case "Buscar movilidad a mi destino":
-                   universal_point="3";
+                   universal_point="4";
                    break;
                case "Excepciones":
-                   universal_point="6";
+                   universal_point="7";
                    break;
                default:
-                   if(universal_point=="2"){
+                   if(universal_point=="2" || universal_point=="3"){
                        log.info("EL MENSAJE ES ADMITIDO");
                    }else{
                        universal_point="0";
@@ -133,7 +138,7 @@ public class BotM  extends TelegramLongPollingBot {
            }
        }else{
            if(update.getMessage().hasLocation()==true){
-               if((update.getMessage().hasLocation()) && (universal_point=="4" || universal_point=="5")){
+               if((update.getMessage().hasLocation()) && (universal_point=="5" || universal_point=="6")){
                    log.info("EL MENSAJE ES ADMITIDO");
                }else{
                    universal_point="0";
@@ -182,17 +187,22 @@ public class BotM  extends TelegramLongPollingBot {
             e.printStackTrace();
         }
         //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
-        int codigo=routeBl.findRoute(list_origin,list_destination);
-        //Generando la url (dibujando el mapa que se enviara)
-        String url= null;
-        try {
-            url = routeBl.drawMap(codigo);
-        } catch (IOException e) {
-            e.printStackTrace();
+        int codigo=0;
+        codigo=routeBl.findRoute(list_origin,list_destination);
+        if(codigo!=0){
+            //Generando la url (dibujando el mapa que se enviara)
+            String url= null;
+            try {
+                url = routeBl.drawMap(codigo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //Devolviendo la url corta
+            mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
+            mensaje=mensaje+url;
+        }else{
+            mensaje=mensaje+"No hay una ruta disponible";
         }
-        //Devolviendo la url corta
-        mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
-        mensaje=mensaje+url;
         return mensaje;
     }
 
