@@ -137,9 +137,16 @@ insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_us
 insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_user`,`tx_host`,`tx_date`)values
 ('3','9','7','karen','localhost',now()),
 ('4','9','8','karen','localhost',now());
-*/
+
 insert into `exception` (`id_exception`, `question_message`, `answer_message`,`tx_user`,`tx_host`,`tx_date`) values
 (1,'Pregunta 1','Respuesta 1','ccaverotx','localhost',now()),
 (2,'Pregunta 2','Respuesta 2','ccaverotx','localhost',now()),
 (3,'Pregunta 3','Respuesta 3','ccaverotx','localhost',now()),
 (4,'Pregunta 4','Respuesta 4','ccaverotx','localhost',now());
+
+ */
+
+/* show fields from 'table_name'
+
+       SELECT table_name FROM information_schema.columns WHERE (table_schema='lpbus_bot' and ordinal_position=1 )
+*/
