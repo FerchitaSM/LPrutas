@@ -35,8 +35,7 @@ public class BotM  extends TelegramLongPollingBot {
     private static String mensaje="HOLA";
     private static String u_origin="";
     private static String u_destination="";
-    private static int level_two=0;
-
+    ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 
     StopBl stopBl;
     RouteBl routeBl;
@@ -56,61 +55,44 @@ public class BotM  extends TelegramLongPollingBot {
                     .setText(mensaje);
             procesandoMensaje(update);
             punto(universal_point,update);
-           // ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-            // Creando el teclado inicial (list of keyboard rows)
-            /*List<KeyboardRow> keyboard_inicial = new ArrayList<>();
-            keyboard_inicial=point(point_conversation,update,mensaje);
-            keyboardMarkup.setKeyboard(keyboard_inicial);*/
             // Add it to the message
-            //message.setReplyMarkup(keyboardMarkup);
             message.setText(mensaje);
+            if(keyboardMarkup!=null){
+                message.setReplyMarkup(keyboardMarkup);
+            }
            try {
                 execute(message); // Sending our message object to user
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-
-
-
-/*
-            SendMessage message=new SendMessage();
-            long chat_id = update.getMessage().getChatId();
-            message.setChatId(chat_id);
-            respuesta(point_conversation,update);
-            message.setText(mensaje);
-            try {
-                execute(message);
-                log.info("mensaje enviado");
-
-            } catch (TelegramApiException e) {
-                log.info("error");
-                e.printStackTrace();}*/
         }
         }
 
    public void punto(String conversacion,Update update){
        switch (conversacion){
            case "0":
-               mensaje="OPCIONES PARTE 1";
+               keyboardMarkup = new ReplyKeyboardMarkup();
+               inicio();
+               mensaje="Elige una opcion";
                break;
            case "1":
-               mensaje="LIN";
+               keyboardMarkup=null;
+               mensaje="Escogiste Buscar una linea en especifico";
                universal_point="0";
                break;
            case "2":
-               mensaje="ESCOGISTE MOV";
-               mensaje=mensaje+"Envia tu ubicacion";
+               keyboardMarkup=null;
+               mensaje="Envia tu ubicacion";
                universal_point="3";
                break;
            case "3":
+               keyboardMarkup=null;
                mensaje="Envia tu destino";
                universal_point="0";
                break;
            case "4":
+               mensaje="Escogiste excepciones";
                universal_point="0";
-               break;
-           case "5":
-
                break;
        }
       // return punto;
@@ -125,33 +107,32 @@ public class BotM  extends TelegramLongPollingBot {
        if(update.getMessage().hasText()==true){
            String m=update.getMessage().getText();
            switch (m){
-               case "LIN":
+               case "Buscar una línea específica":
                    universal_point="1";
                    break;
-               case "MOV":
+               case "Buscar movilidad a mi destino":
                    universal_point="2";
                    break;
+               case "Excepciones":
+                   universal_point="4";
                default:
-                   if((update.getMessage().getText()).equals("ubi") && universal_point=="2" || universal_point=="3"){
-                       log.info("EL MENSAJE ES ADMITIDO");
-                   }else{
-                       universal_point="0";
-                   }
+                   universal_point="0";
+
+           }
+       }else{
+           if(update.getMessage().hasLocation()==true){
+               if((update.getMessage().hasLocation()) && (universal_point=="2" || universal_point=="3")){
+                   log.info("EL MENSAJE ES ADMITIDO");
+               }else{
+                   universal_point="0";
+               }
            }
        }
-       if(update.getMessage().hasLocation()==true){
-           if((update.getMessage().hasLocation()) && universal_point=="2" || universal_point=="3"){
-               log.info("EL MENSAJE ES ADMITIDO");
-           }else{
-               universal_point="0";
-           }
-       }
+
 
    }
-
-
-
-    public List<KeyboardRow> inicio(List<KeyboardRow> keyboard){
+    public void inicio(){
+        List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
         // Set each button, you can also use KeyboardButton objects if you need something else than text
         row.add("Buscar una línea específica");
@@ -162,20 +143,7 @@ public class BotM  extends TelegramLongPollingBot {
         row = new KeyboardRow();
         row.add("Excepciones");
         keyboard.add(row);
-        return keyboard;
-    }
-    public List<KeyboardRow> nivel_two(List<KeyboardRow> keyboard){
-        KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
-        // Set each button, you can also use KeyboardButton objects if you need something else than text
-        row.add("Buscar ");
-        keyboard.add(row);  //primera linea
-        row = new KeyboardRow();// Creando otra linea
-        row.add("Buscar movilidado"); // segunda linea
-        keyboard.add(row);// Adicionando la segunda linea
-        row = new KeyboardRow();
-        row.add("Excep");
-        keyboard.add(row);
-        return keyboard;
+        keyboardMarkup.setKeyboard(keyboard);
     }
 
 
