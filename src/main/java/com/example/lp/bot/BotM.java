@@ -177,6 +177,7 @@ public class BotM  extends TelegramLongPollingBot {
         return mensaje;
     }
     public String casotres(Update update){
+        mensaje="";
         String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
         String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
         u_destination=latitude+","+longitude;

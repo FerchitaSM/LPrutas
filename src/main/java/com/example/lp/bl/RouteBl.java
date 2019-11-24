@@ -41,18 +41,19 @@ public class RouteBl {
                 //Se busca la ruta del punto o las rutas que esten relacionadas a el
                 List<RouteStopEntity> all = this.routeStopRepository.findRoute(point_start);
                     for(RouteStopEntity x:all){
-                        LOGGER.info("LLEGUE EL EROOR NO ESTA QAQUI");
+                        LOGGER.info("LLEGUE EL EROOR NO ESTA QAQUIIIIIIIIIIIIIIIIIIIII");
                         //se obtiene la ruta del punto de inicio
                         int route_start=x.getRouteIdRoute();
                         //se obtiene uno por uno los puntos de destino
-                        int point_finish=finish_points.get(i);
-                        //se obtiene la ruta donde la ruta sea igual a la del punto de inicio y al punto final
+                        for(int u=0;u<finish_points.size();u++){
+                            int point_finish=finish_points.get(u);
+                            //se obtiene la ruta donde la ruta sea igual a la del punto de inicio y al punto final
                             List<RouteStopEntity> find_route=this.routeStopRepository.findRouteFinish(route_start,point_finish);
                             for(RouteStopEntity y:find_route){
                                 //se obtiene cual es esa ruta
                                 route=y.getRouteIdRoute();
+                            }
                         }
-
                     }
             }
 
