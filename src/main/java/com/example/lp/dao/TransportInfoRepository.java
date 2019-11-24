@@ -1,7 +1,6 @@
 package com.example.lp.dao;
 
 import com.example.lp.domain.TransportInfoEntity;
-import com.example.lp.domain.UserInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
