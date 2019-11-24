@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface TransportRepository extends JpaRepository<TransportEntity,Integer> {
     List<TransportEntity> findAllByTransportStatus(int transport_status);
+    List<TransportEntity> findTransport(int transportInfoIdTransportInfo);
 
     @Query( value  =  " SELECT description FROM transport where transport_status =?1" , nativeQuery  =  true )
     List<String> findDescriptionByTransportStatus (int transport_status);

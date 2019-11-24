@@ -1,10 +1,15 @@
 package com.example.lp.domain;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
 
 @Entity
 @Table(name = "transport", schema = "lpbus_bot", catalog = "")
+@XmlRootElement
+@NamedQueries({
+        @NamedQuery(name = "TransportEntity.findTransport", query = "SELECT a FROM TransportEntity a WHERE a.transportInfoIdTransportInfo = :transportInfoIdTransportInfo"),
+})
 public class TransportEntity {
     private int idTransport;
     private int transportStatus;

@@ -2,6 +2,8 @@ package com.example.lp.bot;
 
 import com.example.lp.bl.RouteBl;
 import com.example.lp.bl.StopBl;
+import com.example.lp.bl.TransportBl;
+import com.example.lp.bl.TransportInfoBl;
 import com.example.lp.dao.RouteStopRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,15 +37,17 @@ public class BotM  extends TelegramLongPollingBot {
     private static String mensaje="HOLA";
     private static String u_origin="";
     private static String u_destination="";
-    ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 
     StopBl stopBl;
     RouteBl routeBl;
-
+    TransportBl transportBl;
+    TransportInfoBl transportInfoBl;
     @Autowired
-    public BotM(StopBl stopBl,RouteBl routeBl) {
+    public BotM(StopBl stopBl,RouteBl routeBl,TransportBl transportBl,TransportInfoBl transportInfoBl) {
         this.stopBl=stopBl;
         this.routeBl=routeBl;
+        this.transportBl=transportBl;
+        this.transportInfoBl=transportInfoBl;
     }
 
     @Override
@@ -54,7 +58,8 @@ public class BotM  extends TelegramLongPollingBot {
                     .setChatId(chat_id)
                     .setText(mensaje);
             procesandoMensaje(update);
-            punto(universal_point,update);
+            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+            keyboardMarkup=punto(universal_point,update,keyboardMarkup);
             message.setText(mensaje);
             if(keyboardMarkup!=null){
                 message.setReplyMarkup(keyboardMarkup);
@@ -67,69 +72,76 @@ public class BotM  extends TelegramLongPollingBot {
         }
         }
 
-   public void punto(String conversacion,Update update){
+   public ReplyKeyboardMarkup punto(String conversacion,Update update,ReplyKeyboardMarkup keyboardMarkup){
        switch (conversacion){
            case "0":
-               keyboardMarkup = new ReplyKeyboardMarkup();
-               inicio();
+               keyboardMarkup=inicio(keyboardMarkup);
                mensaje="Elige una opcion";
                break;
            case "1":
-               keyboardMarkup=null;
-               mensaje="Escogiste Buscar una linea en especifico";
-               universal_point="0";
+               mensaje="Elige una opcion";
+               keyboardMarkup=transportInfoBl.DescriptiontransportInfo(keyboardMarkup);
+               universal_point="2";
                break;
            case "2":
-               keyboardMarkup=null;
-               mensaje="Envia tu ubicacion";
-               universal_point="3";
+               mensaje="Elige una opcion";
+               keyboardMarkup=transportBl.findAllDescriptiontransport(keyboardMarkup,update);
+               universal_point="0";
                break;
            case "3":
                keyboardMarkup=null;
-               mensaje=casodos(update);
+               mensaje="Envia tu ubicacion";
                universal_point="4";
                break;
            case "4":
                keyboardMarkup=null;
+               mensaje=casodos(update);
+               universal_point="5";
+               break;
+           case "5":
+               keyboardMarkup=null;
                mensaje=casotres(update);
                universal_point="0";
                break;
-           case "5":
+           case "6":
                keyboardMarkup=null;
                mensaje="Escogiste excepciones";
                universal_point="0";
                break;
        }
+       return keyboardMarkup;
    }
    public void procesandoMensaje(Update update){
        if(update.getMessage().hasText()==true){
-           String m=update.getMessage().getText();
-           switch (m){
+           String message=update.getMessage().getText();
+           switch (message){
                case "Buscar una línea específica":
                    universal_point="1";
                    break;
                case "Buscar movilidad a mi destino":
-                   universal_point="2";
+                   universal_point="3";
                    break;
                case "Excepciones":
-                   universal_point="5";
+                   universal_point="6";
                    break;
                default:
-                   universal_point="0";
+                   if(universal_point=="2"){
+                       log.info("EL MENSAJE ES ADMITIDO");
+                   }else{
+                       universal_point="0";
+                   }
            }
        }else{
            if(update.getMessage().hasLocation()==true){
-               if((update.getMessage().hasLocation()) && (universal_point=="3" || universal_point=="4")){
+               if((update.getMessage().hasLocation()) && (universal_point=="4" || universal_point=="5")){
                    log.info("EL MENSAJE ES ADMITIDO");
                }else{
                    universal_point="0";
                }
            }
        }
-
-
    }
-    public void inicio(){
+    public ReplyKeyboardMarkup inicio(ReplyKeyboardMarkup keyboardMarkup){
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
         // Set each button, you can also use KeyboardButton objects if you need something else than text
@@ -142,6 +154,7 @@ public class BotM  extends TelegramLongPollingBot {
         row.add("Excepciones");
         keyboard.add(row);
         keyboardMarkup.setKeyboard(keyboard);
+        return keyboardMarkup;
     }
 
     public String casodos(Update update){
