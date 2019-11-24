@@ -55,7 +55,6 @@ public class BotM  extends TelegramLongPollingBot {
                     .setText(mensaje);
             procesandoMensaje(update);
             punto(universal_point,update);
-            // Add it to the message
             message.setText(mensaje);
             if(keyboardMarkup!=null){
                 message.setReplyMarkup(keyboardMarkup);
@@ -87,23 +86,22 @@ public class BotM  extends TelegramLongPollingBot {
                break;
            case "3":
                keyboardMarkup=null;
-               mensaje="Envia tu destino";
-               universal_point="0";
+               mensaje=casodos(update);
+               universal_point="4";
                break;
            case "4":
+               keyboardMarkup=null;
+               mensaje=casotres(update);
+               universal_point="0";
+               break;
+           case "5":
+               keyboardMarkup=null;
                mensaje="Escogiste excepciones";
                universal_point="0";
                break;
        }
-      // return punto;
    }
-  /* public int numero(Update update){
-       int numero=0;
-       if()
-       return numero;
-   }*/
    public void procesandoMensaje(Update update){
-
        if(update.getMessage().hasText()==true){
            String m=update.getMessage().getText();
            switch (m){
@@ -114,14 +112,14 @@ public class BotM  extends TelegramLongPollingBot {
                    universal_point="2";
                    break;
                case "Excepciones":
-                   universal_point="4";
+                   universal_point="5";
+                   break;
                default:
                    universal_point="0";
-
            }
        }else{
            if(update.getMessage().hasLocation()==true){
-               if((update.getMessage().hasLocation()) && (universal_point=="2" || universal_point=="3")){
+               if((update.getMessage().hasLocation()) && (universal_point=="3" || universal_point=="4")){
                    log.info("EL MENSAJE ES ADMITIDO");
                }else{
                    universal_point="0";
@@ -146,66 +144,45 @@ public class BotM  extends TelegramLongPollingBot {
         keyboardMarkup.setKeyboard(keyboard);
     }
 
+    public String casodos(Update update){
+        //Se obtiene la latitud y longitud del usuario
+        String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
+        String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
+        u_origin=latitude+","+longitude;
+        //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
+        try {
+            list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mensaje="Envia la ubicacion a donde quieres llegar";
+        return mensaje;
+    }
+    public String casotres(Update update){
+        String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
+        String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
+        u_destination=latitude+","+longitude;
+        //Obteniendo los puntos mas cercanos a mi destino
+        try {
+            list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
+        int codigo=routeBl.findRoute(list_origin,list_destination);
+        //Generando la url (dibujando el mapa que se enviara)
+        String url= null;
+        try {
+            url = routeBl.drawMap(codigo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Devolviendo la url corta
+        mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
+        mensaje=mensaje+url;
+        return mensaje;
+    }
 
-   // }
-   /*public void respuesta(int conversation, Update update) {
-       switch (conversation) {
-           case 0:
-               mensaje="Envia tu ubicacion";
-               point_conversation=1;
-               break;
-           case 1:
-               if(update.getMessage().hasLocation()){
-                   mensaje="";
-                   //Se obtiene la latitud y longitud del usuario
-                   String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
-                   String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
-                   u_origin=latitude+","+longitude;
-                   //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
-                   try {
-                       list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
-                   mensaje="Envia la ubicacion a donde quieres llegar";
-                   point_conversation=2;
-               }else{
-                   point_conversation=0;
-                   break;
-               }
-               break;
-           case 2:
-               if(update.getMessage().hasLocation()){
-                   //Obteniendo la ubicacion del lugar al que el usuario quiere llegar
-                   String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
-                   String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
-                   u_destination=latitude+","+longitude;
-                   //Obteniendo los puntos mas cercanos a mi destino
-                   try {
-                       list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
-                   //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
-                   int codigo=routeBl.findRoute(list_origin,list_destination);
-                   //Generando la url (dibujando el mapa que se enviara)
-                   String url= null;
-                   try {
-                       url = routeBl.drawMap(codigo);
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
-                   //Devolviendo la url corta
-                   mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
-                   mensaje=mensaje+url;
-                   point_conversation=0;
-               }else{
-                   point_conversation=0;
-                   break;
-               }
-               break;
-       }
-    }*/
     @Override
     public String getBotUsername() {
         return "pruebaRLP_bot";
