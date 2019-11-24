@@ -124,7 +124,7 @@ public class BootMain extends TelegramLongPollingBot {
     }
 
     private String responderTexto(Update update) {
-        String mensaje="Elige una opcion ";
+        String mensaje="Hola! Soy el Bot que te facilita la circulación en la ciudad de La Paz, para comenzar, elige una opción ";
 
         String mostrar = op.getMostrar();
         if (!mostrar.equals(""))
