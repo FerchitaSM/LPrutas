@@ -92,27 +92,36 @@ public class BotM  extends TelegramLongPollingBot {
                mensaje=transportBl.findURLTransportByName2(update);
                universal_point="0";
                break;
+
             //EN ESTE NIVEL SE BUSCA LINEAS A MI RUTA
            case "4":
-               //Se pide la ubicacion
-               keyboardMarkup=null;
-               mensaje="Envia tu ubicacion";
+               //Se muestra los tipos de transporte que hay
+               mensaje="Elige una opcion";
+               keyboardMarkup=transportInfoBl.DescriptiontransportInfo(keyboardMarkup);
                universal_point="5";
                break;
            case "5":
-               //Se obtiene datos de paradas cercas a mi
+               //Se pide la ubicacion
                keyboardMarkup=null;
-               mensaje=routeBl.route_one(update,mensaje);
+               routeBl.get_transport(update);
+               mensaje="Envia tu ubicacion";
                universal_point="6";
                break;
            case "6":
+               //Se obtiene datos de paradas cercas a mi
+               keyboardMarkup=null;
+               mensaje=routeBl.route_one(update,mensaje);
+               universal_point="7";
+               break;
+           case "7":
                //Se obtiene datos de paradas cercanas a mi destino y la ruta
                keyboardMarkup=null;
                mensaje=routeBl.route_two(update,mensaje);
                universal_point="0";
                break;
+
            //EN ESTE NIVEL SE ESCOGIO VER LAS EXCEPCIONES
-           case "7":
+           case "8":
                keyboardMarkup=null;
                mensaje="Escogiste excepciones";
                universal_point="0";
@@ -131,10 +140,10 @@ public class BotM  extends TelegramLongPollingBot {
                    universal_point="4";
                    break;
                case "Excepciones":
-                   universal_point="7";
+                   universal_point="8";
                    break;
                default:
-                   if(universal_point=="2" || universal_point=="3"){
+                   if(universal_point=="2" || universal_point=="3" || universal_point=="5" ){
                        log.info("EL MENSAJE ES ADMITIDO");
                    }else{
                        universal_point="0";
@@ -142,7 +151,7 @@ public class BotM  extends TelegramLongPollingBot {
            }
        }else{
            if(update.getMessage().hasLocation()==true){
-               if((update.getMessage().hasLocation()) && (universal_point=="5" || universal_point=="6")){
+               if((update.getMessage().hasLocation()) && (universal_point=="6" || universal_point=="7")){
                    log.info("EL MENSAJE ES ADMITIDO");
                }else{
                    universal_point="0";

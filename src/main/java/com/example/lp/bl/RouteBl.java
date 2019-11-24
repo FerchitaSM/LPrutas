@@ -3,8 +3,10 @@ package com.example.lp.bl;
 import com.example.lp.dao.RouteRepository;
 import com.example.lp.dao.RouteStopRepository;
 import com.example.lp.dao.StopRepository;
+import com.example.lp.dao.TransportInfoRepository;
 import com.example.lp.domain.RouteStopEntity;
 import com.example.lp.domain.StopEntity;
+import com.example.lp.domain.TransportInfoEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +26,38 @@ public class RouteBl {
     List<Integer> list_destination=new ArrayList<>();
     private static String u_origin="";
     private static String u_destination="";
+    private static int cod_transport=0;
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteBl.class);
     private RouteRepository routeRepository;
     private RouteStopRepository routeStopRepository;
     private StopRepository stopRepository;
     private StopBl stopBl;
+    private TransportInfoRepository transportInfoRepository;
 
 
     @Autowired
-    public RouteBl( RouteRepository routeRepository,RouteStopRepository routeStopRepository,StopRepository stopRepository,StopBl stopBl) {
+    public RouteBl( RouteRepository routeRepository,RouteStopRepository routeStopRepository,StopRepository stopRepository,StopBl stopBl,TransportInfoRepository transportInfoRepository) {
         this.routeRepository = routeRepository;
         this.routeStopRepository=routeStopRepository;
         this.stopRepository=stopRepository;
         this.stopBl=stopBl;
+        this.transportInfoRepository=transportInfoRepository;
     }
+    public void get_transport(Update update){
+        String type_transport=update.getMessage().getText();
+        List<TransportInfoEntity> all = this.transportInfoRepository.findAll();
+        int info_id=0;
+        for (TransportInfoEntity x: all) {
+            if(type_transport.equals(x.getInfoDescription())){
+                info_id=x.getIdTransportInfo();
+            }
+        }
+        cod_transport=info_id;
+    }
+    public int get_cod_transport(){
+        return cod_transport;
+    }
+
 
     public String route_one(Update update,String message){
         //Se obtiene la latitud y longitud del usuario
@@ -106,6 +126,8 @@ public class RouteBl {
                             //se obtiene la ruta donde la ruta sea igual a la del punto de inicio y al punto final
                             List<RouteStopEntity> find_route=this.routeStopRepository.findRouteFinish(route_start,point_finish);
                             for(RouteStopEntity y:find_route){
+                               // List<TransportBl> find_transport=this.
+
                                 //se obtiene cual es esa ruta
                                 route=y.getRouteIdRoute();
                             }

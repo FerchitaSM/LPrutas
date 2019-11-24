@@ -7,6 +7,8 @@ import java.sql.Date;
 @Table(name = "route_stop_transport", schema = "dbtest_lpbus2", catalog = "")
 public class RouteStopTransportEntity {
     private int idRouteStopTransport;
+    private int transportIdTransport;
+    private int routeIdRoute;
     private String txHost;
     private String txUser;
     private Date txDate;
@@ -19,6 +21,26 @@ public class RouteStopTransportEntity {
 
     public void setIdRouteStopTransport(int idRouteStopTransport) {
         this.idRouteStopTransport = idRouteStopTransport;
+    }
+
+    @Basic
+    @Column(name = "transport_id_tranport")
+    public int getTransportIdTransport() {
+        return transportIdTransport;
+    }
+
+    public void setTransportIdTransport(int transportIdTransport) {
+        this.transportIdTransport = transportIdTransport;
+    }
+
+    @Basic
+    @Column(name = "route_id_route")
+    public int getRouteIdRoute() {
+        return routeIdRoute;
+    }
+
+    public void setRouteIdRoute(int routeIdRoute) {
+        this.routeIdRoute = routeIdRoute;
     }
 
     @Basic
@@ -59,6 +81,8 @@ public class RouteStopTransportEntity {
         RouteStopTransportEntity that = (RouteStopTransportEntity) o;
 
         if (idRouteStopTransport != that.idRouteStopTransport) return false;
+        if (transportIdTransport != that.transportIdTransport) return false;
+        if (routeIdRoute != that.routeIdRoute) return false;
         if (txHost != null ? !txHost.equals(that.txHost) : that.txHost != null) return false;
         if (txUser != null ? !txUser.equals(that.txUser) : that.txUser != null) return false;
         if (txDate != null ? !txDate.equals(that.txDate) : that.txDate != null) return false;
@@ -69,6 +93,8 @@ public class RouteStopTransportEntity {
     @Override
     public int hashCode() {
         int result = idRouteStopTransport;
+        result = 31 * result + transportIdTransport;
+        result = 31 * result + routeIdRoute;
         result = 31 * result + (txHost != null ? txHost.hashCode() : 0);
         result = 31 * result + (txUser != null ? txUser.hashCode() : 0);
         result = 31 * result + (txDate != null ? txDate.hashCode() : 0);
