@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,17 +20,72 @@ import java.util.List;
 
 @Service
 public class RouteBl {
+    List<Integer> list_origin=new ArrayList<>();
+    //Lista de paradas cercanas al destino
+    List<Integer> list_destination=new ArrayList<>();
+    private static String u_origin="";
+    private static String u_destination="";
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteBl.class);
     private RouteRepository routeRepository;
     private RouteStopRepository routeStopRepository;
     private StopRepository stopRepository;
+    private StopBl stopBl;
 
 
     @Autowired
-    public RouteBl( RouteRepository routeRepository,RouteStopRepository routeStopRepository,StopRepository stopRepository) {
+    public RouteBl( RouteRepository routeRepository,RouteStopRepository routeStopRepository,StopRepository stopRepository,StopBl stopBl) {
         this.routeRepository = routeRepository;
         this.routeStopRepository=routeStopRepository;
         this.stopRepository=stopRepository;
+        this.stopBl=stopBl;
+    }
+    public String route_one(Update update,String message){
+        //Se obtiene la latitud y longitud del usuario
+        u_origin=latitude(update)+","+longitude(update);
+        //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
+        try {
+            list_origin=stopBl.findAllNearbyLocationStop(latitude(update)+","+longitude(update));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        message="Envia la ubicacion a donde quieres llegar";
+        return message;
+    }
+    public String route_two(Update update,String message){
+        message="";
+        u_destination=latitude(update)+","+longitude(update);
+        //Obteniendo los puntos mas cercanos a mi destino
+        try {
+            list_destination=stopBl.findAllNearbyLocationStop(latitude(update)+","+longitude(update));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
+        int codigo=0;
+        codigo=findRoute(list_origin,list_destination);
+        if(codigo!=0){
+            //Generando la url (dibujando el mapa que se enviara)
+            String url= null;
+            try {
+                url =drawMap(codigo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //Devolviendo la url corta
+            message="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
+            message=message+url;
+        }else{
+            message="No hay una ruta disponible";
+        }
+        return message;
+    }
+    //Sacando la latitud
+    public String latitude(Update update){
+        return update.getMessage().getLocation().getLatitude()+"";
+    }
+    //Sacando la longitud
+    public String longitude(Update update){
+        return update.getMessage().getLocation().getLongitude()+"";
     }
 
     //Se da la lista de puntos de inicio y destino encontrando la ruta en la cual conectan
@@ -36,12 +93,10 @@ public class RouteBl {
         int route=0;
             for(int i=0; i<start_points.size();i++){
                 //Se obtiene la lista de puntos de inicio
-                LOGGER.info("LLEGUE EL EROOR NO ESTA QAQUI");
                 int point_start=start_points.get(i);
                 //Se busca la ruta del punto o las rutas que esten relacionadas a el
                 List<RouteStopEntity> all = this.routeStopRepository.findRoute(point_start);
                     for(RouteStopEntity x:all){
-                        LOGGER.info("LLEGUE EL EROOR NO ESTA QAQUIIIIIIIIIIIIIIIIIIIII");
                         //se obtiene la ruta del punto de inicio
                         int route_start=x.getRouteIdRoute();
                         //se obtiene uno por uno los puntos de destino

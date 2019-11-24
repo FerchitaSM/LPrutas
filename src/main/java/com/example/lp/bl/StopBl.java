@@ -21,9 +21,7 @@ import java.util.List;
 @Service
 public class StopBl {
     private static final Logger LOGGER = LoggerFactory.getLogger(StopBl.class);
-
     private StopRepository stopRepository;
-
     @Autowired
     public StopBl( StopRepository stopRepository) {
         this.stopRepository = stopRepository;
@@ -60,8 +58,8 @@ public class StopBl {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyCW_1tL---epCMy6Wix2JrgNWcNjJfqmzg")
                 .build();
-        DistanceMatrix distancia= null;
-        //LA URL ADMITE UNOS 100 DATOS ENTRANTES
+        DistanceMatrix distancia= null; //TODO _LA URL ADMITE HASTA 100 DATOS REVISAR
+
         // se envia la consulta con el origen y las paradas para medir la distancia
         try {
             distancia = DistanceMatrixApi.getDistanceMatrix(
@@ -102,70 +100,4 @@ public class StopBl {
         //se retorna la lista de posiciones en la que se encuentran las direcciones las cuales su distancia es menor a 30 minutos
         return locaciones;
     }
-
-    /*
-    public List<Integer> findAllNearbyLocationStop(String location) {
-        //Se obtiene todas las paradas para luego compararlas con la posicion enviada
-        List<StopEntity> all = this.stopRepository.findAll();
-        Boolean flag=false;
-        List<Integer> stop_distance = new ArrayList<>();
-        for (StopEntity x: all) {
-            String latitud=String.valueOf(x.getLatitude());
-            String longitud= String.valueOf(x.getLongitude());
-            //Colocamos una bandera para saber si la parada cumple con el requisito de distancia
-            flag=CalculateDistance(location,latitud+","+longitud);
-            if(flag==true){
-                 stop_distance.add(x.getIdStop());
-            }
-        }
-        return stop_distance;
-    }*/
-    //Funcion que calcula la distancia
-    /*public boolean CalculateDistance(String location,String nearby_location){
-        Boolean flag=false;
-        //aca se obtiene la ubicacion de origen y destino de los datos entrantes
-        String origin=location;
-        String destination=nearby_location;
-        //Se utiliza la clave de la API de Google
-        GeoApiContext context = new GeoApiContext.Builder()
-                .apiKey("AIzaSyCW_1tL---epCMy6Wix2JrgNWcNjJfqmzg")
-                .build();
-        //se envia las coordenadas para calcular las distancias caminando
-        DistanceMatrix distancia= null;
-        try {
-            distancia = DistanceMatrixApi.getDistanceMatrix(
-                    context,
-                    new String[]{origin},
-                    new String[]{destination}
-            ).mode(TravelMode.WALKING).await();
-        } catch (ApiException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //se genera un Gson
-        Gson gson = new Gson();
-        //Se busca en el JSON el dato de la duracion en segundos dentro del JSON
-        String contents = gson.toJson(distancia);
-       // JsonNode jsonNode = objectMapper.readTree(json);
-
-        JSONObject object=new JSONObject(contents);
-        JSONArray rows=object.getJSONArray("rows");
-        JSONObject first_level =rows.getJSONObject(0);
-        JSONArray elements=first_level.getJSONArray("elements");
-        JSONObject second_level=elements.getJSONObject(0);
-        JSONObject duration=second_level.getJSONObject("duration");
-        //Al encontrar el valor se lo convierte a minutos
-        Integer value=duration.getInt("inSeconds");
-        Double minutes=((double)value)/60;
-        //Si la caminata del origen al destino es menor a 30 minutos se devuelve
-        if(minutes<30){
-            flag=true;
-        }
-        return flag;
-    }*/
-
-
 }

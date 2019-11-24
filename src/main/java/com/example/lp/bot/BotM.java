@@ -74,40 +74,50 @@ public class BotM  extends TelegramLongPollingBot {
 
    public ReplyKeyboardMarkup punto(String conversacion,Update update,ReplyKeyboardMarkup keyboardMarkup){
        switch (conversacion){
+           //ESTE ES EL NIVEL BASICO
            case "0":
                keyboardMarkup=inicio(keyboardMarkup);
                mensaje="Elige una opcion";
                break;
+           //EN ESTE NIVEL SE ESCOGE UNA LINEA ESPECIFICA
            case "1":
+               //Se muestra los tipos de transporte que hay
                mensaje="Elige una opcion";
                keyboardMarkup=transportInfoBl.DescriptiontransportInfo(keyboardMarkup);
                universal_point="2";
                break;
            case "2":
+               //Se muestra movilidades de dicho transporte
                mensaje="Elige una opcion";
                keyboardMarkup=transportBl.findAllDescriptiontransport(keyboardMarkup,update);
                universal_point="3";
                break;
            case "3":
+               //Se muestra la ruta de la movilidad
                mensaje="Elige una opcion\n";
                mensaje=transportBl.findURLTransportByName2(update);
                universal_point="0";
                break;
+            //EN ESTE NIVEL SE BUSCA LINEAS A MI RUTA
            case "4":
+               //Se pide la ubicacion
                keyboardMarkup=null;
                mensaje="Envia tu ubicacion";
                universal_point="5";
                break;
            case "5":
+               //Se obtiene datos de paradas cercas a mi
                keyboardMarkup=null;
-               mensaje=casodos(update);
+               mensaje=routeBl.route_one(update,mensaje);
                universal_point="6";
                break;
            case "6":
+               //Se obtiene datos de paradas cercanas a mi destino y la ruta
                keyboardMarkup=null;
-               mensaje=casotres(update);
+               mensaje=routeBl.route_two(update,mensaje);
                universal_point="0";
                break;
+           //EN ESTE NIVEL SE ESCOGIO VER LAS EXCEPCIONES
            case "7":
                keyboardMarkup=null;
                mensaje="Escogiste excepciones";
@@ -162,51 +172,6 @@ public class BotM  extends TelegramLongPollingBot {
         return keyboardMarkup;
     }
 
-    public String casodos(Update update){
-        //Se obtiene la latitud y longitud del usuario
-        String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
-        String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
-        u_origin=latitude+","+longitude;
-        //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
-        try {
-            list_origin=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mensaje="Envia la ubicacion a donde quieres llegar";
-        return mensaje;
-    }
-    public String casotres(Update update){
-        mensaje="";
-        String latitude=String.valueOf(update.getMessage().getLocation().getLatitude());
-        String longitude=String.valueOf(update.getMessage().getLocation().getLongitude());
-        u_destination=latitude+","+longitude;
-        //Obteniendo los puntos mas cercanos a mi destino
-        try {
-            list_destination=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
-        int codigo=0;
-        codigo=routeBl.findRoute(list_origin,list_destination);
-        if(codigo!=0){
-            //Generando la url (dibujando el mapa que se enviara)
-            String url= null;
-            try {
-                url = routeBl.drawMap(codigo);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //Devolviendo la url corta
-            mensaje="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
-            mensaje=mensaje+url;
-        }else{
-            mensaje=mensaje+"No hay una ruta disponible";
-        }
-        return mensaje;
-    }
-
     @Override
     public String getBotUsername() {
         return "pruebaRLP_bot";
@@ -216,10 +181,7 @@ public class BotM  extends TelegramLongPollingBot {
     public String getBotToken() {
         return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
        // return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
-
        // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
-        // creence su chat bot para que podamos correr en conjunto si
-
     }
 }
 
