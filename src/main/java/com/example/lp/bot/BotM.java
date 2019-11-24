@@ -26,17 +26,11 @@ import java.util.List;
 public class BotM  extends TelegramLongPollingBot {
 
     private static final Logger log = LoggerFactory.getLogger(BotM.class);
-    //Lista de paradas cercanas al origen
-    List<Integer> list_origin=new ArrayList<>();
-    //Lista de paradas cercanas al destino
-    List<Integer> list_destination=new ArrayList<>();
     //punto en el que se encuentra la conversacion
     //punto universal donde se encontraria la persona
     private static String universal_point="0";
     //mensaje a enviar al usuario
     private static String mensaje="HOLA";
-    private static String u_origin="";
-    private static String u_destination="";
 
     StopBl stopBl;
     RouteBl routeBl;
@@ -180,7 +174,8 @@ public class BotM  extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
-       // return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
+       // return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
+        // chatbot Fernanda 1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws
        // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
     }
 }

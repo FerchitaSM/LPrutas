@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,6 +38,7 @@ public class RouteBl {
         this.stopRepository=stopRepository;
         this.stopBl=stopBl;
     }
+
     public String route_one(Update update,String message){
         //Se obtiene la latitud y longitud del usuario
         u_origin=latitude(update)+","+longitude(update);
@@ -51,6 +51,7 @@ public class RouteBl {
         message="Envia la ubicacion a donde quieres llegar";
         return message;
     }
+
     public String route_two(Update update,String message){
         message="";
         u_destination=latitude(update)+","+longitude(update);

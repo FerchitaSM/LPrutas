@@ -91,7 +91,7 @@ public class StopBl {
                 int tiempo=duration.path("inSeconds").asInt();
                 Double minutes=((double)tiempo)/60;
                 //Si la caminata del origen al destino es menor a 30 minutos se devuelve
-                if(minutes<30){
+                if(minutes<15){
                     locaciones.add(contador);
                 }
                 contador++;
