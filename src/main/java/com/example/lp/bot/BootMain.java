@@ -29,7 +29,7 @@ public class BootMain extends TelegramLongPollingBot {
 
     BotOpciones op; // para invocar a la clase opciones del bot
     List<String> opciones; // lista de opciones del menu
-
+    ExceptionBl exceptionBl;
     UsersBl usersBl;
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
@@ -38,22 +38,30 @@ public class BootMain extends TelegramLongPollingBot {
 
 
     UserChatDto userChatDto; //para la relacion de los puntos esto de abajo
+    private boolean request_contact;
     private static int point_conversation=0; //punto en el que se encuentra la conversacion
     boolean menu= true;
 
 
     @Autowired
     public BootMain(TransportBl transportBl,TransportInfoBl transportInfoBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl) {
+
         this.transportBl=transportBl;
         this.transportInfoBl=transportInfoBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
         this.usersBl=usersBl;
     }
+    public String requestContact(boolean requestContact) {
+        request_contact = requestContact;
+        String contact = Boolean.toString(requestContact);
+        return contact;
+    }
 
     @Override
     public void onUpdateReceived(Update update) {
         long chat_id = update.getMessage().getChatId(); //id del ususario
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         UserDto userDto = saveMessageAndUser( update);
         ReplyKeyboardMarkup respuesta_botones = (ReplyKeyboardMarkup) responderBotones(userDto, update); // para los botones
         String respuesta_texto=responderTexto(update); // parael texto
@@ -103,7 +111,7 @@ public class BootMain extends TelegramLongPollingBot {
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
             String mensaje_entrada = userChatDto.getInMessage();
-            op = new BotOpciones(mensaje_entrada, transportBl, transportInfoBl,usersBl,userDto);
+            op = new BotOpciones(mensaje_entrada, transportBl,exceptionBl,transportInfoBl,usersBl,userDto);
             opciones = op.getRetornar();
             //lista con opciones
             for (int i = 0; i < opciones.size(); i++) {
@@ -168,13 +176,13 @@ public class BootMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-       return "pruebaRLP_bot";
+       return "LP_Rutascc_bot";
        // return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
-        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
+        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Fernanda
         //return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
 
 

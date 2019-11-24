@@ -99,7 +99,7 @@ public class UsersBl {
 
     //funcion para registrar un nuevo chat del usuario previamente crado
     public UserChatDto continueWhitUser(Update update ) {
-        LOGGER.info("continueWhitUser.........................");
+        LOGGER.info("continueWithUser.........................");
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         UsersEntity usersEntity = findByIdUserBot(chat_id);
         UserChatEntity lastmessage = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());

@@ -1,31 +1,37 @@
 package com.example.lp.bot;
 
+import com.example.lp.bl.ExceptionBl;
 import com.example.lp.bl.TransportBl;
 import com.example.lp.bl.TransportInfoBl;
 import com.example.lp.bl.UsersBl;
 import com.example.lp.domain.UserTypeEntity;
 import com.example.lp.dto.UserDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BotOpciones {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransportBl.class);
 
     String call_data;
     List<String> retornar = new ArrayList();
     String mostrar ="";
-
+    ExceptionBl exceptionBl;
     TransportBl transportBl;
     TransportInfoBl transportInfoBl;
     UsersBl usersBl;
     UserDto userDto;
 
     @Autowired
-    public BotOpciones(String call_data,TransportBl transportBl, TransportInfoBl transportInfoBl, UsersBl usersBl, UserDto userDto) {
+    public BotOpciones(String call_data,TransportBl transportBl, ExceptionBl exceptionBl,TransportInfoBl transportInfoBl, UsersBl usersBl, UserDto userDto) {
         this.call_data = call_data;
         this.transportBl=transportBl;
+        this.exceptionBl=exceptionBl;
         this.transportInfoBl= transportInfoBl;
         this.usersBl=usersBl;
         this.userDto = userDto;
@@ -39,6 +45,9 @@ public class BotOpciones {
         }else {
             opcionesUsuario();
         }
+    }
+    private void numero_telefono (){
+
     }
 
     private void opcionesadmi() {
@@ -83,7 +92,7 @@ public class BotOpciones {
                 case "Buscar minibuses a mi destino":
                     mostrar=("Karen");
                 case "Ayuda":
-                    sacar_preguntas();
+                    sacar_Preguntas();
                     break;
                 default:
                     String token =usersBl.getTokenAdministrador();
@@ -118,15 +127,7 @@ public class BotOpciones {
     }
 
 
-    private void sacar_preguntas() {
-        String respuesta= "Debes sacar la respuesta de la BD";
-        //AQUI SACAS LA RESPUESTA
-        // en el bl de excepciones haces un metodo buscar por question y devuelves la respuesta
-        // es como la funcion  sacar_TransporteInfo();
-        //retornar =exceptionBl.findAllQuestionMessage();
-        retornar.add("lllllllllll");
-    }
-
+    private void sacar_Preguntas() { retornar=exceptionBl.findAllQuestionMessage(); }
 
     private void sacar_TransporteInfo(){
         retornar=transportInfoBl.findAllDescriptiontransportInfo();
