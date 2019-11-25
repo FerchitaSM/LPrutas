@@ -144,7 +144,7 @@ insert into `exception` (`id_exception`, `question_message`, `answer_message`,`t
 (3,'Pregunta 3','Respuesta 3','ccaverotx','localhost',now()),
 (4,'Pregunta 4','Respuesta 4','ccaverotx','localhost',now());
 
- */
+*/
 
 /* show fields from 'table_name'
 
