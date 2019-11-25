@@ -117,7 +117,8 @@ public class UsersBl {
         userChatEntity.setTxUser(update.getMessage().getFrom().getId().toString());
         userChatEntity.setTxHost(update.getMessage().getChatId().toString());
         userChatEntity.setTxDate(sDate);
-        // Guardamos en base dedatos
+
+        // Guardamos en base de datos
         userChatRepository.save(userChatEntity);
         UserChatDto userChatDto = new UserChatDto(userChatEntity);
         return userChatDto;

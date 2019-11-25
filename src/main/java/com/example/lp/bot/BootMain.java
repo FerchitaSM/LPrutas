@@ -175,14 +175,14 @@ public class BootMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-       return "LP_Rutascc_bot";
-       // return "Rutas_La_Paz_Bot";
+      // return "LP_Rutascc_bot";
+       return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
-        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Cavero
-        //return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+        //return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Cavero
+        return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
 
 
     }

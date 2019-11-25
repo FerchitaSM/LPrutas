@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface Schema extends JpaRepository {
+public interface Schema {}/*extends JpaRepository {
     @Query( value  =  " SELECT table_name FROM information_schema.columns WHERE (table_schema='lpbus_bot' and ordinal_position=1 ) " , nativeQuery  =  true )
     List<String> findTableName();
 
@@ -13,6 +13,6 @@ public interface Schema extends JpaRepository {
     List<String> findColumnsTableName(String tanleName);
 
 }
-
+*/
 
 
