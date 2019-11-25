@@ -98,7 +98,7 @@ public class UsersBl {
     //Funciones de UserChat
 
     //funcion para registrar un nuevo chat del usuario previamente crado
-    public UserChatDto continueWhitUser(Update update, int pointConversation ) {
+    public UserChatDto continueWhitUser(Update update ) {
         LOGGER.info("continueWithUser.........................");
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         UsersEntity usersEntity = findByIdUserBot(chat_id);
@@ -117,7 +117,7 @@ public class UsersBl {
         userChatEntity.setTxUser(update.getMessage().getFrom().getId().toString());
         userChatEntity.setTxHost(update.getMessage().getChatId().toString());
         userChatEntity.setTxDate(sDate);
-        userChatEntity.setPointConversation(pointConversation);
+        userChatEntity.setPointConversation(0);
         // Guardamos en base de datos
         userChatRepository.save(userChatEntity);
         UserChatDto userChatDto = new UserChatDto(userChatEntity);
@@ -210,4 +210,25 @@ public class UsersBl {
     }
 
 
+    public void saveMessageAndUser(Update update ) {
+        UsersEntity usersEntity= null;
+        int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
+        if(!existingUser(chat_id)){
+            usersEntity =  registerUser(update.getMessage().getFrom());
+        } else {
+            usersEntity =  findByIdUserBot(update.getMessage().getFrom().getId());
+        }
+        continueWhitUser(update);
+    }
+
+    @Transactional
+    public void changeChatMessage(long chat_id, String response, String point_conversation) {
+        UsersEntity usersEntity = usersRepository.findByIdUserBot((int) chat_id );
+        UserChatEntity userChatEntity = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
+
+        userChatEntity.setOutMessage(response);
+        userChatEntity.setPointConversation(Integer.parseInt(point_conversation));
+        //userChatRepository.delete(userChatEntity);
+        userChatRepository.save(userChatEntity);
+    }
 }

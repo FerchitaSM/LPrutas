@@ -43,7 +43,7 @@ public class BotM  extends TelegramLongPollingBot {
     }
     @Override
     public void onUpdateReceived(Update update) {
-        saveMessageAndUser( update);
+        usersBl.saveMessageAndUser( update);
 
         if(update.hasMessage()){
             long chat_id = update.getMessage().getChatId();
@@ -63,10 +63,13 @@ public class BotM  extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
+
+
         }
         }
 
-   public ReplyKeyboardMarkup punto(String conversacion,Update update,ReplyKeyboardMarkup keyboardMarkup){
+
+    public ReplyKeyboardMarkup punto(String conversacion,Update update,ReplyKeyboardMarkup keyboardMarkup){
        switch (conversacion){
            //ESTE ES EL NIVEL BASICO
            case "0":
@@ -127,6 +130,7 @@ public class BotM  extends TelegramLongPollingBot {
                universal_point="0";
                break;
        }
+        usersBl.changeChatMessage(update.getMessage().getChatId(),mensaje, universal_point);
        return keyboardMarkup;
    }
 
@@ -192,18 +196,7 @@ public class BotM  extends TelegramLongPollingBot {
        // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
     }
 
-    private void saveMessageAndUser(Update update) {
-        UsersEntity usersEntity= null;
-        int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
-        if(!usersBl.existingUser(chat_id)){
-            usersEntity =  usersBl.registerUser(update.getMessage().getFrom());
-        } else {
-            usersEntity =  usersBl.findByIdUserBot(update.getMessage().getFrom().getId());
-        }
-        List<String> chatResponse= new ArrayList<>();
-        UserChatDto userChatDto = usersBl.continueWhitUser(update, Integer.parseInt(universal_point));
-      //  UserDto userDto = new UserDto(usersEntity);
-    }
+
 
 
 }
