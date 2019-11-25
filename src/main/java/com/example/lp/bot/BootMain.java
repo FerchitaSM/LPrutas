@@ -100,7 +100,7 @@ public class BootMain extends TelegramLongPollingBot {
             usersEntity =  usersBl.findByIdUserBot(update.getMessage().getFrom().getId());
         }
         List<String> chatResponse= new ArrayList<>();
-        userChatDto = usersBl.continueWhitUser(update);
+        userChatDto = usersBl.continueWhitUser(update,0); //TODO CAMBIAR POIN
         UserDto userDto = new UserDto(usersEntity);
         return userDto;
     }

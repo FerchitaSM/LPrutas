@@ -201,7 +201,7 @@ public class BotM  extends TelegramLongPollingBot {
             usersEntity =  usersBl.findByIdUserBot(update.getMessage().getFrom().getId());
         }
         List<String> chatResponse= new ArrayList<>();
-        UserChatDto userChatDto = usersBl.continueWhitUser(update);
+        UserChatDto userChatDto = usersBl.continueWhitUser(update, Integer.parseInt(universal_point));
       //  UserDto userDto = new UserDto(usersEntity);
     }
 

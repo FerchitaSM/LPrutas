@@ -14,6 +14,7 @@ public class UserChatEntity {
     private String txUser;
     private String txHost;
     private Date txDate;
+    private int pointConversation;
 
     @Id
     @Column(name = "id_user_chat", nullable = false)
@@ -94,6 +95,18 @@ public class UserChatEntity {
     public void setTxDate(Date txDate) {
         this.txDate = txDate;
     }
+
+
+    @Basic
+    @Column(name = "point_conversation", nullable = false)
+    public int getPointConversation() {
+        return pointConversation;
+    }
+
+    public void setPointConversation(int pointConversation) {
+        this.pointConversation = pointConversation;
+    }
+
 
     @Override
     public boolean equals(Object o) {

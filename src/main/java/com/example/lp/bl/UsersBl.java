@@ -98,7 +98,7 @@ public class UsersBl {
     //Funciones de UserChat
 
     //funcion para registrar un nuevo chat del usuario previamente crado
-    public UserChatDto continueWhitUser(Update update ) {
+    public UserChatDto continueWhitUser(Update update, int pointConversation ) {
         LOGGER.info("continueWithUser.........................");
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         UsersEntity usersEntity = findByIdUserBot(chat_id);
@@ -117,7 +117,7 @@ public class UsersBl {
         userChatEntity.setTxUser(update.getMessage().getFrom().getId().toString());
         userChatEntity.setTxHost(update.getMessage().getChatId().toString());
         userChatEntity.setTxDate(sDate);
-
+        userChatEntity.setPointConversation(pointConversation);
         // Guardamos en base de datos
         userChatRepository.save(userChatEntity);
         UserChatDto userChatDto = new UserChatDto(userChatEntity);

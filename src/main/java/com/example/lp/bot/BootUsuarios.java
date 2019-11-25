@@ -49,7 +49,8 @@ public class BootUsuarios extends TelegramLongPollingBot {
         if(usersBl.existingUser(chat_id)){
             UsersEntity usersEntity = usersBl.findByIdUserBot(chat_id);
             List<String> chatResponse= new ArrayList<>();
-            usersBl.continueWhitUser(update);
+            usersBl.continueWhitUser(update, 0); //todo cambiar point
+
             return chatResponse.get(chatResponse.size()-1);
         }else {
             usersBl.registerUser(update.getMessage().getFrom());
