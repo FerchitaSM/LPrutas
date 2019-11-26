@@ -150,3 +150,19 @@ insert into `exception` (`id_exception`, `question_message`, `answer_message`,`t
 
        SELECT table_name FROM information_schema.columns WHERE (table_schema='lpbus_bot' and ordinal_position=1 )
 */
+
+/* CAMBIEN ESTOS DATOS PORFA*/
+
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=16zO-9hCUuupQotNH0PLxqaCHkTyPy53Y' WHERE `transport`.`id_transport` = 16;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1osz2LmudoqBe784v_8H53NbgXEkRSOPp' WHERE `transport`.`id_transport` = 15;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1pc8dC5aG9bFKQyk238RAUAmIKCdub-Op' WHERE `transport`.`id_transport` = 14;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1ylisSj1I8nVr1hTENTd9KQoN8tGpPp0t' WHERE `transport`.`id_transport` = 13;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1xlLZ1l2OykTpaeyluBflkR12LnnNhw43' WHERE `transport`.`id_transport` = 12;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1smy2gc-wzjMlOyP_Vd4viqVo6sHudq1E' WHERE `transport`.`id_transport` = 11;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1j953ojotqhF6o6zIeVKeEuTJe6jhiWue' WHERE `transport`.`id_transport` = 10;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=17P2EM-3_sdyOFiEB3otH2I-n9-Vg9q4C' WHERE `transport`.`id_transport` = 9;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1nWRd7tA0oB_kmUl3YCWrtqSiPlidxBc1' WHERE `transport`.`id_transport` = 8;
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1XwP_S5xdWhd_CwpjcBMdues8D0GzwslR' WHERE `transport`.`id_transport` = 7;
+
+
+
