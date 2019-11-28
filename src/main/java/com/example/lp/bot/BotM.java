@@ -53,13 +53,13 @@ public class BotM  extends TelegramLongPollingBot {
             getMessage(update);
 
             ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-            keyboardMarkup=punto(universal_point,update,keyboardMarkup);
+            keyboardMarkup=punto(update,keyboardMarkup);
             message.setText(mensaje);
             if(keyboardMarkup!=null){
                 message.setReplyMarkup(keyboardMarkup);
             }
            try {
-                execute(message); // Sending our message object to user
+               execute(message); // Sending our message object to user
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -69,69 +69,70 @@ public class BotM  extends TelegramLongPollingBot {
         }
 
 
-    public ReplyKeyboardMarkup punto(String conversacion,Update update,ReplyKeyboardMarkup keyboardMarkup){
+    public ReplyKeyboardMarkup punto(Update update,ReplyKeyboardMarkup keyboardMarkup){
+       String conversacion = usersBl.lastPointConversation(update);
        switch (conversacion){
            //ESTE ES EL NIVEL BASICO
            case "0":
                keyboardMarkup=inicio(keyboardMarkup);
-               mensaje="Elige una opcion";
+               mensaje="Elige una opcion"; usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
                break;
            //EN ESTE NIVEL SE ESCOGE UNA LINEA ESPECIFICA
            case "1":
                //Se muestra los tipos de transporte que hay
-               mensaje="Elige una opcion";
+               mensaje="Elige una opcion"; usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
                keyboardMarkup=transportBl.DescriptiontransportInfo(keyboardMarkup);
-               universal_point="2";
+               universal_point="2";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
            case "2":
                //Se muestra movilidades de dicho transporte
-               mensaje="Elige una opcion";
+               mensaje="Elige una opcion"; usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
                keyboardMarkup=transportBl.findAllDescriptiontransport(keyboardMarkup,update);
-               universal_point="3";
+               universal_point="3";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
            case "3":
                //Se muestra la ruta de la movilidad
-               mensaje="Elige una opcion\n";
-               mensaje=transportBl.findURLTransportByName2(update);
-               universal_point="0";
+               mensaje="Elige una opcion\n"; usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+               mensaje= routeBl.drawMapByDescription(update.getMessage().getText());//transportBl.findURLTransportByName2(update);
+               universal_point="0";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
 
             //EN ESTE NIVEL SE BUSCA LINEAS A MI RUTA
            case "4":
                //Se muestra los tipos de transporte que hay
-               mensaje="Elige una opcion";
+               mensaje="Elige una opcion"; usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
                keyboardMarkup=transportBl.DescriptiontransportInfo(keyboardMarkup);
-               universal_point="5";
+               universal_point="5";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
            case "5":
                //Se pide la ubicacion
                keyboardMarkup=null;
                routeBl.get_transport(update);
-               mensaje="Envia tu ubicacion";
-               universal_point="6";
+               mensaje="Envia tu ubicacion"; usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+               universal_point="6";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
            case "6":
                //Se obtiene datos de paradas cercas a mi
                keyboardMarkup=null;
-               mensaje=routeBl.route_one(update,mensaje);
-               universal_point="7";
+               mensaje=routeBl.route_one(update,mensaje); usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+               universal_point="7";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
            case "7":
                //Se obtiene datos de paradas cercanas a mi destino y la ruta
                keyboardMarkup=null;
-               mensaje=routeBl.route_two(update,mensaje);
-               universal_point="0";
+               mensaje=routeBl.route_two(update,mensaje); usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+               universal_point="0"; usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
 
            //EN ESTE NIVEL SE ESCOGIO VER LAS EXCEPCIONES
            case "8":
                keyboardMarkup=null;
-               mensaje="Escogiste excepciones";
-               universal_point="0";
+               mensaje="Escogiste excepciones"; usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+               universal_point="0"; usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
        }
-        usersBl.changeChatMessage(update.getMessage().getChatId(),mensaje, universal_point);
-       return keyboardMarkup;
+
+        return keyboardMarkup;
    }
 
    public void getMessage (Update update){
@@ -139,19 +140,19 @@ public class BotM  extends TelegramLongPollingBot {
            String message=update.getMessage().getText();
            switch (message){
                case "Buscar una línea específica":
-                   universal_point="1";
+                   universal_point="1";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                    break;
                case "Buscar movilidad a mi destino":
-                   universal_point="4";
+                   universal_point="4";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                    break;
                case "Excepciones":
-                   universal_point="8";
+                   universal_point="8";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                    break;
                default:
                    if(universal_point=="2" || universal_point=="3" || universal_point=="5" ){
                        log.info("EL MENSAJE ES ADMITIDO");
                    }else{
-                       universal_point="0";
+                       universal_point="0";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                    }
            }
        }else{
@@ -159,7 +160,7 @@ public class BotM  extends TelegramLongPollingBot {
                if((update.getMessage().hasLocation()) && (universal_point=="6" || universal_point=="7")){
                    log.info("EL MENSAJE ES ADMITIDO");
                }else{
-                   universal_point="0";
+                   universal_point="0";usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                }
            }
        }

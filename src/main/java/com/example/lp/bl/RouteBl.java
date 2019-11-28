@@ -185,6 +185,7 @@ public class RouteBl {
         return url;
     }
     //Al obtener la url de inicio se la acorta
+    //karen uso esta funcion no la borres
     public String shorter(String url) throws IOException {
         String tinyUrl = "http://tinyurl.com/api-create.php?url=";
         String tinyUrlLookup = tinyUrl + url;
@@ -204,4 +205,46 @@ public class RouteBl {
         }
         return coordinates;
     }
+
+
+
+    //Sirve para obtener la URL con las rutas por donde pasa el transporte segun su nombre
+    public String drawMapByDescription(String name){
+        List<String> listLatitudeStop = this.stopRepository.findLatitudeByDescription(name);
+        List<String> listLongitudeStop = this.stopRepository.findLongitudeByDescription(name);
+        List<String> listStop = new ArrayList<>();
+        for (int i = 0; i<listLatitudeStop.size();i++) {
+            String coordenadas= listLatitudeStop.get(i)+ ","+listLongitudeStop.get(i);
+            listStop.add(coordenadas);
+        }
+
+        String url= "Lo sentimos aun no esta disponible la ruta ";
+        try {
+            url = drawMapForTransport(listStop);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return url;
+        }
+        return url;
+    }
+    public String drawMapForTransport(List<String> listStop) throws IOException {
+        String url=getURLForTransport(listStop);
+        String short_url=shorter(url);
+        return short_url;
+    }
+
+
+    public String getURLForTransport(List<String> listStop ){
+        String url="https://www.google.com/maps/dir/";
+        int tamanio= listStop.size()-1;
+        for (int i = 0; i<tamanio;i++) {
+            url+=listStop.get(i)+"/";
+
+        }
+        if (tamanio>0)
+            url+=listStop.get(tamanio);
+        LOGGER.info(url);
+        return url;
+    }
+
 }

@@ -124,6 +124,15 @@ public class UsersBl {
         return userChatDto;
     }
 
+    //funcion para regresar el punto de la ultima conversacion
+    public String lastPointConversation(Update update ) {
+        LOGGER.info("lastPointConversation.........................");
+        String ret="0";
+        int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
+        UsersEntity usersEntity = findByIdUserBot(chat_id);
+        ret = String.valueOf(userChatRepository.findPenultimatePointConversatonChatByUserId(usersEntity.getIdUser()));
+       return ret;
+    }
 
     //Funciones de UserType
 
@@ -222,13 +231,21 @@ public class UsersBl {
     }
 
     @Transactional
-    public void changeChatMessage(long chat_id, String response, String point_conversation) {
+    public void changeResponseChatMessage(long chat_id, String response) {
         UsersEntity usersEntity = usersRepository.findByIdUserBot((int) chat_id );
         UserChatEntity userChatEntity = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
-
         userChatEntity.setOutMessage(response);
+        //userChatRepository.delete(userChatEntity);
+        userChatRepository.save(userChatEntity);
+    }
+
+    @Transactional
+    public void changePointConversationChatMessage(long chat_id, String point_conversation) {
+        UsersEntity usersEntity = usersRepository.findByIdUserBot((int) chat_id );
+        UserChatEntity userChatEntity = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
         userChatEntity.setPointConversation(Integer.parseInt(point_conversation));
         //userChatRepository.delete(userChatEntity);
         userChatRepository.save(userChatEntity);
     }
+
 }
