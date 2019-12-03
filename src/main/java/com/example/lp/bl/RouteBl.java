@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,7 +45,7 @@ public class RouteBl {
         this.stopBl=stopBl;
         this.transportInfoRepository=transportInfoRepository;
     }
-    public void get_transport(Update update){
+    public String get_transport(Update update) throws IOException {
         String type_transport=update.getMessage().getText();
         List<TransportInfoEntity> all = this.transportInfoRepository.findAll();
         int info_id=0;
@@ -53,65 +55,66 @@ public class RouteBl {
             }
         }
         cod_transport=info_id;
+        String url="https://www.google.com/maps/d/edit?hl=es&mid=1sT0h3AEummjmqVLW0pZpweC3pA2t3uTA&ll=-16.695798030199423%2C-68.03800741642942&z=12";
+        String short_url=shorter(url);
+        return short_url;
     }
-    public int get_cod_transport(){
-        return cod_transport;
-    }
-
-
+    //Funcionalidad de la parte uno obteniendo la lista de origen
     public String route_one(Update update,String message){
         //Se obtiene la latitud y longitud del usuario
         u_origin=latitude(update)+","+longitude(update);
         //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
-        try {
-            list_origin=stopBl.findAllNearbyLocationStop(latitude(update)+","+longitude(update));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        list_origin=nearby_points(list_origin,update);
         message="Envia la ubicacion a donde quieres llegar";
         return message;
     }
-
+    //Funcionalidad para acabar la segundo parte dibujando el mapa
     public String route_two(Update update,String message){
-        message="";
         u_destination=latitude(update)+","+longitude(update);
         //Obteniendo los puntos mas cercanos a mi destino
-        try {
-            list_destination=stopBl.findAllNearbyLocationStop(latitude(update)+","+longitude(update));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        list_destination=nearby_points(list_destination,update);
         //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
-        int codigo=0;
-        codigo=findRoute(list_origin,list_destination);
-        if(codigo!=0){
-            //Generando la url (dibujando el mapa que se enviara)
-            String url= null;
-            try {
-                url =drawMap(codigo);
-            } catch (IOException e) {
-                e.printStackTrace();
+        List<Integer> codes=new ArrayList<>();
+        codes=findRoute(list_origin,list_destination);
+        message=routelist_url(codes,message);
+        return message;
+    }
+    //Lista de rutas con su url
+    private String routelist_url(List<Integer> codes,String message){
+        //Preguntando si la ruta es distinta de cero
+        if(codes.size()>0){
+            message="Grandioso ya tenemos la informacion\nEstas son las rutas disponibles:\n\n";
+            for(int i=0;i<codes.size();i++){
+                //Generando la url (dibujando el mapa que se enviara)
+                String url= null;
+                try {
+                    url =drawMap(codes.get(i));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //Devolviendo la url corta
+                message=message+"Ruta:  "+codes.get(i)+"\n";
+                message=message+url+"\n";
             }
-            //Devolviendo la url corta
-            message="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
-            message=message+url;
         }else{
             message="No hay una ruta disponible";
         }
         return message;
     }
-    //Sacando la latitud
-    public String latitude(Update update){
-        return update.getMessage().getLocation().getLatitude()+"";
-    }
-    //Sacando la longitud
-    public String longitude(Update update){
-        return update.getMessage().getLocation().getLongitude()+"";
+
+    //Se saca la lista de puntos cercanos a la ubicacion
+    private List<Integer> nearby_points(List<Integer> list, Update update){
+        try {
+            list=stopBl.findAllNearbyLocationStop(latitude(update)+","+longitude(update));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     //Se da la lista de puntos de inicio y destino encontrando la ruta en la cual conectan
-    public int findRoute(List<Integer> start_points, List<Integer> finish_points){
-        int route=0;
+    private List<Integer> findRoute(List<Integer> start_points, List<Integer> finish_points){
+        List<Integer> routes=new ArrayList<>();
             for(int i=0; i<start_points.size();i++){
                 //Se obtiene la lista de puntos de inicio
                 int point_start=start_points.get(i);
@@ -127,29 +130,48 @@ public class RouteBl {
                             List<RouteStopEntity> find_route=this.routeStopRepository.findRouteFinish(route_start,point_finish);
                             for(RouteStopEntity y:find_route){
                                // List<TransportBl> find_transport=this.
-
-                                //se obtiene cual es esa ruta
-                                route=y.getRouteIdRoute();
+                                //se obtiene cual es esa ruta y se la adiciona a la lista de rutas
+                                routes.add(y.getRouteIdRoute());
                             }
                         }
                     }
             }
 
         //se devuelve la ruta
-        return route;
+        return routes;
     }
+
     //Se dibuja el mapa llamando a la mayor parte de funciones en el String se devuelve la url corta
-    public String drawMap(int route) throws IOException {
+    private String drawMap(int route) throws IOException {
         //Se utiliza la funcion coordenadas donde se busca todos los puntos que esten relacionados con la ruta obtenida
-        List<String> coordinates=get_coordinates(route);
-        //Se envia esta lista de coordenadas a se genere la URL
-        String url=get_url(route,coordinates);
-        //Al tener el URL se lo convierte en una URLcorta
-        String short_url=shorter(url);
+        String short_url="";
+           // if(cod_transport==1){
+             //   String url="https://www.google.com/maps/d/edit?hl=es&mid=1sT0h3AEummjmqVLW0pZpweC3pA2t3uTA&ll=-16.695798030199423%2C-68.03800741642942&z=12";
+              //  short_url=shorter(url);
+           // }else{
+                List<String> coordinates=get_coordinates(route);
+                //Se envia esta lista de coordenadas a se genere la URL
+                String url=get_url(route,coordinates);
+                //Al tener el URL se lo convierte en una URLcorta
+                short_url=shorter(url);
+           // }
         return short_url;
     }
+    //Se genera la lista de rutas intermedias con la ruta enviada
+    private List<String> get_coordinates(int route){
+        List<String> coordinates=new ArrayList<>();
+        List<StopEntity> all = this.stopRepository.findPointsRoute(route);
+        for(StopEntity x:all){
+            float latitude= (float) x.getLatitude();
+            float longitude= (float) x.getLongitude();
+            coordinates.add(latitude+","+longitude);
+            LOGGER.info(latitude+","+longitude);
+        }
+        return coordinates;
+    }
+
     //Se obtiene el origen y destino de la ruta
-    public String origin_and_destin(int route){
+    private String origin_and_destin(int route){
         String origin="";
         //Se obtiene la ubicacion de origen de la ruta
         List<StopEntity> all = this.stopRepository.findStartPosition(route);
@@ -166,7 +188,7 @@ public class RouteBl {
     }
 
     //Se genera la URL enviandole la lista de coordenadas intermedias y la ruta
-    public String get_url(int route,List<String> coordinates){
+    private String get_url(int route,List<String> coordinates){
         //waypoints son las paradas intermedias
         String waypoint="";
         //Se divide con un split el origen y destino despues de invocar la funcion origin_and_destin
@@ -186,25 +208,23 @@ public class RouteBl {
     }
     //Al obtener la url de inicio se la acorta
     //karen uso esta funcion no la borres
-    public String shorter(String url) throws IOException {
+    private String shorter(String url) throws IOException {
         String tinyUrl = "http://tinyurl.com/api-create.php?url=";
         String tinyUrlLookup = tinyUrl + url;
         BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(tinyUrlLookup).openStream()));
         tinyUrl = reader.readLine();
         return tinyUrl;
     }
-    //Se genera la lista de rutas intermedias con la ruta enviada
-    public List<String> get_coordinates(int route){
-        List<String> coordinates=new ArrayList<>();
-        List<StopEntity> all = this.stopRepository.findPointsRoute(route);
-        for(StopEntity x:all){
-            float latitude= (float) x.getLatitude();
-            float longitude= (float) x.getLongitude();
-            coordinates.add(latitude+","+longitude);
-            LOGGER.info(latitude+","+longitude);
-        }
-        return coordinates;
+    //Sacando la latitud
+    private String latitude(Update update){
+        return update.getMessage().getLocation().getLatitude()+"";
     }
+    //Sacando la longitud
+    private String longitude(Update update){
+        return update.getMessage().getLocation().getLongitude()+"";
+    }
+
+
 
 
 

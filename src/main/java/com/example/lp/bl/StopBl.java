@@ -53,7 +53,7 @@ public class StopBl {
         //se retorna la lista de paradas
         return stop_distance;
     }
-    public List<Integer> distancematrix(String origen,String destinos) throws IOException {
+    private List<Integer> distancematrix(String origen,String destinos) throws IOException {
         //se abre el contexto para construir la consulta
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyCW_1tL---epCMy6Wix2JrgNWcNjJfqmzg")
@@ -74,6 +74,13 @@ public class StopBl {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        List<Integer> locaciones=location(distancia);
+        //se retorna la lista de posiciones en la que se encuentran las direcciones las cuales su distancia es menor a 30 minutos
+        return locaciones;
+    }
+    //se obtiene la lista de ubicaciones
+    private List<Integer> location(DistanceMatrix distancia) throws IOException {
+        List<Integer> locaciones=new ArrayList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println("Reading JSON file from Java program");
         String contents = gson.toJson(distancia);
@@ -81,7 +88,6 @@ public class StopBl {
         //se comienza a manejar el JSON por nodos para obtener el valor de la distancia
         JsonNode jsonNode=mapper.readTree(contents);
         JsonNode rows=jsonNode.path("rows");
-        List<Integer> locaciones=new ArrayList<>();
         //el contador sirve para saber en que locacion se encuentra las direcciones que tiene distancias menores a 30 minutos
         int contador=0;
         for(JsonNode node: rows){
@@ -97,7 +103,8 @@ public class StopBl {
                 contador++;
             }
         }
-        //se retorna la lista de posiciones en la que se encuentran las direcciones las cuales su distancia es menor a 30 minutos
         return locaciones;
     }
+
+
 }

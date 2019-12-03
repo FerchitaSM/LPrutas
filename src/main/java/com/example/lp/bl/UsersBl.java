@@ -83,6 +83,7 @@ public class UsersBl {
         LOGGER.info("registrerUser.........................");
         Date sDate = getDate();
         UsersEntity usersEntity = new UsersEntity();
+        System.out.println("gesteeee"+users.getId());
         usersEntity.setIdUserBot(users.getId());
         usersEntity.setIdUserType(UserType.USERS.getUserType());
         usersEntity.setuStatus(Status.ACTIVE.getStatus());
@@ -223,6 +224,7 @@ public class UsersBl {
         UsersEntity usersEntity= null;
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         if(!existingUser(chat_id)){
+            System.out.println("from"+update.getMessage().getFrom());
             usersEntity =  registerUser(update.getMessage().getFrom());
         } else {
             usersEntity =  findByIdUserBot(update.getMessage().getFrom().getId());
