@@ -5,7 +5,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
 @Entity
 @Table(name = "route", schema = "dbtest_lpbus2", catalog = "")
+@NamedQueries({
+        @NamedQuery(name = "RouteEntity.findByRoute", query = "SELECT a FROM RouteEntity a WHERE a.idRoute = :idRoute")
 
+})
 
 public class RouteEntity {
     private int idRoute;

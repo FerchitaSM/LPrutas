@@ -4,6 +4,7 @@ import com.example.lp.dao.RouteRepository;
 import com.example.lp.dao.RouteStopRepository;
 import com.example.lp.dao.StopRepository;
 import com.example.lp.dao.TransportInfoRepository;
+import com.example.lp.domain.RouteEntity;
 import com.example.lp.domain.RouteStopEntity;
 import com.example.lp.domain.StopEntity;
 import com.example.lp.domain.TransportInfoEntity;
@@ -20,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RouteBl {
@@ -45,7 +47,7 @@ public class RouteBl {
         this.stopBl=stopBl;
         this.transportInfoRepository=transportInfoRepository;
     }
-    public String get_transport(Update update) throws IOException {
+    public void get_transport(Update update) throws IOException {
         String type_transport=update.getMessage().getText();
         List<TransportInfoEntity> all = this.transportInfoRepository.findAll();
         int info_id=0;
@@ -55,9 +57,6 @@ public class RouteBl {
             }
         }
         cod_transport=info_id;
-        String url="https://www.google.com/maps/d/edit?hl=es&mid=1sT0h3AEummjmqVLW0pZpweC3pA2t3uTA&ll=-16.695798030199423%2C-68.03800741642942&z=12";
-        String short_url=shorter(url);
-        return short_url;
     }
     //Funcionalidad de la parte uno obteniendo la lista de origen
     public String route_one(Update update,String message){
@@ -145,16 +144,27 @@ public class RouteBl {
     private String drawMap(int route) throws IOException {
         //Se utiliza la funcion coordenadas donde se busca todos los puntos que esten relacionados con la ruta obtenida
         String short_url="";
-           // if(cod_transport==1){
-             //   String url="https://www.google.com/maps/d/edit?hl=es&mid=1sT0h3AEummjmqVLW0pZpweC3pA2t3uTA&ll=-16.695798030199423%2C-68.03800741642942&z=12";
-              //  short_url=shorter(url);
-           // }else{
-                List<String> coordinates=get_coordinates(route);
-                //Se envia esta lista de coordenadas a se genere la URL
-                String url=get_url(route,coordinates);
-                //Al tener el URL se lo convierte en una URLcorta
-                short_url=shorter(url);
-           // }
+        String url="";
+        if(cod_transport==1){
+            List<RouteEntity> all=this.routeRepository.findByRoute(route);
+            for(RouteEntity x:all){
+               url=x.getRouteDetails();
+            }
+            short_url=url;
+
+        }else{
+            // if(cod_transport==1){
+            //   String url="https://www.google.com/maps/d/edit?hl=es&mid=1sT0h3AEummjmqVLW0pZpweC3pA2t3uTA&ll=-16.695798030199423%2C-68.03800741642942&z=12";
+            //  short_url=shorter(url);
+            // }else{
+            List<String> coordinates=get_coordinates(route);
+            //Se envia esta lista de coordenadas a se genere la URL
+            url=get_url(route,coordinates);
+            //Al tener el URL se lo convierte en una URLcorta
+            short_url=shorter(url);
+            // }
+        }
+
         return short_url;
     }
     //Se genera la lista de rutas intermedias con la ruta enviada

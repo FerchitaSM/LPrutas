@@ -114,7 +114,7 @@ public class BotM  extends TelegramLongPollingBot {
            case "5":
                //Se pide la ubicacion
                keyboardMarkup=null;
-               //routeBl.get_transport(update);
+               routeBl.get_transport(update);
                mensaje="Envia tu ubicacion"; //usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
                universal_point="6";//usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
