@@ -105,16 +105,16 @@ public class BotM  extends TelegramLongPollingBot {
             //EN ESTE NIVEL SE BUSCA LINEAS A MI RUTA
            case "4":
                //Se muestra los tipos de transporte que hay
-               String mas=routeBl.get_transport(update);
+               //String mas=routeBl.get_transport(update);
                mensaje="Elige una opcion+\n"; //usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
-               mensaje=mensaje+mas;
+               //mensaje=mensaje+mas;
                keyboardMarkup=transportBl.DescriptiontransportInfo(keyboardMarkup);
                universal_point="5";//usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;
            case "5":
                //Se pide la ubicacion
                keyboardMarkup=null;
-               routeBl.get_transport(update);
+               //routeBl.get_transport(update);
                mensaje="Envia tu ubicacion"; //usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
                universal_point="6";//usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
                break;

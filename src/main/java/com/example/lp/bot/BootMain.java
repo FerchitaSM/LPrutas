@@ -207,16 +207,7 @@ public class BootMain extends TelegramLongPollingBot {
                 }
                 break;
             case 2:
-                if(update.getMessage().hasLocation()){
-                    list_destination=llenar_lista(obtener_latitud(update),obtener_longitud(update) );//Obteniendo los puntos mas cercanos a mi destino
-                    mensaje=mandar_url_dibujo(list_origin, list_destination);
-                    point_conversation=0;
-                    menu= true;
-                }else{
-                    point_conversation=0;
-                    break;
-                }
-                break;
+
         }
         return mensaje;
     }
@@ -230,22 +221,7 @@ public class BootMain extends TelegramLongPollingBot {
         return longitude;
     }
 
-    private String mandar_url_dibujo(List<Integer> list_origin, List<Integer> list_destination  ) {
-        int codigo=routeBl.findRoute(list_origin,list_destination);//Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
-        String ret="";
-        String url= null;
-        try {
-            url = routeBl.drawMap(codigo);
-        } catch (IOException e) {
-            log.info("ACA ESTA EL NULL EN LA LINEA 212");
-            e.printStackTrace();
-        }
-        //Devolviendo la url corta
-        ret="Grandioso ya tenemos la informacion\nIngresa al siguiente link para ver el bus a tomar:\n";
-        ret=ret+url;
-        return ret;
 
-    }
 
     private List<Integer> llenar_lista(String latitude, String longitude ){
         List<Integer> retorno =new ArrayList<>();

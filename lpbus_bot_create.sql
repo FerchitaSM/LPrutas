@@ -16,6 +16,7 @@ CREATE TABLE route (
     tx_host varchar(200) NOT NULL,
     tx_user varchar(200) NOT NULL,
     tx_date date NOT NULL,
+    route_name varchar(200) NOT NULL,
     route_details varchar(200) NOT NULL,
     stop_start int NOT NULL,
     stop_finish int NOT NULL,
