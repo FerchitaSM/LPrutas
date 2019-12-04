@@ -44,9 +44,8 @@ public class BotM  extends TelegramLongPollingBot {
     }
     @Override
     public void onUpdateReceived(Update update) {
-        //usersBl.saveMessageAndUser( update);
-
         if(update.hasMessage()){
+            //usersBl.saveMessageAndUser( update);
             long chat_id = update.getMessage().getChatId();
             SendMessage message = new SendMessage()// Create a message object object
                     .setChatId(chat_id)

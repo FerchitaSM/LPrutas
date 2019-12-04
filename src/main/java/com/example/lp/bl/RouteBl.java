@@ -21,7 +21,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class RouteBl {
@@ -81,11 +82,13 @@ public class RouteBl {
     //Lista de rutas con su url
     private String routelist_url(List<Integer> codes,String message){
         //Preguntando si la ruta es distinta de cero
-        if(codes.size()>0){
+        String url= null;
+        if(codes.size()>1){
             message="Grandioso ya tenemos la informacion\nEstas son las rutas disponibles:\n\n";
+            //Encontrando si hay ruta repetidas
+            codes=finding_repetitions(codes);
             for(int i=0;i<codes.size();i++){
                 //Generando la url (dibujando el mapa que se enviara)
-                String url= null;
                 try {
                     url =drawMap(codes.get(i));
                 } catch (IOException e) {
@@ -96,9 +99,16 @@ public class RouteBl {
                 message=message+url+"\n";
             }
         }else{
-            message="No hay una ruta disponible";
+                message="No hay una ruta disponible";
         }
         return message;
+    }
+    private List<Integer> finding_repetitions(List<Integer> codes){
+        //Utilizando hashSet para evitar rutas repetidas
+        Set<Integer> hashSet = new HashSet<Integer>(codes);
+        codes.clear();
+        codes.addAll(hashSet);
+        return codes;
     }
 
     //Se saca la lista de puntos cercanos a la ubicacion
