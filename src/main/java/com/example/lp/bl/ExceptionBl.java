@@ -5,6 +5,7 @@ import com.example.lp.dao.UserChatRepository;
 import com.example.lp.domain.ExceptionEntity;
 import com.example.lp.domain.TransportEntity;
 import com.example.lp.domain.TransportInfoEntity;
+import com.example.lp.domain.UserChatEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,22 @@ public class ExceptionBl {
         String QuestionMessage = this.usersBl.idMessage(chat_id);
         String ret =this.exceptionRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
         return ret;
+    }
+    public ReplyKeyboardMarkup otherQuestion(ReplyKeyboardMarkup keyboardMarkup, Update update) {
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        long chat_id = update.getMessage().getChatId();
+        String QuestionMessage = this.usersBl.idMessage(chat_id);
+
+        if(QuestionMessage.equals("Otra pregunta")) {
+            KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
+            row.add(findAnswerMessageByQuestionMessage(update));
+            keyboard.add(row);
+            keyboardMarkup.setKeyboard(keyboard);
+        }else {
+            keyboardMarkup=null;
+        }
+
+        return keyboardMarkup;
     }
 
 }
