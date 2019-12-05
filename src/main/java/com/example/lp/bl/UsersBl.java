@@ -130,6 +130,8 @@ public class UsersBl {
         LOGGER.info("lastPointConversation.........................");
         String ret="0";
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
+
+
         UsersEntity usersEntity = findByIdUserBot(chat_id);
         ret = String.valueOf(userChatRepository.findPenultimatePointConversatonChatByUserId(usersEntity.getIdUser()));
        return ret;
