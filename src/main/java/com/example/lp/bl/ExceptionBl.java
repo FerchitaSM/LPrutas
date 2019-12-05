@@ -53,24 +53,9 @@ public class ExceptionBl {
     public String findAnswerMessageByQuestionMessage(Update update ) {
         long chat_id = update.getMessage().getChatId();
         String QuestionMessage = this.usersBl.idMessage(chat_id);
-        String ret =this.exceptionRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
+        String ret=this.exceptionRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
         return ret;
     }
-    public ReplyKeyboardMarkup otherQuestion(ReplyKeyboardMarkup keyboardMarkup, Update update) {
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        long chat_id = update.getMessage().getChatId();
-        String QuestionMessage = this.usersBl.idMessage(chat_id);
 
-        if(QuestionMessage.equals("Otra pregunta")) {
-            KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
-            row.add(findAnswerMessageByQuestionMessage(update));
-            keyboard.add(row);
-            keyboardMarkup.setKeyboard(keyboard);
-        }else {
-            keyboardMarkup=null;
-        }
-
-        return keyboardMarkup;
-    }
 
 }

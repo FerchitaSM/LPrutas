@@ -153,7 +153,7 @@ public class BotM  extends TelegramLongPollingBot {
                break;
            case "9":
                //Obtenemos la pregunta a la respuesta previa
-               keyboardMarkup=exceptionBl.otherQuestion(keyboardMarkup,update);
+               keyboardMarkup=null;
                mensaje=exceptionBl.findAnswerMessageByQuestionMessage(update);
                universal_point="0";
                break;
