@@ -112,7 +112,7 @@ public class BotM  extends TelegramLongPollingBot {
            case "3":
                //Se muestra la ruta de la movilidad
                mensaje="Elige una opcion\n";
-               mensaje= routeBl.drawMapByDescription(update.getMessage().getText());//transportBl.findURLTransportByName2(update);
+               mensaje= transportBl.findURLTransportByName2(update); //routeBl.drawMapByDescription(update.getMessage().getText());
                universal_point="0";
                break;
 
@@ -147,8 +147,14 @@ public class BotM  extends TelegramLongPollingBot {
 
            //EN ESTE NIVEL SE ESCOGIO VER LAS EXCEPCIONES
            case "8":
+               keyboardMarkup=exceptionBl.findAllQuestionMessage(keyboardMarkup,update);
+               mensaje="Escogiste ayuda en que podemos ayudar";
+               universal_point="9";
+               break;
+           case "9":
+               //Obtenemos la pregunta a la respuesta previa
                keyboardMarkup=null;
-               mensaje="Escogiste excepciones";
+               mensaje=exceptionBl.findAnswerMessageByQuestionMessage(update);
                universal_point="0";
                break;
        }
@@ -170,7 +176,7 @@ public class BotM  extends TelegramLongPollingBot {
                    universal_point="8";
                    break;
                default:
-                   if(universal_point=="2" || universal_point=="3" || universal_point=="5" ){
+                   if(universal_point=="2" || universal_point=="3" || universal_point=="5" || universal_point=="9" ){
                        log.info("EL MENSAJE ES ADMITIDO");
                    }else{
                        universal_point="0";

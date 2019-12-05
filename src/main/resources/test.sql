@@ -108,6 +108,7 @@ insert into `exception` (`id_exception`, `question_message`, `answer_message`,`t
 (3,'Pregunta 3','Respuesta 3','ccaverotx','localhost',now()),
 (4,'Pregunta 4','Respuesta 4','ccaverotx','localhost',now());
 
+UPDATE `exception` SET `answer_message` = 'https://www.google.com/maps/d/embed?mid=16zO-9hCUuupQotNH0PLxqaCHkTyPy53Y' WHERE `exception`.`id_exception` = 1;
 
 /* show fields from 'table_name'
 

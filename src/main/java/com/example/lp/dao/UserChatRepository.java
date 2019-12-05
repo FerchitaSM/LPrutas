@@ -14,4 +14,6 @@ public interface UserChatRepository extends JpaRepository<UserChatEntity,Integer
     @Query ( value  =  " SELECT point_conversation FROM user_chat where id_user =?1 ORDER BY id_user_chat DESC LIMIT 1 " , nativeQuery  =  true )
     int finUltimatePointConversatonChatByUserId(Integer userId);
 
+    @Query ( value  =  " SELECT in_message FROM user_chat where id_user =?1 ORDER BY id_user_chat DESC LIMIT 1 " , nativeQuery  =  true )
+    String finUltimateInMessageByUserId(Integer userId);
 }

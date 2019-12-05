@@ -235,7 +235,7 @@ public class UsersBl {
     public String idMessage (long chat_id) {
         UsersEntity usersEntity = usersRepository.findByIdUserBot((int) chat_id );
         UserChatEntity userChatEntity = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
-        String mensaje = String.valueOf(userChatEntity.getIdUserChat());
+        String mensaje = userChatEntity.getInMessage();
         return mensaje;
     }
 
