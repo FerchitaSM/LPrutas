@@ -133,7 +133,7 @@ public class UsersBl {
 
 
         UsersEntity usersEntity = findByIdUserBot(chat_id);
-        ret = String.valueOf(userChatRepository.findPenultimatePointConversatonChatByUserId(usersEntity.getIdUser()));
+        ret = String.valueOf(userChatRepository.finUltimatePointConversatonChatByUserId(usersEntity.getIdUser()));
        return ret;
     }
 
@@ -212,8 +212,6 @@ public class UsersBl {
 
     }
 
-
-
     //extras
     private Date getDate() {
         java.util.Date uDate = new java.util.Date();
@@ -223,16 +221,24 @@ public class UsersBl {
 
 
     public void saveMessageAndUser(Update update ) {
-        UsersEntity usersEntity= null;
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());
         if(!existingUser(chat_id)){
-            System.out.println("from"+update.getMessage().getFrom());
-            usersEntity =  registerUser(update.getMessage().getFrom());
+            registerUser(update.getMessage().getFrom());
         } else {
-            usersEntity =  findByIdUserBot(update.getMessage().getFrom().getId());
+            findByIdUserBot(update.getMessage().getFrom().getId());
         }
         continueWhitUser(update);
     }
+
+
+
+    public String idMessage (long chat_id) {
+        UsersEntity usersEntity = usersRepository.findByIdUserBot((int) chat_id );
+        UserChatEntity userChatEntity = userChatRepository.findLastChatByUserId(usersEntity.getIdUser());
+        String mensaje = String.valueOf(userChatEntity.getIdUserChat());
+        return mensaje;
+    }
+
 
     @Transactional
     public void changeResponseChatMessage(long chat_id, String response) {
