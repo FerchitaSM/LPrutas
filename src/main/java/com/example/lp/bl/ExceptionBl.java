@@ -5,6 +5,7 @@ import com.example.lp.dao.UserChatRepository;
 import com.example.lp.domain.ExceptionEntity;
 import com.example.lp.domain.TransportEntity;
 import com.example.lp.domain.TransportInfoEntity;
+import com.example.lp.domain.UserChatEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,9 @@ public class ExceptionBl {
     public String findAnswerMessageByQuestionMessage(Update update ) {
         long chat_id = update.getMessage().getChatId();
         String QuestionMessage = this.usersBl.idMessage(chat_id);
-        String ret =this.exceptionRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
+        String ret=this.exceptionRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
         return ret;
     }
+
 
 }

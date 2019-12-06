@@ -172,7 +172,7 @@ public class BotM  extends TelegramLongPollingBot {
                case "Buscar movilidad a mi destino":
                    universal_point="4";
                    break;
-               case "Excepciones":
+               case "Ayuda":
                    universal_point="8";
                    break;
                default:
@@ -203,7 +203,7 @@ public class BotM  extends TelegramLongPollingBot {
         row.add("Buscar movilidad a mi destino"); // segunda linea
         keyboard.add(row);// Adicionando la segunda linea
         row = new KeyboardRow();
-        row.add("Excepciones");
+        row.add("Ayuda");
         keyboard.add(row);
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;

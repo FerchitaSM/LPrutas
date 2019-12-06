@@ -106,7 +106,7 @@ CREATE TABLE user_chat (
     tx_user varchar(50)  NOT NULL,
     tx_host varchar(100)  NOT NULL,
     tx_date date  NOT NULL,
-    point_conversation nt  NOT NULL,
+    point_conversation int  NOT NULL,
     CONSTRAINT user_chat_pk PRIMARY KEY (id_user_chat)
 );
 
