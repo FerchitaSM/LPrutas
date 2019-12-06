@@ -86,6 +86,9 @@ public class BotOpciones {
                     break;
                 case "Buscar minibuses a mi destino":
                     mostrar=("Karen");
+                case "Mis Rutas":
+                    sacar_Preguntas();
+                    break;
                 case "Ayuda":
                     sacar_Preguntas();
                     break;
