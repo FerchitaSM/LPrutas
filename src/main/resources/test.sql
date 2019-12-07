@@ -130,3 +130,8 @@ UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=
 
 
 
+insert into `parada_taxi`(`id_taxi`, `company_name`,`phone_number`,`zone`, `address`,`tx_user`,`tx_host`,`tx_date`) values
+(1,'Radio Movil Expreso Del Sur','2771818','Zona Sur','Alto Florida, Calle 1 Nº 26, La Paz','ccaverotx','localhost',now()),
+(2,'Radio Taxi San Antonio','2222222','Zona Norte','Villa San Antonio','ccaverotx','localhost',now()),
+(3,'Radio Taxi Magnate','63935165','Centro',' Av. Diego de Peralta, La Paz','ccaverotx','localhost',now());
+
