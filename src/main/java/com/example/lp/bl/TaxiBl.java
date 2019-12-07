@@ -34,7 +34,28 @@ public class TaxiBl {
     public List<String> findAllZones() {
         List<String> ret = this.taxiRepository.findAllZones();
         return ret;
-    }    /*
+    }
+    public String findAllCompanyNameByZone(String zone) {
+        LOGGER.info("findAllCompanyNameByZone.........................");
+        String ret = this.taxiRepository.findAllCompanyNameByZone(zone);
+        if (ret != null) {
+            return ret;
+        } else {
+            LOGGER.info("findAllCompanyNameByZone null");
+            throw new RuntimeException("There is no companyName with zone:" + zone);
+        }
+    }
+    public String findInfoByCompanyName(String company_name) {
+        LOGGER.info("findInfoByCompanyName.........................");
+        String ret = this.taxiRepository.findInfoByCompanyName(company_name);
+        if (ret != null) {
+            return ret;
+        } else {
+            LOGGER.info("findInfoByCompanyName null");
+            throw new RuntimeException("There is no info with companyname:" + company_name);
+        }
+    }
+    /*
     public ReplyKeyboardMarkup findAllZones(ReplyKeyboardMarkup keyboardMarkup, Update update) {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
