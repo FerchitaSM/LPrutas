@@ -129,6 +129,18 @@ CREATE TABLE user_type(
     tx_date date  NOT NULL,
     CONSTRAINT user_type_pk PRIMARY KEY (id_user_type) 
 );
+CREATE TABLE parada_taxi(
+	id_taxi int NOT NULL auto_increment,
+	company_name varchar(100) NOT NULL,
+    phone_number varchar(50) NOT NULL,
+    zone varchar(50) NOT NULL,
+    address varchar(100) NOT NULL,
+    map_photo text NOT null,
+	tx_user varchar(50)  NOT NULL,
+    tx_host varchar(100)  NOT NULL,
+    tx_date date  NOT NULL,
+    CONSTRAINT parada_taxi_pk PRIMARY KEY (id_taxi)
+);
 
 -- foreign keys
 -- Reference: ride_data_route (table: ride_data)
