@@ -34,7 +34,7 @@ public class TaxiBl {
     public List<String> findAllZones() {
         List<String> ret = this.taxiRepository.findAllZones();
         return ret;
-    }
+    }    /*
     public ReplyKeyboardMarkup findAllZones(ReplyKeyboardMarkup keyboardMarkup, Update update) {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -54,6 +54,6 @@ public class TaxiBl {
         String QuestionMessage = this.usersBl.idMessage(chat_id);
         String ret =this.taxiRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
         return ret;
-    }
+    }*/
 
 }

@@ -45,9 +45,6 @@ public class BotOpciones {
             opcionesUsuario();
         }
     }
-    private void numero_telefono (){
-
-    }
 
     private void opcionesadmi() {
         if ((getCall_data().equals("Altas")) || getCall_data().equals("Bajas") || getCall_data().equals("Modificaciones")){
@@ -90,10 +87,9 @@ public class BotOpciones {
                     break;
                 case "Buscar minibuses a mi destino":
                     mostrar=("Karen");
-                case "Mostrar estaciones de RadioTaxi disponibles":
-                    sacar_taxi();
-                case "Mis Rutas":
-                    sacar_Preguntas();
+                    break;
+                case "Mostrar estaciones de Radio Taxi disponibles":
+                    sacar_Taxi();
                     break;
                 case "Ayuda":
                     sacar_Preguntas();
@@ -106,6 +102,7 @@ public class BotOpciones {
                     }else {
                         retornar.add("Buscar la ruta de una linea");
                         retornar.add("Buscar minibuses a mi destino");
+                        retornar.add("Mostrar estaciones de Radio Taxi disponibles");
                         retornar.add("Ayuda");
                         /*
                         retornar.add(String.valueOf(getCall_data().equals(token)));
@@ -125,18 +122,15 @@ public class BotOpciones {
     public List<String> getRetornar() {
         return retornar;
     }
-
     public String getMostrar() {
         return mostrar;
     }
 
-    private void sacar_taxi() { retornar=taxiBl.findAllZones(); }
+    private void sacar_Taxi() { retornar=taxiBl.findAllZones(); }
     private void sacar_Preguntas() { retornar=exceptionBl.findAllQuestionMessage(); }
-
     private void sacar_TransporteInfo(){
         retornar=transportBl.findAllDescriptiontransportInfo();
     }
-
     private void sacar_TransportePorInfo(int info_id){
         retornar=transportBl.findAllDescriptiontransportByInfo(info_id);
     }

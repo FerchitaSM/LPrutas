@@ -8,7 +8,7 @@ public class ParadaTaxiEntity {
     private int idTaxi;
     private String companyName;
     private String phoneNumber;
-    private String zone;
+    private String zone_t;
     private String address;
     private String mapPhoto;
 
@@ -43,13 +43,13 @@ public class ParadaTaxiEntity {
     }
 
     @Basic
-    @Column(name = "zone")
-    public String getZone() {
-        return zone;
+    @Column(name = "zone_t")
+    public String getZone_t() {
+        return zone_t;
     }
 
-    public void setZone(String zone) {
-        this.zone = zone;
+    public void setZone_t(String zone_t) {
+        this.zone_t = zone_t;
     }
 
     @Basic
@@ -82,7 +82,7 @@ public class ParadaTaxiEntity {
         if (idTaxi != that.idTaxi) return false;
         if (companyName != null ? !companyName.equals(that.companyName) : that.companyName != null) return false;
         if (phoneNumber != null ? !phoneNumber.equals(that.phoneNumber) : that.phoneNumber != null) return false;
-        if (zone != null ? !zone.equals(that.zone) : that.zone != null) return false;
+        if (zone_t != null ? !zone_t.equals(that.zone_t) : that.zone_t != null) return false;
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         if (mapPhoto != null ? !mapPhoto.equals(that.mapPhoto) : that.mapPhoto != null) return false;
 
@@ -94,7 +94,7 @@ public class ParadaTaxiEntity {
         int result = idTaxi;
         result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
-        result = 31 * result + (zone != null ? zone.hashCode() : 0);
+        result = 31 * result + (zone_t != null ? zone_t.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (mapPhoto != null ? mapPhoto.hashCode() : 0);
         return result;

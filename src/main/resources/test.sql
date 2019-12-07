@@ -102,11 +102,11 @@ insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_us
 ('35','5','18','karen','localhost',now()),
 ('36','5','19','karen','localhost',now());
 
-insert into `exception` (`id_exception`, `question_message`, `answer_message`,`tx_user`,`tx_host`,`tx_date`) values
-(1,'Pregunta 1','Respuesta 1','ccaverotx','localhost',now()),
-(2,'Pregunta 2','Respuesta 2','ccaverotx','localhost',now()),
-(3,'Pregunta 3','Respuesta 3','ccaverotx','localhost',now()),
-(4,'Pregunta 4','Respuesta 4','ccaverotx','localhost',now());
+    insert into `exception` (`id_exception`, `question_message`, `answer_message`,`tx_user`,`tx_host`,`tx_date`) values
+    (1,'Pregunta 1','Respuesta 1','ccaverotx','localhost',now()),
+    (2,'Pregunta 2','Respuesta 2','ccaverotx','localhost',now()),
+    (3,'Pregunta 3','Respuesta 3','ccaverotx','localhost',now()),
+    (4,'Pregunta 4','Respuesta 4','ccaverotx','localhost',now());
 
 UPDATE `exception` SET `answer_message` = 'https://www.google.com/maps/d/embed?mid=16zO-9hCUuupQotNH0PLxqaCHkTyPy53Y' WHERE `exception`.`id_exception` = 1;
 

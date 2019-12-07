@@ -35,7 +35,7 @@ public class ExceptionBl {
     public List<String> findAllQuestionMessage() {
         List<String> ret = this.exceptionRepository.findAllQuestionMessage();
         return ret;
-    }
+    }/*
     public ReplyKeyboardMarkup findAllQuestionMessage(ReplyKeyboardMarkup keyboardMarkup, Update update) {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -55,7 +55,7 @@ public class ExceptionBl {
         String QuestionMessage = this.usersBl.idMessage(chat_id);
         String ret=this.exceptionRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
         return ret;
-    }
+    }*/
 
 
 }

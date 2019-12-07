@@ -11,7 +11,7 @@ public interface ExceptionRepository extends JpaRepository<ExceptionEntity,Integ
     List<String> findAllQuestionMessage();
 
 
-    @Query( value  =  " SELECT answer_message FROM exception where question_message =?1" , nativeQuery  =  true )
+    @Query( value  =  " SELECT answer_message FROM exception where questxion_message =?1" , nativeQuery  =  true )
     String findAnswerMessageByQuestionMessage(String question);
 
 
