@@ -15,6 +15,7 @@ public class BotInicializator  {
     private static final Logger log = LoggerFactory.getLogger(BotInicializator.class);
 
     TransportBl transportBl;
+    TaxiBl taxiBl;
     StopBl stopBl;
     RouteBl routeBl;
     UsersBl usersBl;
@@ -23,8 +24,9 @@ public class BotInicializator  {
     @Autowired
 
     //Inicializacion Fer
-    public BotInicializator(TransportBl transportBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl, ExceptionBl exceptionBl) {
+    public BotInicializator(TransportBl transportBl,TaxiBl taxiBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl, ExceptionBl exceptionBl) {
         this.transportBl=transportBl;
+        this.taxiBl=taxiBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
         this.usersBl=usersBl;
@@ -46,8 +48,8 @@ public class BotInicializator  {
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
        try {
-            telegramBotsApi.registerBot(new BotM(transportBl,stopBl,routeBl,usersBl,exceptionBl)); //Inicializacion Karen
-         //  telegramBotsApi.registerBot(new BootMain(transportBl,stopBl,routeBl,usersBl,exceptionBl)); //Inicializacion Fer
+         //   telegramBotsApi.registerBot(new BotM(transportBl,stopBl,routeBl,usersBl,exceptionBl)); //Inicializacion Karen
+              telegramBotsApi.registerBot(new BootMain(transportBl,taxiBl,stopBl,routeBl,usersBl,exceptionBl)); //Inicializacion Fer
            log.info("Bot levantado");
        } catch (TelegramApiException e) {
            log.info("Bot NO levantado");

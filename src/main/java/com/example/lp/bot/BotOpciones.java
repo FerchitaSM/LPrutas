@@ -1,8 +1,10 @@
 package com.example.lp.bot;
 
 import com.example.lp.bl.ExceptionBl;
+import com.example.lp.bl.TaxiBl;
 import com.example.lp.bl.TransportBl;
 import com.example.lp.bl.UsersBl;
+import com.example.lp.dao.TaxiRepository;
 import com.example.lp.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +20,17 @@ public class BotOpciones {
     String call_data;
     List<String> retornar = new ArrayList();
     String mostrar ="";
+    TaxiBl taxiBl;
     ExceptionBl exceptionBl;
     TransportBl transportBl;
     UsersBl usersBl;
     UserDto userDto;
 
     @Autowired
-    public BotOpciones(String call_data,TransportBl transportBl, ExceptionBl exceptionBl, UsersBl usersBl, UserDto userDto) {
+    public BotOpciones(String call_data, TransportBl transportBl, TaxiBl taxiBl, ExceptionBl exceptionBl, UsersBl usersBl, UserDto userDto) {
         this.call_data = call_data;
         this.transportBl=transportBl;
+        this.taxiBl=taxiBl;
         this.exceptionBl=exceptionBl;
         this.usersBl=usersBl;
         this.userDto = userDto;
@@ -86,6 +90,8 @@ public class BotOpciones {
                     break;
                 case "Buscar minibuses a mi destino":
                     mostrar=("Karen");
+                case "Mostrar estaciones de RadioTaxi disponibles":
+                    sacar_taxi();
                 case "Mis Rutas":
                     sacar_Preguntas();
                     break;
@@ -124,7 +130,7 @@ public class BotOpciones {
         return mostrar;
     }
 
-
+    private void sacar_taxi() { retornar=taxiBl.findAllZones(); }
     private void sacar_Preguntas() { retornar=exceptionBl.findAllQuestionMessage(); }
 
     private void sacar_TransporteInfo(){

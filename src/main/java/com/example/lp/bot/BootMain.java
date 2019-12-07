@@ -29,6 +29,7 @@ public class BootMain extends TelegramLongPollingBot {
 
     BotOpciones op; // para invocar a la clase opciones del bot
     List<String> opciones; // lista de opciones del menu
+    TaxiBl taxiBl;
     ExceptionBl exceptionBl;
     UsersBl usersBl;
     TransportBl transportBl;
@@ -43,9 +44,10 @@ public class BootMain extends TelegramLongPollingBot {
 
 
     @Autowired
-    public BootMain(TransportBl transportBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl) {
+    public BootMain(TransportBl transportBl,TaxiBl taxiBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl) {
 
         this.transportBl=transportBl;
+        this.taxiBl=taxiBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
         this.usersBl=usersBl;
@@ -110,7 +112,7 @@ public class BootMain extends TelegramLongPollingBot {
         List<KeyboardRow> keyboard = new ArrayList<>();
         if(menu) {
             String mensaje_entrada = userChatDto.getInMessage();
-            op = new BotOpciones(mensaje_entrada, transportBl,exceptionBl,usersBl,userDto);
+            op = new BotOpciones(mensaje_entrada, transportBl,taxiBl,exceptionBl,usersBl,userDto);
             opciones = op.getRetornar();
             //lista con opciones
             for (int i = 0; i < opciones.size(); i++) {
@@ -175,14 +177,14 @@ public class BootMain extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-      // return "LP_Rutascc_bot";
-       return "Rutas_La_Paz_Bot";
+       return "LP_Rutascc_bot";
+      // return "Rutas_La_Paz_Bot";
     }
 
     @Override
     public String getBotToken() {
-        //return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Cavero
-        return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Cavero
+       // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
 
 
     }
