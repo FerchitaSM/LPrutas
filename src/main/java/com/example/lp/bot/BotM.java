@@ -147,14 +147,14 @@ public class BotM  extends TelegramLongPollingBot {
 
            //EN ESTE NIVEL SE ESCOGIO VER LAS EXCEPCIONES
            case "8":
-        //         keyboardMarkup=exceptionBl.findAllQuestionMessage(keyboardMarkup,update);
+               keyboardMarkup=exceptionBl.findAllQuestionMessage(keyboardMarkup,update);
                mensaje="Escogiste ayuda en que podemos ayudar";
                universal_point="9";
                break;
            case "9":
                //Obtenemos la pregunta a la respuesta previa
                keyboardMarkup=null;
-             //  mensaje=exceptionBl.findAnswerMessageByQuestionMessage(update);
+               mensaje=exceptionBl.findAnswerMessageByQuestionMessage(update);
                universal_point="0";
                break;
        }
