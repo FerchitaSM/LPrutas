@@ -39,9 +39,34 @@ public class UsersBl {
         this.userTypeRepository = userTypeRepository;
     }
 
+    /*
+    //KAREEENNNNNNNNN MODIFICACION
+    public int user(Update update){
+        boolean flag=existingUser(update.getMessage().getFrom();
+        if(flag==false){
+            LOGGER.info("El usuario no existe..........creando");
+            registerUser2(update.getMessage().getFrom());
+        }
+        return 0;
+    }
 
     //Funciones de User
-
+//funcion para registrar a un nuevo usuario
+    public void registerUser2(User users) {
+        LOGGER.info("registrerUser.........................");
+        Date sDate = getDate();
+        UsersEntity usersEntity = new UsersEntity();
+        System.out.println("gesteeee"+users.getId());
+        usersEntity.setIdUserBot(users.getId());
+        usersEntity.setIdUserType(UserType.USERS.getUserType());
+        usersEntity.setuStatus(Status.ACTIVE.getStatus());
+        usersEntity.setTxHost("localhost");
+        usersEntity.setTxUser("fer");
+        usersEntity.setTxDate(sDate);
+        usersEntity.setUserName(users.getFirstName());
+        usersRepository.save(usersEntity);
+    }
+  */
     //funcion para ver si existe el usuario con el id del bot
     public boolean existingUser(int chat_id_bot) {
         LOGGER.info("existingUser.........................");
@@ -52,6 +77,9 @@ public class UsersBl {
         }
         return ret;
     }
+
+
+
 
     //funcion para buscar usuario por el id
     public UsersEntity findByIdUser(int id) {
@@ -218,7 +246,6 @@ public class UsersBl {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
     }
-
 
     public void saveMessageAndUser(Update update ) {
         int chat_id = Integer.parseInt(update.getMessage().getChatId().toString());

@@ -79,6 +79,7 @@ public class RouteBl {
         message=routelist_url(codes,message);
         return message;
     }
+
     //Lista de rutas con su url
     private String routelist_url(List<Integer> codes,String message){
         //Preguntando si la ruta es distinta de cero
@@ -103,6 +104,7 @@ public class RouteBl {
         }
         return message;
     }
+    //Evitando rutas repetidas
     private List<Integer> finding_repetitions(List<Integer> codes){
         //Utilizando hashSet para evitar rutas repetidas
         Set<Integer> hashSet = new HashSet<Integer>(codes);
@@ -287,4 +289,136 @@ public class RouteBl {
         return url;
     }
 
+
+
+
+    // -----------------------------------INTENTANDO HACER LOS MAPAS CON KML------------------------------------------------
+    public void kml(){
+        List<Integer> origin_routes=new ArrayList<>();
+        for(int i=0;i<list_origin.size();i++) {
+            List<RouteStopEntity> all = this.routeStopRepository.findRoute(list_origin.get(i));
+            for (RouteStopEntity x : all) {
+                //se obtiene la ruta del punto de inicio
+                origin_routes.add(x.getRouteIdRoute());
+            }
+        }
+        List<Integer> destination_routes=new ArrayList<>();
+        for(int i=0;i<list_destination.size();i++) {
+            List<RouteStopEntity> all = this.routeStopRepository.findRoute(list_destination.get(i));
+            for (RouteStopEntity x : all) {
+                //se obtiene la ruta del punto de inicio
+                destination_routes.add(x.getRouteIdRoute());
+            }
+        }
+        List<String> rutas = new ArrayList<>();
+        rutas.add("1,2");
+        rutas.add("2,3");
+        rutas.add("3,4");
+        rutas.add("4,5");
+        rutas.add("3,9");
+        rutas.add("4,9");
+        //generamos el grafo
+        //  Graph<String, String> grafo = new Graph<>(false);
+        //se ingresara adentro del for para que cada vez que compare inicialize otra vez
+        for (int g = 0; g < origin_routes.size(); g++) {
+            boolean bandera = false;
+            List<String> general = new ArrayList<>();
+            int cont = 0;
+            general.add(origin_routes.get(g)+"");
+            while (bandera == false) {
+                System.out.println("Este es el punto general> " + general.get(cont));
+                //   Vertex<String, String> vuno = grafo.addVertex(general.get(cont));
+                for (int i = 0; i < rutas.size(); i++) {
+                    String string = rutas.get(i);
+                    String[] parts = string.split(",");
+                    String part1 = parts[0]; // 123
+                    String part2 = parts[1]; // 654321
+                    //   Vertex<String, String> vdos = null;
+                    if (part1.equals(general.get(cont)) || part2.equals(general.get(cont))) {
+                        if (part1.equals(general.get(cont))) {
+                            // vdos = grafo.addVertex(part2);
+                            general.add(part2);
+                            //grafo.addEdge(vuno, vdos);
+                            System.out.println("EL VALOR DE GENERAAAL CAMBIO A>" + general.size());
+                        } else {
+                            if (part2.equals(general.get(cont))) {
+                                // vdos = grafo.addVertex(part1);
+                                general.add(part1);
+                                //grafo.addEdge(vuno, vdos);
+                                System.out.println("EL VALOR DE GENERAAAL CAMBIO 222222222 A>" + general.size());
+                            }
+                        }
+
+                    }
+                }
+
+                general = finding_repetitions2(general);
+                cont++;
+                System.out.println("ES IGUAL " + general.size() + " y " + " CONT? " + cont);
+                if (general.size() == cont) {
+                    bandera = true;
+                }
+                for (int t = 0; t < general.size(); t++) {
+                    System.out.println("ESTOS SON LOS VALORES DE T" + general.get(t));
+                }
+                //  System.out.println(grafo);
+             /* for(Vertex<String,String> e : grafo.vertices_array()){
+                  System.out.println(e);
+                  e.getData();
+              }*/
+                System.out.println("-------------------------------");
+            }
+            boolean flag=false;
+            for(int w=0;w<destination_routes.size();w++){
+                for(int c=0;c<general.size();c++){
+                    if((destination_routes.get(w)+"").equals(general.get(c))){
+                        flag=true;
+                        System.out.println(" SI HAY UNA RUTA DISPONIBLE");
+                    }
+                }
+            }
+            if(flag==true){
+
+            }
+        }
+    }
+    public static List<String> finding_repetitions2(List<String> codes){
+        //Utilizando hashSet para evitar rutas repetidas
+        Set<String> hashSet = new HashSet<String>(codes);
+        codes.clear();
+        codes.addAll(hashSet);
+        return codes;
+    }
+
+
+
+
+    //Se da la lista de puntos de inicio y destino encontrando la ruta en la cual conectan
+    private List<Integer> findRoute2(List<Integer> start_points, List<Integer> finish_points){
+        List<Integer> routes=new ArrayList<>();
+        for(int i=0; i<start_points.size();i++){
+            //Se obtiene la lista de puntos de inicio
+            int point_start=start_points.get(i);
+            //Se busca la ruta del punto o las rutas que esten relacionadas a el
+            List<RouteStopEntity> all = this.routeStopRepository.findRoute(point_start);
+            for(RouteStopEntity x:all){
+                //se obtiene la ruta del punto de inicio
+                int route_start=x.getRouteIdRoute();
+                //se obtiene uno por uno los puntos de destino
+                for(int u=0;u<finish_points.size();u++){
+                    int point_finish=finish_points.get(u);
+                    //se obtiene la ruta donde la ruta sea igual a la del punto de inicio y al punto final
+                    List<RouteStopEntity> find_route=this.routeStopRepository.findRouteFinish(route_start,point_finish);
+                    for(RouteStopEntity y:find_route){
+                        // List<TransportBl> find_transport=this.
+                        //se obtiene cual es esa ruta y se la adiciona a la lista de rutas
+                        routes.add(y.getRouteIdRoute());
+                    }
+                }
+            }
+        }
+
+        //se devuelve la ruta
+        return routes;
+    }
 }
