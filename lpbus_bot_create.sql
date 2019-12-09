@@ -1,3 +1,4 @@
+-- Table: users
 CREATE TABLE ride_data (
     id_ride int NOT NULL auto_increment,
     users_id_user int NOT NULL,
@@ -127,7 +128,7 @@ CREATE TABLE user_type(
     tx_user varchar(50)  NOT NULL,
     tx_host varchar(100)  NOT NULL,
     tx_date date  NOT NULL,
-    CONSTRAINT user_type_pk PRIMARY KEY (id_user_type) 
+    CONSTRAINT user_type_pk PRIMARY KEY (id_user_type)
 );
 CREATE TABLE parada_taxi(
     id_taxi int NOT NULL auto_increment,
@@ -186,10 +187,24 @@ ALTER TABLE transport ADD CONSTRAINT transport_transport_info FOREIGN KEY transp
 -- Reference: users_user_info (table: users)
 ALTER TABLE user_chat ADD CONSTRAINT user_chat_users FOREIGN KEY user_chat_users (id_user)
     REFERENCES users (id_user);
-    
+
     -- Reference: users_user_info (table: users)
 ALTER TABLE users ADD CONSTRAINT users_user_type FOREIGN KEY users_user_type (id_user_type)
     REFERENCES user_type (id_user_type);
 
--- End of file.
+CREATE TABLE connection_routes(
+	id_coroutes int NOT NULL auto_increment,
+    coroutes_status int,
+    tx_host varchar(200),
+    tx_user varchar(200),
+    tx_date date,
+    route_a int,
+    route_b int,
+    type_connection int,
+    description varchar(200),
+    CONSTRAINT coroutes_pk PRIMARY KEY (id_coroutes),
+    foreign key (route_a) references route(id_route),
+    foreign key (route_b) references route(id_route),
+    foreign key (type_connection) references transport_info(id_transport_info)
+);
 

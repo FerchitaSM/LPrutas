@@ -4,11 +4,12 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://localhost:3306/lpbus_bot</property>
+    <property name="connection.url">jdbc:mysql://localhost:3307/lpbus_bot</property>
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-    <mapping class="com.example.lp.domain.ExceptionEntity"/>
+      <mapping class="com.example.lp.domain.ExceptionEntity"/>
       <mapping class="com.example.lp.domain.UserTypeEntity"/>
       <mapping class="com.example.lp.domain.UsersEntity"/>
+      <mapping class="com.example.lp.domain.ConnectionRoutesEntity"/>
       <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
