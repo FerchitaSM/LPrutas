@@ -1,13 +1,7 @@
 package com.example.lp.bl;
 
-import com.example.lp.dao.RouteRepository;
-import com.example.lp.dao.RouteStopRepository;
-import com.example.lp.dao.StopRepository;
-import com.example.lp.dao.TransportInfoRepository;
-import com.example.lp.domain.RouteEntity;
-import com.example.lp.domain.RouteStopEntity;
-import com.example.lp.domain.StopEntity;
-import com.example.lp.domain.TransportInfoEntity;
+import com.example.lp.dao.*;
+import com.example.lp.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +32,17 @@ public class RouteBl {
     private StopRepository stopRepository;
     private StopBl stopBl;
     private TransportInfoRepository transportInfoRepository;
+    private ConnectionRoutesRepository connectionRoutesRepository;
 
 
     @Autowired
-    public RouteBl( RouteRepository routeRepository,RouteStopRepository routeStopRepository,StopRepository stopRepository,StopBl stopBl,TransportInfoRepository transportInfoRepository) {
+    public RouteBl(RouteRepository routeRepository, RouteStopRepository routeStopRepository, StopRepository stopRepository, StopBl stopBl, TransportInfoRepository transportInfoRepository, ConnectionRoutesRepository connectionRoutesRepository) {
         this.routeRepository = routeRepository;
         this.routeStopRepository=routeStopRepository;
         this.stopRepository=stopRepository;
         this.stopBl=stopBl;
         this.transportInfoRepository=transportInfoRepository;
+        this.connectionRoutesRepository=connectionRoutesRepository;
     }
     public void get_transport(Update update) throws IOException {
         String type_transport=update.getMessage().getText();
@@ -74,9 +70,10 @@ public class RouteBl {
         //Obteniendo los puntos mas cercanos a mi destino
         list_destination=nearby_points(list_destination,update);
         //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
-        List<Integer> codes=new ArrayList<>();
-        codes=findRoute(list_origin,list_destination);
-        message=routelist_url(codes,message);
+       // List<Integer> codes=new ArrayList<>();
+        //codes=findRoute(list_origin,list_destination);
+       // message=routelist_url(codes,message);
+        message=kml();
         return message;
     }
 
@@ -293,30 +290,28 @@ public class RouteBl {
 
 
     // -----------------------------------INTENTANDO HACER LOS MAPAS CON KML------------------------------------------------
-    public void kml(){
-        List<Integer> origin_routes=new ArrayList<>();
-        for(int i=0;i<list_origin.size();i++) {
-            List<RouteStopEntity> all = this.routeStopRepository.findRoute(list_origin.get(i));
+    public List<Integer> to_route(List<Integer> list){
+        List<Integer> convert_list=new ArrayList<>();
+        for(int i=0;i<list.size();i++) {
+            List<RouteStopEntity> all = this.routeStopRepository.findRoute(list.get(i));
             for (RouteStopEntity x : all) {
                 //se obtiene la ruta del punto de inicio
-                origin_routes.add(x.getRouteIdRoute());
+                convert_list.add(x.getRouteIdRoute());
             }
         }
-        List<Integer> destination_routes=new ArrayList<>();
-        for(int i=0;i<list_destination.size();i++) {
-            List<RouteStopEntity> all = this.routeStopRepository.findRoute(list_destination.get(i));
-            for (RouteStopEntity x : all) {
-                //se obtiene la ruta del punto de inicio
-                destination_routes.add(x.getRouteIdRoute());
-            }
-        }
+        return convert_list;
+    }
+    public String kml(){
+        String message="";
+        List<Integer> origin_routes=to_route(list_origin);
+        List<Integer> destination_routes=to_route(list_destination);
         List<String> rutas = new ArrayList<>();
         rutas.add("1,2");
-        rutas.add("2,3");
-        rutas.add("3,4");
-        rutas.add("4,5");
-        rutas.add("3,9");
-        rutas.add("4,9");
+        List<ConnectionRoutesEntity> all=this.connectionRoutesRepository.findAll();
+        for (ConnectionRoutesEntity x : all) {
+            //se obtiene la ruta del punto de inicio
+            rutas.add(x.getRouteA()+","+x.getRouteB());
+        }
         //generamos el grafo
         //  Graph<String, String> grafo = new Graph<>(false);
         //se ingresara adentro del for para que cada vez que compare inicialize otra vez
@@ -374,13 +369,17 @@ public class RouteBl {
                     if((destination_routes.get(w)+"").equals(general.get(c))){
                         flag=true;
                         System.out.println(" SI HAY UNA RUTA DISPONIBLE");
+                        message=message+" el destination point "+destination_routes.get(w)+"el general"+general.get(c);
                     }
                 }
             }
             if(flag==true){
-
+                message=message+"SI HAY UNA RUTA DISPONIBLE";
+            }else{
+                message="NO HAY RUTA DISPONIBLE";
             }
         }
+        return message;
     }
     public static List<String> finding_repetitions2(List<String> codes){
         //Utilizando hashSet para evitar rutas repetidas
