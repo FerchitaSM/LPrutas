@@ -4,28 +4,28 @@ INSERT INTO `user_type` (`id_user_type`, `type`, `token`, `tx_user`, `tx_host`, 
 (NULL, 'Usuario', NULL, 'fer', 'localhost', '2019-11-22');
 
 INSERT INTO `transport_info` (`id_transport_info`, `tx_hosts`, `tx_user`, `tx_date`,`type`, `info_description`) VALUES
-('0', 'loclahost', 'fer', '2019-11-15', '1',  'Puma Katari'),
-('1', 'loclahost', 'fer', '2019-11-15', '1',  'Teleferico');
+(NULL, 'loclahost', 'fer', '2019-11-15', '1',  'Puma Katari'),
+(NULL, 'loclahost', 'fer', '2019-11-15', '1',  'Teleferico');
 
 
 INSERT INTO `transport` (`id_transport`, `transport_status`, `tx_host`, `tx_user`, `tx_date`, `description`, `transport_info_id_transport_info`, `route_image`) VALUES
-('0', '1', 'localhost', 'fer', '2019-11-15', 'Inca Llojeta', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutaincallojeta.pdf'),
-('1', '1', 'localhost', 'fer', '2019-11-15', 'Villa Salome', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutavillasalome.pdf'),
-('2', '1', 'localhost', 'fer', '2019-11-15', 'Chasquipampa', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutachasquipampa.pdf'),
-('3', '1', 'localhost', 'fer', '2019-11-15', 'Caja Ferroviaria', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/rutas/%20CAJA%20FERROVIARIA-02-02-02.jpg'),
-('4', '1', 'localhost', 'fer', '2019-11-15', 'Integradora', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/Mapa%20Final%20Integradora%20Web-01.png'),
-('5', '1', 'localhost', 'fer', '2019-11-15', 'Irpavi II', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/rutas/IRPAVI%20MAPA%20SOLO-02.pdf'),
-('6', '1', 'localhost', 'fer', '2019-11-15', 'Achumani', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/Mapa%20Oficial%20Achumani.pdf'),
-('7', '1', 'localhost', 'fer', '2019-11-15', 'Linea Naranja', '1', 'https://i.ibb.co/z8pWD7Q/Naranja.jpg'),
-('8', '1', 'localhost', 'fer', '2019-11-15', 'Linea Amarilla', '1', 'https://i.ibb.co/DMVmW6Z/Amarilla.jpg'),
-('9', '1', 'localhost', 'fer', '2019-11-15', 'Linea Azul', '1', 'https://i.ibb.co/cYs3qv1/Azul.jpg'),
-('10', '1', 'localhost', 'fer', '2019-11-15', 'Linea Blanca', '1', 'https://i.ibb.co/YWSH3dc/Blanca.jpg'),
-('11', '1', 'localhost', 'fer', '2019-11-15', 'Linea Cafe', '1', 'https://i.ibb.co/30PCx21/Cafe.jpg'),
-('12', '1', 'localhost', 'fer', '2019-11-15', 'Linea Celeste', '1', 'https://i.ibb.co/D8rRf7x/Celeste.jpg'),
-('13', '1', 'localhost', 'fer', '2019-11-15', 'Linea Morada', '1', 'https://i.ibb.co/x2T4zbN/Morada.jpg'),
-('14', '1', 'localhost', 'fer', '2019-11-15', 'Linea Plateada', '1', 'https://i.ibb.co/fM0FnxX/Plateada.jpg'),
-('15', '1', 'localhost', 'fer', '2019-11-15', 'Linea Roja', '1', 'https://i.ibb.co/HrjXVGJ/Rojo.jpg'),
-('16', '1', 'localhost', 'fer', '2019-11-15', 'Linea Verde', '1', 'https://i.ibb.co/pfptz1S/Verde.jpg');
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Inca Llojeta', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutaincallojeta.pdf'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Villa Salome', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutavillasalome.pdf'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Chasquipampa', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/mapa_rutachasquipampa.pdf'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Caja Ferroviaria', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/rutas/%20CAJA%20FERROVIARIA-02-02-02.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Integradora', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/Mapa%20Final%20Integradora%20Web-01.png'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Irpavi II', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/rutas/IRPAVI%20MAPA%20SOLO-02.pdf'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Achumani', '0', 'http://www.lapazbus.bo/fileman/Uploads/files/pdf/Mapa%20Oficial%20Achumani.pdf'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Naranja', '1', 'https://i.ibb.co/z8pWD7Q/Naranja.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Amarilla', '1', 'https://i.ibb.co/DMVmW6Z/Amarilla.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Azul', '1', 'https://i.ibb.co/cYs3qv1/Azul.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Blanca', '1', 'https://i.ibb.co/YWSH3dc/Blanca.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Cafe', '1', 'https://i.ibb.co/30PCx21/Cafe.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Celeste', '1', 'https://i.ibb.co/D8rRf7x/Celeste.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Morada', '1', 'https://i.ibb.co/x2T4zbN/Morada.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Plateada', '1', 'https://i.ibb.co/fM0FnxX/Plateada.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Roja', '1', 'https://i.ibb.co/HrjXVGJ/Rojo.jpg'),
+(NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Verde', '1', 'https://i.ibb.co/pfptz1S/Verde.jpg');
 
 
 insert into `stop` (`id_stop`,`stop_status`,`tx_host`,`tx_user`,`tx_date`,`latitude`,`longitude`,`description`) values
@@ -112,11 +112,12 @@ insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_us
 ('36','10','22','karen','localhost',now());
 
 
-    insert into `exception` (`id_exception`, `question_message`, `answer_message`,`tx_user`,`tx_host`,`tx_date`) values
-    (1,'Pregunta 1','Respuesta 1','ccaverotx','localhost',now()),
-    (2,'Pregunta 2','Respuesta 2','ccaverotx','localhost',now()),
-    (3,'Pregunta 3','Respuesta 3','ccaverotx','localhost',now()),
-    (4,'Pregunta 4','Respuesta 4','ccaverotx','localhost',now());
+insert into `exception` (`id_exception`, `question_message`, `answer_message`,`tx_user`,`tx_host`,`tx_date`) values
+(1,'Pregunta 1','Respuesta 1','ccaverotx','localhost',now()),
+(2,'Pregunta 2','Respuesta 2','ccaverotx','localhost',now()),
+(3,'Pregunta 3','Respuesta 3','ccaverotx','localhost',now()),
+(4,'Pregunta 4','Respuesta 4','ccaverotx','localhost',now());
+
 
 UPDATE `exception` SET `answer_message` = 'https://www.google.com/maps/d/embed?mid=16zO-9hCUuupQotNH0PLxqaCHkTyPy53Y' WHERE `exception`.`id_exception` = 1;
 
@@ -145,3 +146,5 @@ insert into `parada_taxi`(`id_taxi`, `company_name`,`phone_number`,`zone`, `addr
 (2,'Radio Taxi San Antonio','2222222','Zona Norte','Villa San Antonio','ccaverotx','localhost',now()),
 (3,'Radio Taxi Magnate','63935165','Centro',' Av. Diego de Peralta, La Paz','ccaverotx','localhost',now());
 
+
+UPDATE `transport` SET `route_image` = 'https://www.google.com/maps/d/embed?mid=1JsQc8sA0Nx-DOvIPTBzgwu4ZvcIFxatX' WHERE `transport`.`id_transport` = 0;
