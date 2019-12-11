@@ -175,19 +175,23 @@ public class BootMain extends TelegramLongPollingBot {
 
     }
 
+
     @Override
     public String getBotUsername() {
-       return "LP_Rutascc_bot";
-      // return "Rutas_La_Paz_Bot";
+        return "pruebaRLP_bot";
+        //return "PreguntasLaPaz_bot";
+
     }
 
     @Override
     public String getBotToken() {
-        return "1069385476:AAHAGvkWlH9uiNRUeHU380MTNUOrolQO2W0";  // chatbot Cavero
-       // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
-
-
+        //return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
+        // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+        return  "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
+        // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
     }
+
+
 
 
     public String respuesta(int conversation, Update update) {

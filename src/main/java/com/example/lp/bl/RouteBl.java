@@ -420,4 +420,33 @@ public class RouteBl {
         //se devuelve la ruta
         return routes;
     }
+
+
+
+
+    //Devolviendo la ruta para hoteles
+    public String route_hotel(Update update,String message){
+        //Se obtiene la latitud y longitud del usuario
+        u_origin=latitude(update)+","+longitude(update);
+        //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
+        list_origin=nearby_points(list_origin,update);
+
+        message=kml();
+        return message;
+    }
+
+    public void data_hotel(String latitude, String longitude) {
+        u_destination=latitude+","+longitude;
+        list_destination=nearby_points_hotel(list_destination,latitude, longitude);
+    }
+
+    private List<Integer> nearby_points_hotel(List<Integer> list, String latitude, String longitude) {
+        try {
+            list=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

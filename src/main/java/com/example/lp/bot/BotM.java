@@ -36,14 +36,16 @@ public class BotM  extends TelegramLongPollingBot {
     TransportBl transportBl;
     ExceptionBl exceptionBl;
     UsersBl usersBl;
+    HotelBl hotelBl;
 
     @Autowired
-    public BotM(TransportBl transportBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl) {
+    public BotM(TransportBl transportBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl,HotelBl hotelBl) {
         this.transportBl=transportBl;
         this.stopBl = stopBl;
         this.routeBl=routeBl;
         this.usersBl=usersBl;
         this.exceptionBl=exceptionBl;
+        this.hotelBl= hotelBl;
     }
     @Override
     public void onUpdateReceived(Update update) {
@@ -87,7 +89,6 @@ public class BotM  extends TelegramLongPollingBot {
 
         }
         }
-
 
     public ReplyKeyboardMarkup punto(Update update,ReplyKeyboardMarkup keyboardMarkup) throws IOException {
        String conversacion = usersBl.lastPointConversation(update);
@@ -159,6 +160,43 @@ public class BotM  extends TelegramLongPollingBot {
                mensaje=exceptionBl.findAnswerMessageByQuestionMessage(update);
                universal_point="0";
                break;
+
+           //EN ESTE NIVEL SE MUESTRA COMO LLEGAR A CIERTOS DESTINOS EN ESPECIFICO (HOTELES)
+           case "10":
+               //Se muestra los hoteles que hay
+               mensaje="Elige una opcion";
+               keyboardMarkup= hotelBl.findAllName(keyboardMarkup);
+               universal_point="11";
+               break;
+           case "11":
+               //Se muestra la informacion del hotel
+               mensaje= hotelBl.findAllInformationHotel(update);
+               keyboardMarkup= hotelBl.GoHotel(keyboardMarkup, update); //si no
+               routeBl.data_hotel(hotelBl.findLatitude(update),hotelBl.findLongitude(update));
+               universal_point="12"; // depnde del si o no
+               break;
+
+           case "12":
+               //Se muestra los tipos de transporte que hay
+               mensaje="Elige una opcion+\n";
+               //mensaje=mensaje+mas;
+               keyboardMarkup=transportBl.DescriptiontransportInfo(keyboardMarkup);
+               universal_point="13";
+               break;
+           case "13":
+               //Se pide la ubicacion
+               keyboardMarkup=null;
+               routeBl.get_transport(update);
+               mensaje="Envia la ubicacion de partida";
+               universal_point="14";
+               break;
+           case "14":
+               //Se obtiene datos de paradas cercas a mi
+               keyboardMarkup=null;
+               mensaje=routeBl.route_hotel(update,mensaje);
+               universal_point="0";
+               break;
+
        }
 
         return keyboardMarkup;
@@ -177,8 +215,12 @@ public class BotM  extends TelegramLongPollingBot {
                case "Ayuda":
                    universal_point="8";
                    break;
+               case "Hoteles":
+                   universal_point="10";
+                   break;
                default:
-                   if(universal_point=="2" || universal_point=="3" || universal_point=="5" || universal_point=="9" ){
+                   if(universal_point=="2" || universal_point=="3" || universal_point=="5" || universal_point=="9"
+                           || universal_point=="11" || universal_point=="12"|| universal_point=="13" ){
                        log.info("EL MENSAJE ES ADMITIDO");
                    }else{
                        universal_point="0";
@@ -186,7 +228,8 @@ public class BotM  extends TelegramLongPollingBot {
            }
        }else{
            if(update.getMessage().hasLocation()==true){
-               if((update.getMessage().hasLocation()) && (universal_point=="6" || universal_point=="7")){
+               if((update.getMessage().hasLocation()) && (universal_point=="6" || universal_point=="7"
+                       || universal_point=="14")){
                    log.info("EL MENSAJE ES ADMITIDO");
                }else{
                    universal_point="0";//usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
@@ -207,22 +250,25 @@ public class BotM  extends TelegramLongPollingBot {
         row = new KeyboardRow();
         row.add("Ayuda");
         keyboard.add(row);
+        row = new KeyboardRow();
+        row.add("Hoteles");
+        keyboard.add(row);
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;
     }
 
     @Override
     public String getBotUsername() {
-       // return "pruebaRLP_bot";
-        return "PreguntasLaPaz_bot";
+        return "pruebaRLP_bot";
+        //return "PreguntasLaPaz_bot";
 
     }
 
     @Override
     public String getBotToken() {
-        return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
+        //return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
        // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
-      // return  "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
+       return  "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
        // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
     }
 
