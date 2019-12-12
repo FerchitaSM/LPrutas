@@ -1,5 +1,6 @@
 package com.example.lp.bl;
 
+import com.example.lp.bot.BotAdministrador;
 import com.example.lp.dao.ExceptionRepository;
 import com.example.lp.dao.UserChatRepository;
 import com.example.lp.domain.ExceptionEntity;
@@ -54,8 +55,24 @@ public class ExceptionBl {
         long chat_id = update.getMessage().getChatId();
         String QuestionMessage = this.usersBl.idMessage(chat_id);
         String ret=this.exceptionRepository.findAnswerMessageByQuestionMessage(QuestionMessage);
+
         return ret;
     }
 
+    public String universalPoint( String message ) {
+        String answer=this.exceptionRepository.findAnswerMessageByQuestionMessage("Otra pregunta");
+        String ret ="0";
+        if(answer!=null){
+            ret= "10";
+        }
+        return ret;
+    }
+
+    public String sendQuestionAdmi(Update update ) {
+        BotAdministrador botAdministrador = new BotAdministrador();
+        botAdministrador.sendQuestion( update);
+        String ret = "Pronto le llegara la respuesta, mientras puede seguir con el chatBot";
+        return ret;
+    }
 
 }
