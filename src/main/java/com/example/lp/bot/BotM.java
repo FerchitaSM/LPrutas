@@ -51,14 +51,14 @@ public class BotM  extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if(update.hasMessage()){
             System.out.println("LLEGO EL MENSAJE");
-            usersBl.saveMessageAndUser( update);
+          //  usersBl.saveMessageAndUser( update);
             long chat_id = update.getMessage().getChatId();
             SendMessage message = new SendMessage()// Create a message object object
                     .setChatId(chat_id)
                     .setText(mensaje);
 
             getMessage(update);
-           usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
+          // usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
 
             ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
             try {
@@ -66,9 +66,11 @@ public class BotM  extends TelegramLongPollingBot {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+          /*TODO hay un error cuando el mensaje es largo*/
 
-            usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
-            usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
+
+          //  usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+        //    usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
 
 
 
@@ -91,8 +93,8 @@ public class BotM  extends TelegramLongPollingBot {
         }
 
     public ReplyKeyboardMarkup punto(Update update,ReplyKeyboardMarkup keyboardMarkup) throws IOException {
-       String conversacion = usersBl.lastPointConversation(update);
-       // String conversacion=universal_point;
+       //String conversacion = usersBl.lastPointConversation(update);
+        String conversacion=universal_point;
        switch (conversacion){
            //ESTE ES EL NIVEL BASICO
            case "0":
@@ -266,9 +268,9 @@ public class BotM  extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        //return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
+        return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
        // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
-       return  "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
+    //   return  "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
        // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
     }
 

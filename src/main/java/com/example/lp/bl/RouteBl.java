@@ -1,5 +1,8 @@
 package com.example.lp.bl;
 
+import com.example.lp.bl.graph.graph.Edge;
+import com.example.lp.bl.graph.graph.Graph;
+import com.example.lp.bl.graph.graph.Vertex;
 import com.example.lp.dao.*;
 import com.example.lp.domain.*;
 import org.slf4j.Logger;
@@ -33,7 +36,6 @@ public class RouteBl {
     private StopBl stopBl;
     private TransportInfoRepository transportInfoRepository;
     private ConnectionRoutesRepository connectionRoutesRepository;
-
 
     @Autowired
     public RouteBl(RouteRepository routeRepository, RouteStopRepository routeStopRepository, StopRepository stopRepository, StopBl stopBl, TransportInfoRepository transportInfoRepository, ConnectionRoutesRepository connectionRoutesRepository) {
@@ -312,8 +314,17 @@ public class RouteBl {
             //se obtiene la ruta del punto de inicio
             rutas.add(x.getRouteA()+","+x.getRouteB());
         }
+        for(int w=0;w<origin_routes.size();w++){
+            LOGGER.info("Valor del origin_route position; "+origin_routes.get(w)+" position "+w);
+
+        }
+        for(int q=0;q<destination_routes.size();q++){
+            LOGGER.info("Valor del origin_route position; "+destination_routes.get(q)+" position "+q);
+
+        }
+
         //generamos el grafo
-        //  Graph<String, String> grafo = new Graph<>(false);
+          Graph<String, String> grafo = new Graph<>(false);
         //se ingresara adentro del for para que cada vez que compare inicialize otra vez
         for (int g = 0; g < origin_routes.size(); g++) {
             boolean bandera = false;
@@ -321,9 +332,58 @@ public class RouteBl {
             int cont = 0;
             general.add(origin_routes.get(g)+"");
             while (bandera == false) {
-                System.out.println("Este es el punto general> " + general.get(cont));
-                //   Vertex<String, String> vuno = grafo.addVertex(general.get(cont));
+                LOGGER.info("Este es el punto general> " + general.get(cont));
+                Vertex<String, String> vuno = grafo.addVertex(general.get(cont));
                 for (int i = 0; i < rutas.size(); i++) {
+                    String string = rutas.get(i);
+                    String[] parts = string.split(",");
+                    String part1 = parts[0]; // 123
+                    String part2 = parts[1]; // 654321
+                    Vertex<String, String> vdos = null;
+                    if (part1.equals(general.get(cont)) || part2.equals(general.get(cont))) {
+                        if (part1.equals(general.get(cont))) {
+                             vdos = grafo.addVertex(part2);
+                            general.add(part2);
+                            grafo.addEdge(vuno, vdos);
+                            LOGGER.info("EL VALOR DE GENERAAAL CAMBIO A>" + general.size());
+                        } else {
+                            if (part2.equals(general.get(cont))) {
+                                 vdos = grafo.addVertex(part1);
+                                general.add(part1);
+                                grafo.addEdge(vuno, vdos);
+                                LOGGER.info("EL VALOR DE GENERAAAL CAMBIO 222222222 A>" + general.size());
+                            }
+                        }
+
+                    }
+                }
+
+                general = finding_repetitions2(general);
+                cont++;
+                LOGGER.info("ES IGUAL " + general.size() + " y " + " CONT? " + cont);
+                if (general.size() == cont) {
+                    bandera = true;
+                }
+                for (int t = 0; t < general.size(); t++) {
+                    LOGGER.info("ESTOS SON LOS VALORES DE T" + general.get(t));
+                }
+
+             /* for(Vertex<String,String> e : grafo.vertices_array()){
+                  System.out.println(e);
+                  e.getData();
+              }*/
+                LOGGER.info("-------------------------------");
+            }
+            boolean flag=false;
+            for(int w=0;w<destination_routes.size();w++){
+                if(general.contains(destination_routes.get(w)+"")){
+                    LOGGER.info("HAY RUTA");
+                    flag=true;
+                }
+            }
+           /* if(flag==true){
+                /*AQUI BUSCAMOS LA RUTA OBTENIENDO RUTAS*/
+              /* for (int i = 0; i < rutas.size(); i++) {
                     String string = rutas.get(i);
                     String[] parts = string.split(",");
                     String part1 = parts[0]; // 123
@@ -346,38 +406,41 @@ public class RouteBl {
 
                     }
                 }
+            }*/
+            message=message+"RUTA "+ origin_routes.get(g)+"\n";
+            /* de aqui se sacan las rutas que estan unidas o te llevan*/
+            LOGGER.info(String.valueOf(grafo));
+           // Edge<String,String> holu=grafo.edges_array();
 
-                general = finding_repetitions2(general);
-                cont++;
-                System.out.println("ES IGUAL " + general.size() + " y " + " CONT? " + cont);
-                if (general.size() == cont) {
-                    bandera = true;
+            Vertex<String,String> v[] = grafo.vertices_array();
+           /* int contador=0;
+            int con1=0;
+            int con2=0;
+            for(Vertex<String,String> v1:v){
+                if (v1.getData().equals(origin_routes.get(g)+"")){
+                    con1=contador;
+                    System.out.println("La posicion del contador uno es; "+con1);
                 }
-                for (int t = 0; t < general.size(); t++) {
-                    System.out.println("ESTOS SON LOS VALORES DE T" + general.get(t));
+                if (v1.getData().equals(destination_routes.get(0)+"")){
+                    con2=contador;
+                    System.out.println("La posicion del contador dos es; "+con2);
                 }
-                //  System.out.println(grafo);
-             /* for(Vertex<String,String> e : grafo.vertices_array()){
-                  System.out.println(e);
-                  e.getData();
-              }*/
-                System.out.println("-------------------------------");
-            }
-            boolean flag=false;
-            for(int w=0;w<destination_routes.size();w++){
-                for(int c=0;c<general.size();c++){
-                    if((destination_routes.get(w)+"").equals(general.get(c))){
-                        flag=true;
-                        System.out.println(" SI HAY UNA RUTA DISPONIBLE");
-                        message=message+" el destination point "+destination_routes.get(w)+"el general"+general.get(c);
-                    }
-                }
-            }
+                contador++;
+            }*/
             if(flag==true){
-                message=message+"SI HAY UNA RUTA DISPONIBLE";
+                message=message+"SI HAY UNA RUTA DISPONIBLE"+"\n";
+                LOGGER.info("DIBUJANDO EL DIJSTRAAAAAAAAA" );
+                LOGGER.info("entra 1" );
+                    Edge<String,String> dijsktra[]=grafo.dijkstra(v[0],v[2]);
+                LOGGER.info("entra 2" );
+                    for(Edge<String,String> dijsktra1:dijsktra){
+                        System.out.println(dijsktra1);
+                    }
+
             }else{
                 message="NO HAY RUTA DISPONIBLE";
             }
+
         }
         return message;
     }
