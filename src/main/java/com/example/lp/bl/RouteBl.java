@@ -324,7 +324,8 @@ public class RouteBl {
         }
 
         //generamos el grafo
-          Graph<String, String> grafo = new Graph<>(false);
+        /*podemos revisar el true*/
+          Graph<String, String> grafo = new Graph<>(true);
         //se ingresara adentro del for para que cada vez que compare inicialize otra vez
         for (int g = 0; g < origin_routes.size(); g++) {
             boolean bandera = false;
@@ -360,18 +361,9 @@ public class RouteBl {
 
                 general = finding_repetitions2(general);
                 cont++;
-                LOGGER.info("ES IGUAL " + general.size() + " y " + " CONT? " + cont);
                 if (general.size() == cont) {
                     bandera = true;
                 }
-                for (int t = 0; t < general.size(); t++) {
-                    LOGGER.info("ESTOS SON LOS VALORES DE T" + general.get(t));
-                }
-
-             /* for(Vertex<String,String> e : grafo.vertices_array()){
-                  System.out.println(e);
-                  e.getData();
-              }*/
                 LOGGER.info("-------------------------------");
             }
             boolean flag=false;
@@ -381,58 +373,25 @@ public class RouteBl {
                     flag=true;
                 }
             }
-           /* if(flag==true){
-                /*AQUI BUSCAMOS LA RUTA OBTENIENDO RUTAS*/
-              /* for (int i = 0; i < rutas.size(); i++) {
-                    String string = rutas.get(i);
-                    String[] parts = string.split(",");
-                    String part1 = parts[0]; // 123
-                    String part2 = parts[1]; // 654321
-                    //   Vertex<String, String> vdos = null;
-                    if (part1.equals(general.get(cont)) || part2.equals(general.get(cont))) {
-                        if (part1.equals(general.get(cont))) {
-                            // vdos = grafo.addVertex(part2);
-                            general.add(part2);
-                            //grafo.addEdge(vuno, vdos);
-                            System.out.println("EL VALOR DE GENERAAAL CAMBIO A>" + general.size());
-                        } else {
-                            if (part2.equals(general.get(cont))) {
-                                // vdos = grafo.addVertex(part1);
-                                general.add(part1);
-                                //grafo.addEdge(vuno, vdos);
-                                System.out.println("EL VALOR DE GENERAAAL CAMBIO 222222222 A>" + general.size());
-                            }
-                        }
 
-                    }
-                }
-            }*/
+            grafo=finding_repetitions_graph(grafo);
             message=message+"RUTA "+ origin_routes.get(g)+"\n";
             /* de aqui se sacan las rutas que estan unidas o te llevan*/
             LOGGER.info(String.valueOf(grafo));
-           // Edge<String,String> holu=grafo.edges_array();
-
-            Vertex<String,String> v[] = grafo.vertices_array();
-           /* int contador=0;
-            int con1=0;
-            int con2=0;
-            for(Vertex<String,String> v1:v){
-                if (v1.getData().equals(origin_routes.get(g)+"")){
-                    con1=contador;
-                    System.out.println("La posicion del contador uno es; "+con1);
-                }
-                if (v1.getData().equals(destination_routes.get(0)+"")){
-                    con2=contador;
-                    System.out.println("La posicion del contador dos es; "+con2);
-                }
-                contador++;
+            /*Aca enviaremos el grafo a otra funcion para que no tenga repetidos*/
+           /* Edge<String,String> holu[]=grafo.edges_array();
+            for(Edge<String,String> holu1: holu){
+                LOGGER.info("LINEAAAAAAAAAAAAA-------------------------------");
+                LOGGER.info("el VECTOR 1 DEL GRAFO ES;" + holu1.getV1().getData());
+                LOGGER.info("el VECTOR 2 DEL GRAFO ES;" + holu1.getV2().getData());;
             }*/
+
             if(flag==true){
                 message=message+"SI HAY UNA RUTA DISPONIBLE"+"\n";
-                LOGGER.info("DIBUJANDO EL DIJSTRAAAAAAAAA" );
-                LOGGER.info("entra 1" );
-                    Edge<String,String> dijsktra[]=grafo.dijkstra(v[0],v[2]);
-                LOGGER.info("entra 2" );
+                LOGGER.info("DIBUJANDO EL DIJKSTRAAAAAAAAA" );
+                Vertex<String,String> v1=convert_string_to_vertex(grafo,origin_routes.get(g)+"");
+                Vertex<String,String> v2=convert_string_to_vertex(grafo,destination_routes.get(0)+"");
+                    Edge<String,String> dijsktra[]=grafo.dijkstra(v1,v2);
                     for(Edge<String,String> dijsktra1:dijsktra){
                         System.out.println(dijsktra1);
                     }
@@ -444,44 +403,54 @@ public class RouteBl {
         }
         return message;
     }
+    public Graph<String,String> finding_repetitions_graph(Graph<String,String> graph){
+        List<String> vertex=new ArrayList<>();
+        List<String> edge=new ArrayList<>();
+        Edge<String,String> e[]=graph.edges_array();
+        Vertex<String,String> v[] = graph.vertices_array();
+        for(Vertex<String,String> v1:v) {
+            vertex.add(v1.getData());
+        }
+        vertex=finding_repetitions2(vertex);
+        for(Edge<String,String> e1: e){
+            edge.add(e1.getV1().getData()+","+e1.getV2().getData());
+        }
+        edge=finding_repetitions2(edge);
+        /*Ahora si se dibuja un nuevo grafo*/
+        Graph<String, String> new_graph = new Graph<>(false);
+        for(int i=0;i<vertex.size();i++){
+            new_graph.addVertex(vertex.get(i));
+        }
+        System.out.println("BUSCANDO ERROR DE LOS EDGES ");
+        for(int u=0;u<edge.size();u++){
+            System.out.println(edge.get(u));
+            String string = edge.get(u);
+            String[] parts = string.split(",");
+            String part1 = parts[0]; // 123
+            String part2 = parts[1]; // 654321
+            Vertex<String,String> v1=convert_string_to_vertex(new_graph,part1);
+            Vertex<String,String> v2=convert_string_to_vertex(new_graph,part2);
+            new_graph.addEdge(v1,v2);
+        }
+        return new_graph;
+    }
+    public Vertex<String,String> convert_string_to_vertex(Graph<String,String> graph,String vertex)
+    {
+        Vertex<String,String> convert_vertex=null;
+        Vertex<String,String> v[] = graph.vertices_array();
+        for(Vertex<String,String> v1:v) {
+            if(v1.getData().equals(vertex)){
+                convert_vertex=v1;
+            }
+        }
+        return convert_vertex;
+    }
     public static List<String> finding_repetitions2(List<String> codes){
         //Utilizando hashSet para evitar rutas repetidas
         Set<String> hashSet = new HashSet<String>(codes);
         codes.clear();
         codes.addAll(hashSet);
         return codes;
-    }
-
-
-
-
-    //Se da la lista de puntos de inicio y destino encontrando la ruta en la cual conectan
-    private List<Integer> findRoute2(List<Integer> start_points, List<Integer> finish_points){
-        List<Integer> routes=new ArrayList<>();
-        for(int i=0; i<start_points.size();i++){
-            //Se obtiene la lista de puntos de inicio
-            int point_start=start_points.get(i);
-            //Se busca la ruta del punto o las rutas que esten relacionadas a el
-            List<RouteStopEntity> all = this.routeStopRepository.findRoute(point_start);
-            for(RouteStopEntity x:all){
-                //se obtiene la ruta del punto de inicio
-                int route_start=x.getRouteIdRoute();
-                //se obtiene uno por uno los puntos de destino
-                for(int u=0;u<finish_points.size();u++){
-                    int point_finish=finish_points.get(u);
-                    //se obtiene la ruta donde la ruta sea igual a la del punto de inicio y al punto final
-                    List<RouteStopEntity> find_route=this.routeStopRepository.findRouteFinish(route_start,point_finish);
-                    for(RouteStopEntity y:find_route){
-                        // List<TransportBl> find_transport=this.
-                        //se obtiene cual es esa ruta y se la adiciona a la lista de rutas
-                        routes.add(y.getRouteIdRoute());
-                    }
-                }
-            }
-        }
-
-        //se devuelve la ruta
-        return routes;
     }
 
 
