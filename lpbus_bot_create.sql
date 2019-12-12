@@ -1,32 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.9.1
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 10-12-2019 a las 22:48:32
--- Versión del servidor: 10.4.8-MariaDB
--- Versión de PHP: 7.1.33
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de datos: `lpbus_bot`
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `connection_routes`
---
 
 CREATE TABLE `connection_routes` (
   `id_coroutes` int(11) NOT NULL,
@@ -489,6 +460,17 @@ CREATE TABLE `user_type` (
 -- Volcado de datos para la tabla `user_type`
 --
 
+CREATE TABLE `favorite_routes` (
+  `id_favorite_routes` int(11) NOT NULL,
+  `id_route` int(11) NOT NULL,
+  `Name` text DEFAULT NULL,
+  `tx_user` varchar(50) NOT NULL,
+  `tx_host` varchar(100) NOT NULL,
+  `tx_date` date NOT NULL,
+  primary key (`id_favorite_routes`),
+  foreign key (`id_route`) references `route`(`id_route`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO `user_type` (`id_user_type`, `type`, `token`, `tx_user`, `tx_host`, `tx_date`) VALUES
 (1, 'Administrador', '992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4', 'fer', 'localhost', '2019-11-22'),
 (2, 'Usuario', NULL, 'fer', 'localhost', '2019-11-22');
@@ -728,10 +710,11 @@ ALTER TABLE `route_stop_transport`
 --
 -- Filtros para la tabla `transport`
 --
-ALTER TABLE `transport`
-  ADD CONSTRAINT `transport_transport_info` FOREIGN KEY (`transport_info_id_transport_info`) REFERENCES `transport_info` (`id_transport_info`);
 
---
+ALTER TABLE `transport`
+  ADD foreign key (`transport_info_id_transport_info`) references `transport_info` (`id_transport_info`);
+-- transport_transport_info
+-- transport_info_id_transport_info
 -- Filtros para la tabla `users`
 --
 ALTER TABLE `users`
@@ -743,7 +726,3 @@ ALTER TABLE `users`
 ALTER TABLE `user_chat`
   ADD CONSTRAINT `user_chat_users` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
