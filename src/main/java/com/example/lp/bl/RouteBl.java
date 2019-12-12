@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -314,15 +312,14 @@ public class RouteBl {
             //se obtiene la ruta del punto de inicio
             rutas.add(x.getRouteA()+","+x.getRouteB());
         }
-        for(int w=0;w<origin_routes.size();w++){
+      /*  for(int w=0;w<origin_routes.size();w++){
             LOGGER.info("Valor del origin_route position; "+origin_routes.get(w)+" position "+w);
 
         }
         for(int q=0;q<destination_routes.size();q++){
             LOGGER.info("Valor del origin_route position; "+destination_routes.get(q)+" position "+q);
 
-        }
-
+        }*/
         //generamos el grafo
         /*podemos revisar el true*/
           Graph<String, String> grafo = new Graph<>(true);
@@ -451,6 +448,49 @@ public class RouteBl {
         codes.clear();
         codes.addAll(hashSet);
         return codes;
+    }
+
+    public File createKMLFile(){
+        String kmlstart = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
+        String document="\t<Document>\n"+
+                "\t<name>Línea Naranja-Blanca-Celeste-Verde</name>\n"+
+                "\t<description/>\n"+
+                "\t<NetworkLink>\n"+
+                "\t<name>Línea Naranja-Blanca-Celeste-Verde</name>\n"+
+                "\t<Link>\n"+
+                "\t <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1iOBUFy7ez8cOfV1RMOG959XPfOLUKt_L]]></href>\n"+
+                "\t</Link>\n"+
+                "\t</NetworkLink>\n"+
+                "\t<NetworkLink>\n"+
+                "\t<name>Línea Amarilla_Verde</name>\n"+
+                "\t<Link>\n"+
+                "\t<href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1mP8gFLVrPvvwyfwk4TMiZi0GUQjbeGMs]]></href>\n"+
+                "\t</Link>\n"+
+                "\t</NetworkLink>\n"+
+                "\t</Document>\n";
+        String kmlend = "</kml>";
+
+        ArrayList<String> content = new ArrayList<String>();
+        //content.add(0,kmlstart);
+        //content.add(1,kmlelement);
+        //content.add(2,kmlend);
+
+
+        File file=new File("Mapa.kml");
+        PrintWriter fichero =null;
+        try
+        {
+            fichero = new PrintWriter(file);
+            fichero.println(kmlstart);
+            fichero.println(document);
+            fichero.println(kmlend);
+            fichero.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
 
