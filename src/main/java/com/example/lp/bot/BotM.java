@@ -30,8 +30,9 @@ public class BotM  extends TelegramLongPollingBot {
 
     private static String universal_point="0";
     //mensaje a enviar al usuario
-    private static String mensaje="HOLA";
+    private static String mensaje="";
     private static File file=null;
+    private static String downl_message="";
 
 
     StopBl stopBl;
@@ -80,8 +81,6 @@ public class BotM  extends TelegramLongPollingBot {
 
             usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
             usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
-
-
             message.setText(mensaje);
             if(keyboardMarkup!=null){
                 message.setReplyMarkup(keyboardMarkup);
@@ -92,11 +91,15 @@ public class BotM  extends TelegramLongPollingBot {
             SendDocument document=new SendDocument()
                     .setChatId(chat_id)
                     .setCaption("MAP");
+            SendMessage download_message=new SendMessage()
+                    .setChatId(chat_id);
 
            try {
                execute(message); // Sending our message object to user
                if(file!=null){
+                   download_message.setText(downl_message);
                    document.setDocument(file);
+                   execute(download_message);
                    execute(document);
                    file=null;
                }
@@ -164,6 +167,7 @@ public class BotM  extends TelegramLongPollingBot {
                //Se obtiene datos de paradas cercanas a mi destino y la ruta
                keyboardMarkup=null;
                mensaje=routeBl.route_two(update,mensaje);
+               downl_message=routeBl.download_message();
                file=routeBl.return_file();
                universal_point="0";
                break;

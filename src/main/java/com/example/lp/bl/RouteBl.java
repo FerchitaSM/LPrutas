@@ -46,6 +46,7 @@ public class RouteBl {
         this.transportInfoRepository=transportInfoRepository;
         this.connectionRoutesRepository=connectionRoutesRepository;
     }
+    /*Obteniendo el codigo del transporte escogido*/
     public void get_transport(Update update) throws IOException {
         String type_transport=update.getMessage().getText();
         List<TransportInfoEntity> all = this.transportInfoRepository.findAll();
@@ -57,6 +58,15 @@ public class RouteBl {
         }
         cod_transport=info_id;
     }
+    /*Mensaje sobre descargar Google Earth*/
+    public String download_message(){
+        String message="";
+        String instalation="Debes tener instalado Google Earth para poder abrir el archivo: "+"\n";
+        String link="https://play.google.com/store/apps/details?id=com.google.earth&hl=es_BO";
+        message=instalation+link;
+        return message;
+    }
+
     //Funcionalidad de la parte uno obteniendo la lista de origen
     public String route_one(Update update,String message){
         //Se obtiene la latitud y longitud del usuario
@@ -87,11 +97,15 @@ public class RouteBl {
         List<Integer> destination_routes=to_route(list_destination);
         List<String> routes = to_connections_routes();
         //generamos el grafo
+        for(int i=0;i<origin_routes.size();i++){
+            LOGGER.info("VALORES ORIGIN ORUTES POSITION "+i+" valor "+origin_routes.get(i));
+        }
         Graph<String, String> grafo = new Graph<>(true);
         //se ingresara adentro del for para que cada vez que compare inicialize otra vez
         /*Se utiliza un for de los origin_routes para ir uno por uno para formar su grafo y ver si estan conectados con algun destino*/
         for (int g = 0; g < origin_routes.size(); g++) {
             /*se inicia el general que es tipo string para poder encontrar repeticiones con la funcion string*/
+            LOGGER.info("EL VALOR DEL ORIGIN ROUTES DE LA FUNCION PRINICPAL ES "+origin_routes.get(g));
             message=general(origin_routes.get(g),grafo,routes,destination_routes,message);
             /*cuando el cont sea igual a el size del general la bandera cambiara a true*/
 
@@ -139,6 +153,7 @@ public class RouteBl {
             }
         }
 
+        /*Se elimina las repeticiones del grafo*/
         graph=finding_repetitions_graph(graph);
 
         boolean flag=false;
@@ -151,27 +166,59 @@ public class RouteBl {
         /*se envia el grafo a una funcion para que no tenga repeticiones*/
         //TODO FALTA COMPARAR LOS GRAFOS DE VARIOS DESTINOS
         /* de aqui se sacan las rutas que estan unidas o te llevan*/
+
         LOGGER.info(String.valueOf(graph));
-        List<String> draw_route=new ArrayList<>();
         if(flag==true){
             message=message+"SI HAY UNA RUTA DISPONIBLE"+"\n";
             LOGGER.info("DIBUJANDO EL DIJKSTRAAAAAAAAA" );
-            Vertex<String,String> v1=convert_string_to_vertex(graph,origin_routes+"");
-            Vertex<String,String> v2=convert_string_to_vertex(graph,destination_routes.get(0)+"");
-            Edge<String,String> dijsktra[]=graph.dijkstra(v1,v2);
-            for(Edge<String,String> dijsktra1:dijsktra){
-                System.out.println(dijsktra1);
-                draw_route.add(dijsktra1.getV1().getData()+"");
-                draw_route.add(dijsktra1.getV2().getData()+"");
-            }
-            draw_route=finding_repetitions_string(draw_route);
-            file=createKMLFile(draw_route);
+            dijkstra(graph,origin_routes,destination_routes);
         }else{
             message="NO HAY RUTA DISPONIBLE";
         }
         return message;
     }
+/*En esta funcion se maneja dijkstra*/
+    private void dijkstra(Graph<String,String> graph,int origin_routes,List<Integer> destination_routes){
+        LOGGER.info("DESDE EL DIJSKTRA EL VALOR DEL ORIGIN routes ES "+origin_routes);
+        List<String> draw_route=compare_route_size(graph,origin_routes,destination_routes);
+        file=createKMLFile(draw_route);
+    }
+    /*se compara con todos los destination routes y el que tenga menor cantidad de rutas conectadas se devuelve*/
+    private List<String> compare_route_size(Graph<String,String> graph,int origin_routes,List<Integer> destination_routes){
+        LOGGER.info("INGRESE A LA COMPARACION DE COMPARE_ROUTE_SIZE");
+        LOGGER.info("AQUI EL VALOR DEL ORIGIN ROUTES ES"+origin_routes);
+        List<String> draw_route=new ArrayList<>();
+        int minimum_route=100;
+        for(int i=0;i<destination_routes.size();i++)
+        {
+            draw_route=dijkstra_function(graph,origin_routes,destination_routes.get(i));
+            if(draw_route.size()<minimum_route){
+                minimum_route=destination_routes.get(i);
+            }
+        }
+        LOGGER.info("Y EL ORIGIN ROUTES ES "+origin_routes);
+        LOGGER.info("ESTE ES EL VALOR DEL MINIMUM ROUTE DE EL DESTINO CON MENOR CANTIDAD DE CONEXIONES "+minimum_route);
+        //TODO revisar que cuando el usuario envia un mensaje despues de pedir el tipo de transporte este acepta y esta mal
 
+        if(minimum_route>0 && minimum_route<100){
+            draw_route=dijkstra_function(graph,origin_routes,minimum_route);
+        }
+        return draw_route;
+    }
+    /*Se utiliza la funcion de dijkstra para almacenar todas las rutas por las cuales se debe pasar*/
+    private List<String> dijkstra_function(Graph<String,String> graph,int origin_routes,int destination_routes){
+        List<String> draw_route=new ArrayList<>();
+        Vertex<String,String> v1=convert_string_to_vertex(graph,origin_routes+"");
+        Vertex<String,String> v2=convert_string_to_vertex(graph,destination_routes+"");
+        Edge<String,String> dijsktra[]=graph.dijkstra(v1,v2);
+        for(Edge<String,String> dijsktra1:dijsktra){
+            System.out.println(dijsktra1);
+            draw_route.add(dijsktra1.getV1().getData()+"");
+            draw_route.add(dijsktra1.getV2().getData()+"");
+        }
+        draw_route=finding_repetitions_string(draw_route);
+        return draw_route;
+    }
     /*Convirtiendo la lista obteniendo sus rutas*/
     private List<Integer> to_route(List<Integer> list){
         List<Integer> convert_list=new ArrayList<>();

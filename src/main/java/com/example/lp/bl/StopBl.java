@@ -22,13 +22,13 @@ import java.util.List;
 public class StopBl {
     private static final Logger LOGGER = LoggerFactory.getLogger(StopBl.class);
     private StopRepository stopRepository;
-    private static List<Integer> stop_distance=new ArrayList<>();
     @Autowired
     public StopBl( StopRepository stopRepository) {
         this.stopRepository = stopRepository;
     }
 
     public List<Integer> findAllNearbyLocationStop(String location) throws IOException {
+        List<Integer> stop_distance=new ArrayList<>();
         Integer contador=0;
         //Se obtiene todas las paradas para luego compararlas con la posicion enviada
         /*Se cuenta la cantidad de datos que hay en stop Repositoty ya que la solicitud de Distance Matrix solo admite 100*/
