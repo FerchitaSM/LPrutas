@@ -9,7 +9,7 @@ import java.sql.Date;
         @NamedQuery(name = "StopEntity.findPointsRoute", query = "SELECT a FROM RouteStopEntity c,StopEntity a WHERE c.routeIdRoute = :routeIdRoute and a.idStop = c.stopIdStop"),
         @NamedQuery(name = "StopEntity.findStartPosition", query = "SELECT a FROM RouteEntity c,StopEntity a WHERE c.stopStart = a.idStop and c.idRoute = :idRoute"),
         @NamedQuery(name = "StopEntity.findFinishPosition", query = "SELECT a FROM RouteEntity c,StopEntity a WHERE c.stopFinish = a.idStop and c.idRoute =: idRoute"),
-
+        @NamedQuery(name = "StopEntity.findAllById", query = "SELECT a FROM StopEntity a WHERE a.idStop BETWEEN :idRouteLess AND :idRouteGreater"),
 })
 public class StopEntity {
     private int idStop;

@@ -22,6 +22,7 @@ import java.util.List;
 public class StopBl {
     private static final Logger LOGGER = LoggerFactory.getLogger(StopBl.class);
     private StopRepository stopRepository;
+    private static List<Integer> stop_distance=new ArrayList<>();
     @Autowired
     public StopBl( StopRepository stopRepository) {
         this.stopRepository = stopRepository;
@@ -30,25 +31,36 @@ public class StopBl {
     public List<Integer> findAllNearbyLocationStop(String location) throws IOException {
         Integer contador=0;
         //Se obtiene todas las paradas para luego compararlas con la posicion enviada
-        List<StopEntity> all = this.stopRepository.findAll();
-        List<Integer> stop_distance = new ArrayList<>();
-        String destinos="";
-        //En String destinos se almacena las coordenadas que se enviara al url
-        for (StopEntity x: all) {
-            String latitud=String.valueOf(x.getLatitude());
-            String longitud= String.valueOf(x.getLongitude());
-            destinos=destinos+latitud+","+longitud+"|";
-        }
-        //se lo envia a distancematrix y obtiene una lista con enteros de en que ubicacion se encuentran las locaciones cercanas
-        List<Integer> locaciones=distancematrix(location,destinos);
-        for(StopEntity y:all){
-            for(int i=0;i<locaciones.size();i++){
-                if(contador == locaciones.get(i)){
-                    //se almacena en stop_distance los id`s de las paradas cercanas
-                    stop_distance.add(y.getIdStop());
-                }
+        /*Se cuenta la cantidad de datos que hay en stop Repositoty ya que la solicitud de Distance Matrix solo admite 100*/
+        int count= (int) this.stopRepository.count();
+        /*Se divide para saber cuantas solicitudes habra que hacer*/
+        int div=(count/100);
+        /*ya que es la cantidad de solicitudes aunque sea mayor a 0 habra una solicitud*/
+        div=div+1;
+        for(int u=0;u<div;u++){
+            int less=u*100;
+            /*es 101 ya que estamos utilizando between*/
+            int greater=less+101;
+            /*se le da un limite con less y greater*/
+            List<StopEntity> all = this.stopRepository.findAllById(less,greater);
+            String destinos="";
+            //En String destinos se almacena las coordenadas que se enviara al url
+            for (StopEntity x: all) {
+                String latitud=String.valueOf(x.getLatitude());
+                String longitud= String.valueOf(x.getLongitude());
+                destinos=destinos+latitud+","+longitud+"|";
             }
-            contador++;
+            //se lo envia a distancematrix y obtiene una lista con enteros de en que ubicacion se encuentran las locaciones cercanas
+            List<Integer> locaciones=distancematrix(location,destinos);
+            for(StopEntity y:all){
+                for(int i=0;i<locaciones.size();i++){
+                    if(contador == locaciones.get(i)){
+                        //se almacena en stop_distance los id`s de las paradas cercanas
+                        stop_distance.add(y.getIdStop());
+                    }
+                }
+                contador++;
+            }
         }
         //se retorna la lista de paradas
         return stop_distance;

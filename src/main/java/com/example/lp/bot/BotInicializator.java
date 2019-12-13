@@ -33,15 +33,6 @@ public class BotInicializator  {
         this.exceptionBl=exceptionBl;
         this.hotelBl=hotelBl;
     }
-
-
-/*
-    //Inicializacion Karen
-    public BotInicializator(StopBl stopBl, RouteBl routeBl) {
-        this.stopBl = stopBl;
-        this.routeBl=routeBl;
-    }
- */
     @PostConstruct
    public void levantando_bot() {
 

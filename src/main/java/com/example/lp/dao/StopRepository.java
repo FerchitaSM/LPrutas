@@ -3,14 +3,18 @@ package com.example.lp.dao;
 import com.example.lp.domain.StopEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 
 public interface StopRepository extends JpaRepository<StopEntity,Integer> {
+    /*Consultas Karen-------------------------------------*/
     List<StopEntity> findPointsRoute(int routeIdRoute);
     List<StopEntity> findStartPosition(int idRoute);
     List<StopEntity> findFinishPosition(int idRoute);
+    List<StopEntity> findAllById(@Param("idRouteLess") int less,@Param("idRouteGreater") int greater);
+    /*----------------------------------------------------*/
 
 
     @Query( value  =  " SELECT latitude FROM stop st, route ro, route_stop_transport rst, transport tr" +
@@ -28,5 +32,6 @@ public interface StopRepository extends JpaRepository<StopEntity,Integer> {
             "     AND tr.description =?1",
             nativeQuery  =  true )
     List<String> findLongitudeByDescription (String name);
+
 
 }

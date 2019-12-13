@@ -481,7 +481,7 @@ public class RouteBl {
         }
         String kmlend = "\t</Document>\n"+
                         "</kml>";
-        File file=new File("Mapa.kmz");
+        File file=new File("Mapa.kml");
         PrintWriter fichero =null;
         try
         {
