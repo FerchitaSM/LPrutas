@@ -3,7 +3,6 @@
 	<Document>
 	<name>Líneas de Teleférico</name>
 	<description/>
-
 	<NetworkLink>
 	<name>Línea Azul</name>
 	<Link>
@@ -28,6 +27,5 @@
 	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1osq23KE1YO2EeaT9_sS4syQhBiC5MZk8]]></href>
 	</Link>
 	</NetworkLink>
-
 	</Document>
 </kml>

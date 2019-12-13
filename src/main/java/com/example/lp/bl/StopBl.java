@@ -70,7 +70,7 @@ public class StopBl {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyCW_1tL---epCMy6Wix2JrgNWcNjJfqmzg")
                 .build();
-        DistanceMatrix distancia= null; //TODO _LA URL ADMITE HASTA 100 DATOS REVISAR
+        DistanceMatrix distancia= null;
 
         // se envia la consulta con el origen y las paradas para medir la distancia
         try {
