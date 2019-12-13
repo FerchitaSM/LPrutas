@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+	<Document>
+	<name>Líneas de Teleférico</name>
+	<description/>
+
+	<NetworkLink>
+	<name>Linea Naranja</name>
+	<Link>
+	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sjcfFIOb8UnjRZeESzFxihJSXBcP7k42]]></href>
+	</Link>
+	</NetworkLink>
+	<NetworkLink>
+	<name>Línea Blanca</name>
+	<Link>
+	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=13EEAKvIgW4qgG3peLE2_OHFzIZ7NykS9]]></href>
+	</Link>
+	</NetworkLink>
+	<NetworkLink>
+	<name>Línea Celeste</name>
+	<Link>
+	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1rFhlweyNsynr8g10ZQvNB8n3DVrK2yjN]]></href>
+	</Link>
+	</NetworkLink>
+	<NetworkLink>
+	<name>Línea Amarilla</name>
+	<Link>
+	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1-86oYxjF_jyJxQc3I5VhMjTNa0tuoKAv]]></href>
+	</Link>
+	</NetworkLink>
+
+	</Document>
+</kml>
