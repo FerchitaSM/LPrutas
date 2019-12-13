@@ -24,6 +24,7 @@ public class RouteBl {
     List<Integer> list_origin=new ArrayList<>();
     //Lista de paradas cercanas al destino
     List<Integer> list_destination=new ArrayList<>();
+    private static File file=null;
     private static String u_origin="";
     private static String u_destination="";
     private static int cod_transport=0;
@@ -34,6 +35,7 @@ public class RouteBl {
     private StopBl stopBl;
     private TransportInfoRepository transportInfoRepository;
     private ConnectionRoutesRepository connectionRoutesRepository;
+
 
     @Autowired
     public RouteBl(RouteRepository routeRepository, RouteStopRepository routeStopRepository, StopRepository stopRepository, StopBl stopBl, TransportInfoRepository transportInfoRepository, ConnectionRoutesRepository connectionRoutesRepository) {
@@ -382,7 +384,7 @@ public class RouteBl {
                 LOGGER.info("el VECTOR 1 DEL GRAFO ES;" + holu1.getV1().getData());
                 LOGGER.info("el VECTOR 2 DEL GRAFO ES;" + holu1.getV2().getData());;
             }*/
-
+           List<String> draw_route=new ArrayList<>();
             if(flag==true){
                 message=message+"SI HAY UNA RUTA DISPONIBLE"+"\n";
                 LOGGER.info("DIBUJANDO EL DIJKSTRAAAAAAAAA" );
@@ -391,14 +393,20 @@ public class RouteBl {
                     Edge<String,String> dijsktra[]=grafo.dijkstra(v1,v2);
                     for(Edge<String,String> dijsktra1:dijsktra){
                         System.out.println(dijsktra1);
+                        draw_route.add(dijsktra1.getV1().getData()+"");
+                        draw_route.add(dijsktra1.getV2().getData()+"");
                     }
-
+                    draw_route=finding_repetitions2(draw_route);
+                    file=createKMLFile(draw_route);
             }else{
                 message="NO HAY RUTA DISPONIBLE";
             }
 
         }
         return message;
+    }
+    public File return_file(){
+        return  file;
     }
     public Graph<String,String> finding_repetitions_graph(Graph<String,String> graph){
         List<String> vertex=new ArrayList<>();
@@ -450,34 +458,30 @@ public class RouteBl {
         return codes;
     }
 
-    public File createKMLFile(){
+    public File createKMLFile(List <String> routes){
         String kmlstart = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
-        String document="\t<Document>\n"+
-                "\t<name>Línea Naranja-Blanca-Celeste-Verde</name>\n"+
-                "\t<description/>\n"+
-                "\t<NetworkLink>\n"+
-                "\t<name>Línea Naranja-Blanca-Celeste-Verde</name>\n"+
-                "\t<Link>\n"+
-                "\t <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1iOBUFy7ez8cOfV1RMOG959XPfOLUKt_L]]></href>\n"+
-                "\t</Link>\n"+
-                "\t</NetworkLink>\n"+
-                "\t<NetworkLink>\n"+
-                "\t<name>Línea Amarilla_Verde</name>\n"+
-                "\t<Link>\n"+
-                "\t<href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1mP8gFLVrPvvwyfwk4TMiZi0GUQjbeGMs]]></href>\n"+
-                "\t</Link>\n"+
-                "\t</NetworkLink>\n"+
-                "\t</Document>\n";
-        String kmlend = "</kml>";
+                "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"+
+                "\t<Document>\n"+
+                "\t<name>Líneas de Teleférico</name>\n"+
+                "\t<description/>\n";
+        String document="";
+        for(int i=0;i<routes.size();i++){
+            List<RouteEntity> all = this.routeRepository.findByRoute(Integer.parseInt(routes.get(i)));
+            for (RouteEntity x : all) {
+                //se obtiene la ruta del punto de inicio
+                document=document+
+                        "\t<NetworkLink>\n"+
+                        "\t<name>"+x.getRouteName()+"</name>\n"+
+                        "\t<Link>\n"+
+                        "\t <href>"+x.getRouteDetails()+"</href>\n"+
+                        "\t</Link>\n"+
+                        "\t</NetworkLink>\n";
 
-        ArrayList<String> content = new ArrayList<String>();
-        //content.add(0,kmlstart);
-        //content.add(1,kmlelement);
-        //content.add(2,kmlend);
-
-
-        File file=new File("Mapa.kml");
+            }
+        }
+        String kmlend = "\t</Document>\n"+
+                        "</kml>";
+        File file=new File("Mapa.kmz");
         PrintWriter fichero =null;
         try
         {
