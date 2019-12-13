@@ -40,6 +40,8 @@ public class BotM  extends TelegramLongPollingBot {
     ExceptionBl exceptionBl;
     UsersBl usersBl;
     HotelBl hotelBl;
+    BotAdministrador botAdministrador;
+
 
     @Autowired
     public BotM(TransportBl transportBl,StopBl stopBl, RouteBl routeBl, UsersBl usersBl,ExceptionBl exceptionBl,HotelBl hotelBl) {
@@ -49,19 +51,23 @@ public class BotM  extends TelegramLongPollingBot {
         this.usersBl=usersBl;
         this.exceptionBl=exceptionBl;
         this.hotelBl= hotelBl;
+        botAdministrador = new BotAdministrador(this.usersBl);
     }
     @Override
     public void onUpdateReceived(Update update) {
         if(update.hasMessage()){
-            System.out.println("LLEGO EL MENSAJE");
-          //  usersBl.saveMessageAndUser( update);
             long chat_id = update.getMessage().getChatId();
+            if(chat_id== BotInicializator.chatIdAdmi){
+                botAdministrador.sendAnswer(update);
+            }
+            System.out.println("LLEGO EL MENSAJE");
+            usersBl.saveMessageAndUser( update);
             SendMessage message = new SendMessage()// Create a message object object
                     .setChatId(chat_id)
                     .setText(mensaje);
 
             getMessage(update);
-          // usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
+           usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
 
             ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
             try {
@@ -72,9 +78,8 @@ public class BotM  extends TelegramLongPollingBot {
           /*TODO hay un error cuando el mensaje es largo*/
 
 
-          //  usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
-        //    usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
-
+            usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+            usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
 
 
             message.setText(mensaje);
@@ -162,7 +167,6 @@ public class BotM  extends TelegramLongPollingBot {
                file=routeBl.return_file();
                universal_point="0";
                break;
-
            //EN ESTE NIVEL SE ESCOGIO VER LAS EXCEPCIONES
            case "8":
                keyboardMarkup=exceptionBl.findAllQuestionMessage(keyboardMarkup,update);
@@ -173,9 +177,92 @@ public class BotM  extends TelegramLongPollingBot {
                //Obtenemos la pregunta a la respuesta previa
                keyboardMarkup=null;
                mensaje=exceptionBl.findAnswerMessageByQuestionMessage(update);
+               universal_point=exceptionBl.universalPoint(mensaje);
+               break;
+           case "10":
+               //Si la pregunta fuera "Otra pregunta" ira aca
+               keyboardMarkup=null;
+               mensaje=exceptionBl.sendQuestionAdmi(update);
                universal_point="0";
                break;
 
+
+
+       }
+
+        return keyboardMarkup;
+    }
+
+
+    public void getMessage (Update update){
+       if(update.getMessage().hasText()==true){
+           String message=update.getMessage().getText();
+           switch (message){
+               case "Buscar una línea específica":
+                   universal_point="1";
+                   break;
+               case "Buscar movilidad a mi destino":
+                   universal_point="4";
+                   break;
+               case "Ayuda":
+                   universal_point="8";
+                   break;
+               default:
+                   if(universal_point=="2" || universal_point=="3" || universal_point=="5" || universal_point=="9"|| universal_point=="10" ){
+                       log.info("EL MENSAJE ES ADMITIDO");
+                   }else{
+                       universal_point="0";
+                   }
+           }
+       }else{
+           if(update.getMessage().hasLocation()==true){
+               if((update.getMessage().hasLocation()) && (universal_point=="6" || universal_point=="7")){
+                   //  || universal_point=="14")){
+                   log.info("EL MENSAJE ES ADMITIDO");
+               }else{
+                   universal_point="0";//usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
+               }
+           }
+       }
+    }
+
+    public ReplyKeyboardMarkup inicio(ReplyKeyboardMarkup keyboardMarkup){
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
+        // Set each button, you can also use KeyboardButton objects if you need something else than text
+        row.add("Buscar una línea específica");
+        keyboard.add(row);  //primera linea
+        row = new KeyboardRow();// Creando otra linea
+        row.add("Buscar movilidad a mi destino"); // segunda linea
+        keyboard.add(row);// Adicionando la segunda linea
+        row = new KeyboardRow();
+        row.add("Ayuda");
+        keyboard.add(row);
+        keyboardMarkup.setKeyboard(keyboard);
+        return keyboardMarkup;
+    }
+
+    @Override
+    public String getBotUsername() {
+        return "PreguntasLaPaz_bot";
+
+    }
+
+    @Override
+    public String getBotToken() {
+        return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
+       // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+       // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
+    }
+
+
+
+
+}
+
+
+
+/*
            //EN ESTE NIVEL SE MUESTRA COMO LLEGAR A CIERTOS DESTINOS EN ESPECIFICO (HOTELES)
            case "10":
                //Se muestra los hoteles que hay
@@ -212,84 +299,6 @@ public class BotM  extends TelegramLongPollingBot {
                universal_point="0";
                break;
 
-       }
-
-        return keyboardMarkup;
-   }
-
-   public void getMessage (Update update){
-       if(update.getMessage().hasText()==true){
-           String message=update.getMessage().getText();
-           switch (message){
-               case "Buscar una línea específica":
-                   universal_point="1";
-                   break;
-               case "Buscar movilidad a mi destino":
-                   universal_point="4";
-                   break;
-               case "Ayuda":
-                   universal_point="8";
-                   break;
-               case "Hoteles":
-                   universal_point="10";
-                   break;
-               default:
-                   if(universal_point=="2" || universal_point=="3" || universal_point=="5" || universal_point=="9"
-                           || universal_point=="11" || universal_point=="12"|| universal_point=="13" ){
-                       log.info("EL MENSAJE ES ADMITIDO");
-                   }else{
-                       universal_point="0";
-                   }
-           }
-       }else{
-           if(update.getMessage().hasLocation()==true){
-               if((update.getMessage().hasLocation()) && (universal_point=="6" || universal_point=="7"
-                       || universal_point=="14")){
-                   log.info("EL MENSAJE ES ADMITIDO");
-               }else{
-                   universal_point="0";//usersBl.changePointConversationChatMessage(update.getMessage().getChatId(),universal_point);
-               }
-           }
-       }
-   }
-
-    public ReplyKeyboardMarkup inicio(ReplyKeyboardMarkup keyboardMarkup){
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
-        // Set each button, you can also use KeyboardButton objects if you need something else than text
-        row.add("Buscar una línea específica");
-        keyboard.add(row);  //primera linea
-        row = new KeyboardRow();// Creando otra linea
-        row.add("Buscar movilidad a mi destino"); // segunda linea
-        keyboard.add(row);// Adicionando la segunda linea
-        row = new KeyboardRow();
-        row.add("Ayuda");
-        keyboard.add(row);
-        row = new KeyboardRow();
-        row.add("Hoteles");
-        keyboard.add(row);
-        keyboardMarkup.setKeyboard(keyboard);
-        return keyboardMarkup;
-    }
-
-    @Override
-    public String getBotUsername() {
-        return "pruebaRLP_bot";
-        //return "PreguntasLaPaz_bot";
-
-    }
-
-    @Override
-    public String getBotToken() {
-        return "1009052032:AAGzTMnE24Q4Nc7TJTmSsXdv2XSp-auMFHc";//chatbot karen
-       // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
-    //   return  "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
-       // return "992556865:AAF_LERRNZvwv8zYiDJ6r3XCnHU6ytjCWc4";  // chatbot Luis
-    }
-
-
-
-
-}
+ */
 
 

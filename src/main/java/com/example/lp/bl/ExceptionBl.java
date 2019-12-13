@@ -62,14 +62,14 @@ public class ExceptionBl {
     public String universalPoint( String message ) {
         String answer=this.exceptionRepository.findAnswerMessageByQuestionMessage("Otra pregunta");
         String ret ="0";
-        if(answer!=null){
+        if(answer.equals(message)){
             ret= "10";
         }
         return ret;
     }
 
     public String sendQuestionAdmi(Update update ) {
-        BotAdministrador botAdministrador = new BotAdministrador();
+        BotAdministrador botAdministrador = new BotAdministrador(usersBl);
         botAdministrador.sendQuestion( update);
         String ret = "Pronto le llegara la respuesta, mientras puede seguir con el chatBot";
         return ret;

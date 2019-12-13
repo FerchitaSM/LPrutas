@@ -1,5 +1,6 @@
 package com.example.lp.bl;
 
+import com.example.lp.bot.BotInicializator;
 import com.example.lp.dao.UserChatRepository;
 import com.example.lp.dao.UserTypeRepository;
 import com.example.lp.dao.UsersRepository;
@@ -153,6 +154,7 @@ public class UsersBl {
         return userChatDto;
     }
 
+
     //funcion para regresar el punto de la ultima conversacion
     public String lastPointConversation(Update update ) {
         LOGGER.info("lastPointConversation.........................");
@@ -163,6 +165,13 @@ public class UsersBl {
         UsersEntity usersEntity = findByIdUserBot(chat_id);
         ret = String.valueOf(userChatRepository.finUltimatePointConversatonChatByUserId(usersEntity.getIdUser()));
        return ret;
+    }
+
+    //funcion para registrar un nuevo chat del administrador previamente crado
+    public void continueWhitAdmi( UserChatEntity userChatEntity ) {
+        LOGGER.info("continueWhitAdmi.........................");
+        // Guardamos en base de datos
+        userChatRepository.save(userChatEntity);
     }
 
     //Funciones de UserType
@@ -285,4 +294,13 @@ public class UsersBl {
         userChatRepository.save(userChatEntity);
     }
 
+
+    public long chatIdUser() {
+        int idAdmi=findByIdUserBot((int) BotInicializator.chatIdAdmi).getIdUser();
+        int p1 = userChatRepository.finUltimatePointConversatonChatByUserId(idAdmi);
+        String id = String.valueOf(p1);
+        long ret = Long.parseLong(id);
+        return ret;
+
+    }
 }
