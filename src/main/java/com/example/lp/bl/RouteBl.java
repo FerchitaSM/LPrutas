@@ -244,7 +244,12 @@ public class RouteBl {
     //TODO falta hacer busqueda mixta
     private List<String> to_connections_routes(){
         List<String> routes = new ArrayList<>();
-        List<ConnectionRoutesEntity> all=this.connectionRoutesRepository.findAllByTypeTransport(cod_transport);
+        List<ConnectionRoutesEntity> all=null;
+        if(cod_transport==4){
+            all=this.connectionRoutesRepository.findAll();
+        }else{
+            all=this.connectionRoutesRepository.findAllByTypeTransport(cod_transport);
+        }
         for (ConnectionRoutesEntity x : all) {
             //se obtiene la ruta del punto de inicio
             routes.add(x.getRouteA()+","+x.getRouteB());
