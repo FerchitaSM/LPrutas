@@ -70,6 +70,19 @@ insert into `route` (`id_route`,`route_status`,`tx_host`,`tx_user`,`tx_date`,`ro
 ('9','1','localhost','karen',now(),'Línea Café','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sjQ6xUw0oyyKZJuuD9aUWcFMjKGKSx_a]]>','11','23'),
 ('10','1','localhost','karen',now(),'Línea Plateada','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1osq23KE1YO2EeaT9_sS4syQhBiC5MZk8]]>','5','22');
 
+/*CONEXION DE RUTAAAAAAAAAAAS*/
+insert into `connection_routes` (`id_coroutes`,`coroutes_status`,`tx_host`,`tx_user`,`tx_date`,`route_a`,`route_b`,`type_connection`,`description`) values
+('1','1','localhost','karen',now(),'1','2','1','Linea Azul-Rojo'),
+('2','1','localhost','karen',now(),'2','3','1','Linea Rojo-Naranja'),
+('3','1','localhost','karen',now(),'3','4','1','Linea Naranja-Blanca'),
+('4','1','localhost','karen',now(),'4','5','1','Linea Blanca-Celeste'),
+('5','1','localhost','karen',now(),'5','6','1','Linea Celeste-Verde'),
+('6','1','localhost','karen',now(),'5','7','1','Linea Celeste-Amarilla'),
+('7','1','localhost','karen',now(),'7','6','1','Linea Verde-Amarilla'),
+('8','1','localhost','karen',now(),'10','7','1','Linea Amarilla-Plateada'),
+('9','1','localhost','karen',now(),'10','1','1','Linea Plateada-Azul'),
+('10','1','localhost','karen',now(),'10','8','1','Linea Plateada-Morada'),
+('11','1','localhost','karen',now(),'4','9','1','Linea Blanca-Cafe');
 
 
 /*Conexion de telefericos*/
@@ -79,37 +92,47 @@ insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_us
 ('3','1','3','karen','localhost',now()),
 ('4','1','4','karen','localhost',now()),
 ('5','1','5','karen','localhost',now()),
+
 ('6','2','5','karen','localhost',now()),
 ('7','2','6','karen','localhost',now()),
 ('8','2','7','karen','localhost',now()),
+
 ('9','3','7','karen','localhost',now()),
 ('10','3','8','karen','localhost',now()),
 ('11','3','9','karen','localhost',now()),
 ('12','3','10','karen','localhost',now()),
+
 ('13','4','10','karen','localhost',now()),
 ('14','4','11','karen','localhost',now()),
 ('15','4','12','karen','localhost',now()),
 ('16','4','15','karen','localhost',now()),
+
 ('17','5','13','karen','localhost',now()),
 ('18','5','14','karen','localhost',now()),
 ('19','5','15','karen','localhost',now()),
 ('20','5','16','karen','localhost',now()),
+
 ('21','6','16','karen','localhost',now()),
 ('22','6','17','karen','localhost',now()),
 ('23','6','18','karen','localhost',now()),
 ('24','6','19','karen','localhost',now()),
+
 ('25','7','16','karen','localhost',now()),
 ('26','7','20','karen','localhost',now()),
 ('27','7','21','karen','localhost',now()),
 ('28','7','22','karen','localhost',now()),
+
 ('29','8','24','karen','localhost',now()),
 ('30','8','25','karen','localhost',now()),
 ('31','8','26','karen','localhost',now()),
+
 ('32','9','11','karen','localhost',now()),
 ('33','9','23','karen','localhost',now()),
+
 ('34','10','5','karen','localhost',now()),
 ('35','10','25','karen','localhost',now()),
 ('36','10','22','karen','localhost',now());
+
 
 
 insert into `exception` (`id_exception`, `question_message`, `answer_message`,`tx_user`,`tx_host`,`tx_date`) values
