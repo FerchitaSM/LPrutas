@@ -232,7 +232,7 @@ public class BootMain extends TelegramLongPollingBot {
     private List<Integer> llenar_lista(String latitude, String longitude ){
         List<Integer> retorno =new ArrayList<>();
         try {
-            retorno=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+            retorno=stopBl.findAllNearbyLocationStop(latitude+","+longitude,15);
         } catch (IOException e) {
             e.printStackTrace();
         }

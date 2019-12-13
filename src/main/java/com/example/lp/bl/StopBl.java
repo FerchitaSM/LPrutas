@@ -27,7 +27,7 @@ public class StopBl {
         this.stopRepository = stopRepository;
     }
 
-    public List<Integer> findAllNearbyLocationStop(String location) throws IOException {
+    public List<Integer> findAllNearbyLocationStop(String location,int compare) throws IOException {
         List<Integer> stop_distance=new ArrayList<>();
         Integer contador=0;
         //Se obtiene todas las paradas para luego compararlas con la posicion enviada
@@ -51,7 +51,7 @@ public class StopBl {
                 destinos=destinos+latitud+","+longitud+"|";
             }
             //se lo envia a distancematrix y obtiene una lista con enteros de en que ubicacion se encuentran las locaciones cercanas
-            List<Integer> locaciones=distancematrix(location,destinos);
+            List<Integer> locaciones=distancematrix(location,destinos,compare);
             for(StopEntity y:all){
                 for(int i=0;i<locaciones.size();i++){
                     if(contador == locaciones.get(i)){
@@ -65,7 +65,7 @@ public class StopBl {
         //se retorna la lista de paradas
         return stop_distance;
     }
-    private List<Integer> distancematrix(String origen,String destinos) throws IOException {
+    private List<Integer> distancematrix(String origen,String destinos,int compare) throws IOException {
         //se abre el contexto para construir la consulta
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyCW_1tL---epCMy6Wix2JrgNWcNjJfqmzg")
@@ -86,12 +86,12 @@ public class StopBl {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<Integer> locaciones=location(distancia);
+        List<Integer> locaciones=location(distancia,compare);
         //se retorna la lista de posiciones en la que se encuentran las direcciones las cuales su distancia es menor a 30 minutos
         return locaciones;
     }
     //se obtiene la lista de ubicaciones
-    private List<Integer> location(DistanceMatrix distancia) throws IOException {
+    private List<Integer> location(DistanceMatrix distancia,int compare) throws IOException {
         List<Integer> locaciones=new ArrayList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println("Reading JSON file from Java program");
@@ -109,7 +109,7 @@ public class StopBl {
                 int tiempo=duration.path("inSeconds").asInt();
                 Double minutes=((double)tiempo)/60;
                 //Si la caminata del origen al destino es menor a 30 minutos se devuelve
-                if(minutes<15){
+                if(minutes<compare){
                     locaciones.add(contador);
                 }
                 contador++;

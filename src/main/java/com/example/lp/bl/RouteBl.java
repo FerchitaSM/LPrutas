@@ -72,7 +72,7 @@ public class RouteBl {
         //Se obtiene la latitud y longitud del usuario
       //  u_origin=latitude(update)+","+longitude(update);
         //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
-        list_origin=nearby_points(list_origin,update);
+        list_origin=nearby_points(list_origin,update,10);
         message="Envia la ubicacion a donde quieres llegar";
         return message;
     }
@@ -80,7 +80,7 @@ public class RouteBl {
     public String route_two(Update update,String message){
        // u_destination=latitude(update)+","+longitude(update);
         //Obteniendo los puntos mas cercanos a mi destino
-        list_destination=nearby_points(list_destination,update);
+        list_destination=nearby_points(list_destination,update,15);
         //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
        // List<Integer> codes=new ArrayList<>();
         //codes=findRoute(list_origin,list_destination);
@@ -97,9 +97,6 @@ public class RouteBl {
         List<Integer> destination_routes=to_route(list_destination);
         List<String> routes = to_connections_routes();
         //generamos el grafo
-        for(int i=0;i<origin_routes.size();i++){
-            LOGGER.info("VALORES ORIGIN ORUTES POSITION "+i+" valor "+origin_routes.get(i));
-        }
         Graph<String, String> grafo = new Graph<>(true);
         //se ingresara adentro del for para que cada vez que compare inicialize otra vez
         /*Se utiliza un for de los origin_routes para ir uno por uno para formar su grafo y ver si estan conectados con algun destino*/
@@ -111,7 +108,26 @@ public class RouteBl {
         }
         return message;
     }
+
     private String general(int origin_routes, Graph<String,String> graph, List<String> routes, List<Integer> destination_routes, String message){
+        /*Se obtiene el grafo a partir del origin_routes que se da */
+        graph=general_graph(graph,origin_routes,routes);
+        /*Se elimina las repeticiones del grafo*/
+        graph=finding_repetitions_graph(graph);
+        /*Se verifica que todas las destination routes existan dentro del general y se obtiene una nueva lista de destination routes que si se encuentren en
+        * el general*/
+        destination_routes=verifying_destiny_exists(graph,destination_routes);
+        /*si el size de destination_routes es mayor a 0 entonces por lo menos este tiene un destino*/
+        if(destination_routes.size()>0){
+            message="SI HAY UNA RUTA DISPONIBLE"+"\n";
+            dijkstra(graph,origin_routes,destination_routes);
+        }else{
+            message="NO HAY RUTA DISPONIBLE";
+        }
+        return message;
+    }
+
+    private Graph<String,String> general_graph(Graph<String,String> graph,int origin_routes,List<String> routes){
         /*se utiliza una bandera cuando la bandera sea true se conecto- dibujo correctamente el grafo y el general*/
         boolean bandera = false;
         List<String> general=new ArrayList<>();
@@ -151,28 +167,18 @@ public class RouteBl {
                 bandera = true;
             }
         }
-
-        /*Se elimina las repeticiones del grafo*/
-        graph=finding_repetitions_graph(graph);
-        /*Se verifica que todas las destination routes existan dentro del general y se obtiene una nueva lista de destination routes que si se encuentren en
-        * el general*/
-        destination_routes=verifying_destiny_exists(destination_routes,general);
-        /*si el size de destination_routes es mayor a 0 entonces por lo menos este tiene un destino*/
-        if(destination_routes.size()>0){
-            message="SI HAY UNA RUTA DISPONIBLE"+"\n";
-            LOGGER.info("DIBUJANDO EL DIJKSTRAAAAAAAAA" );
-            dijkstra(graph,origin_routes,destination_routes);
-        }else{
-            message="NO HAY RUTA DISPONIBLE";
-        }
-        return message;
+        return graph;
     }
 
+
     /*Verifica que rutas dentro del destination se encuentran en el general*/
-    private List<Integer> verifying_destiny_exists(List<Integer> destination_routes,List<String> general){
+    private List<Integer> verifying_destiny_exists(Graph<String,String> graph, List<Integer> destination_routes){
         List<Integer> new_destination_routes=new ArrayList<>();
         for(int w=0;w<destination_routes.size();w++){
-            if(general.contains(destination_routes.get(w)+"")){
+            Vertex<String,String> exists_vertex=null;
+            exists_vertex=convert_string_to_vertex(graph,destination_routes.get(w)+"");
+            /*se compruea si el destino existe en el grafo*/
+            if(exists_vertex!=null){
                 new_destination_routes.add(destination_routes.get(w));
             }
         }
@@ -206,6 +212,7 @@ public class RouteBl {
         }
         return draw_route;
     }
+
     /*Se utiliza la funcion de dijkstra para almacenar todas las rutas por las cuales se debe pasar*/
     private List<String> dijkstra_function(Graph<String,String> graph,int origin_routes,int destination_routes){
         List<String> draw_route=new ArrayList<>();
@@ -234,10 +241,10 @@ public class RouteBl {
         return convert_list;
     }
     /*Se obtiene las conexiones de rutas segun el tipo de transporte*/
-    //TODO falta hacer la busqueda segun el tipo de transporte
+    //TODO falta hacer busqueda mixta
     private List<String> to_connections_routes(){
         List<String> routes = new ArrayList<>();
-        List<ConnectionRoutesEntity> all=this.connectionRoutesRepository.findAll();
+        List<ConnectionRoutesEntity> all=this.connectionRoutesRepository.findAllByTypeTransport(cod_transport);
         for (ConnectionRoutesEntity x : all) {
             //se obtiene la ruta del punto de inicio
             routes.add(x.getRouteA()+","+x.getRouteB());
@@ -412,9 +419,9 @@ public class RouteBl {
     }
 
     //Se saca la lista de puntos cercanos a la ubicacion que se da
-    private List<Integer> nearby_points(List<Integer> list, Update update){
+    private List<Integer> nearby_points(List<Integer> list, Update update,int compare){
         try {
-            list=stopBl.findAllNearbyLocationStop(latitude(update)+","+longitude(update));
+            list=stopBl.findAllNearbyLocationStop(latitude(update)+","+longitude(update),compare);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -427,7 +434,7 @@ public class RouteBl {
         //Se obtiene la latitud y longitud del usuario
         u_origin=latitude(update)+","+longitude(update);
         //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
-        list_origin=nearby_points(list_origin,update);
+        list_origin=nearby_points(list_origin,update,15);
 
         message=kml();
         return message;
@@ -440,7 +447,7 @@ public class RouteBl {
 
     private List<Integer> nearby_points_hotel(List<Integer> list, String latitude, String longitude) {
         try {
-            list=stopBl.findAllNearbyLocationStop(latitude+","+longitude);
+            list=stopBl.findAllNearbyLocationStop(latitude+","+longitude,15);
         } catch (IOException e) {
             e.printStackTrace();
         }
