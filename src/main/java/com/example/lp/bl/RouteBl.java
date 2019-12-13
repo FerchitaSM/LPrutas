@@ -104,11 +104,10 @@ public class RouteBl {
         //se ingresara adentro del for para que cada vez que compare inicialize otra vez
         /*Se utiliza un for de los origin_routes para ir uno por uno para formar su grafo y ver si estan conectados con algun destino*/
         for (int g = 0; g < origin_routes.size(); g++) {
+            //TODO falta la comparacion de los minimios entre origenes y rutas al obtener ya la ruta al destino minio es lo mismo pero con origenes
             /*se inicia el general que es tipo string para poder encontrar repeticiones con la funcion string*/
-            LOGGER.info("EL VALOR DEL ORIGIN ROUTES DE LA FUNCION PRINICPAL ES "+origin_routes.get(g));
             message=general(origin_routes.get(g),grafo,routes,destination_routes,message);
             /*cuando el cont sea igual a el size del general la bandera cambiara a true*/
-
         }
         return message;
     }
@@ -155,21 +154,12 @@ public class RouteBl {
 
         /*Se elimina las repeticiones del grafo*/
         graph=finding_repetitions_graph(graph);
-
-        boolean flag=false;
-        for(int w=0;w<destination_routes.size();w++){
-            if(general.contains(destination_routes.get(w)+"")){
-                LOGGER.info("HAY RUTA");
-                flag=true;
-            }
-        }
-        /*se envia el grafo a una funcion para que no tenga repeticiones*/
-        //TODO FALTA COMPARAR LOS GRAFOS DE VARIOS DESTINOS
-        /* de aqui se sacan las rutas que estan unidas o te llevan*/
-
-        LOGGER.info(String.valueOf(graph));
-        if(flag==true){
-            message=message+"SI HAY UNA RUTA DISPONIBLE"+"\n";
+        /*Se verifica que todas las destination routes existan dentro del general y se obtiene una nueva lista de destination routes que si se encuentren en
+        * el general*/
+        destination_routes=verifying_destiny_exists(destination_routes,general);
+        /*si el size de destination_routes es mayor a 0 entonces por lo menos este tiene un destino*/
+        if(destination_routes.size()>0){
+            message="SI HAY UNA RUTA DISPONIBLE"+"\n";
             LOGGER.info("DIBUJANDO EL DIJKSTRAAAAAAAAA" );
             dijkstra(graph,origin_routes,destination_routes);
         }else{
@@ -177,18 +167,29 @@ public class RouteBl {
         }
         return message;
     }
+
+    /*Verifica que rutas dentro del destination se encuentran en el general*/
+    private List<Integer> verifying_destiny_exists(List<Integer> destination_routes,List<String> general){
+        List<Integer> new_destination_routes=new ArrayList<>();
+        for(int w=0;w<destination_routes.size();w++){
+            if(general.contains(destination_routes.get(w)+"")){
+                new_destination_routes.add(destination_routes.get(w));
+            }
+        }
+        return new_destination_routes;
+    }
+
+    /*....................................................DIJKSTRA.....................................................................................*/
 /*En esta funcion se maneja dijkstra*/
     private void dijkstra(Graph<String,String> graph,int origin_routes,List<Integer> destination_routes){
-        LOGGER.info("DESDE EL DIJSKTRA EL VALOR DEL ORIGIN routes ES "+origin_routes);
         List<String> draw_route=compare_route_size(graph,origin_routes,destination_routes);
         file=createKMLFile(draw_route);
     }
     /*se compara con todos los destination routes y el que tenga menor cantidad de rutas conectadas se devuelve*/
     private List<String> compare_route_size(Graph<String,String> graph,int origin_routes,List<Integer> destination_routes){
-        LOGGER.info("INGRESE A LA COMPARACION DE COMPARE_ROUTE_SIZE");
-        LOGGER.info("AQUI EL VALOR DEL ORIGIN ROUTES ES"+origin_routes);
         List<String> draw_route=new ArrayList<>();
         int minimum_route=100;
+        /* Se coloco un numero alto para poder comparar y obtener la ruta que teng ala menor cantidad de conexiones*/
         for(int i=0;i<destination_routes.size();i++)
         {
             draw_route=dijkstra_function(graph,origin_routes,destination_routes.get(i));
@@ -196,11 +197,11 @@ public class RouteBl {
                 minimum_route=destination_routes.get(i);
             }
         }
-        LOGGER.info("Y EL ORIGIN ROUTES ES "+origin_routes);
-        LOGGER.info("ESTE ES EL VALOR DEL MINIMUM ROUTE DE EL DESTINO CON MENOR CANTIDAD DE CONEXIONES "+minimum_route);
         //TODO revisar que cuando el usuario envia un mensaje despues de pedir el tipo de transporte este acepta y esta mal
+        /*Al obtener la ruta y comprobando que el destin_route es mayor a 0 y distinto de nuestro numero de comparacion del principio se genera la lista de
+        * la ruta*/
 
-        if(minimum_route>0 && minimum_route<100){
+        if(minimum_route>0 && minimum_route!=100){
             draw_route=dijkstra_function(graph,origin_routes,minimum_route);
         }
         return draw_route;
@@ -219,6 +220,7 @@ public class RouteBl {
         draw_route=finding_repetitions_string(draw_route);
         return draw_route;
     }
+    /*....................................................................................................................................................*/
     /*Convirtiendo la lista obteniendo sus rutas*/
     private List<Integer> to_route(List<Integer> list){
         List<Integer> convert_list=new ArrayList<>();
