@@ -4,27 +4,27 @@
 	<name>Líneas de Teleférico</name>
 	<description/>
 	<NetworkLink>
+	<name>Línea Roja</name>
+	<Link>
+	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1H-WxMl3P1-kQMekzmzXP6Anl4AfvQBof]]></href>
+	</Link>
+	</NetworkLink>
+	<NetworkLink>
 	<name>Linea Naranja</name>
 	<Link>
 	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sjcfFIOb8UnjRZeESzFxihJSXBcP7k42]]></href>
 	</Link>
 	</NetworkLink>
 	<NetworkLink>
-	<name>Línea Blanca</name>
+	<name>Línea Morada</name>
 	<Link>
-	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=13EEAKvIgW4qgG3peLE2_OHFzIZ7NykS9]]></href>
+	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1vsibOWQr8OrDKAz2ekD08_q59AjA_UY4]]></href>
 	</Link>
 	</NetworkLink>
 	<NetworkLink>
-	<name>Línea Celeste</name>
+	<name>Línea Plateada</name>
 	<Link>
-	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1rFhlweyNsynr8g10ZQvNB8n3DVrK2yjN]]></href>
-	</Link>
-	</NetworkLink>
-	<NetworkLink>
-	<name>Línea Amarilla</name>
-	<Link>
-	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1-86oYxjF_jyJxQc3I5VhMjTNa0tuoKAv]]></href>
+	 <href><![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1osq23KE1YO2EeaT9_sS4syQhBiC5MZk8]]></href>
 	</Link>
 	</NetworkLink>
 	</Document>

@@ -80,7 +80,7 @@ public class RouteBl {
     public String route_two(Update update,String message){
        // u_destination=latitude(update)+","+longitude(update);
         //Obteniendo los puntos mas cercanos a mi destino
-        list_destination=nearby_points(list_destination,update,15);
+        list_destination=nearby_points(list_destination,update,30);
         //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
        // List<Integer> codes=new ArrayList<>();
         //codes=findRoute(list_origin,list_destination);
@@ -93,6 +93,8 @@ public class RouteBl {
 /*//////////////////////////////////////////////////////REALIZANDO MAPAS CON KML////////////////////////////////////////////////////////////////////////////*/
     public String kml(List<Integer> list_origin,List<Integer> list_destination){
         String message="";
+        int compare=100;
+        List<String> draw_route=null;
         List<Integer> origin_routes=to_route(list_origin);
         List<Integer> destination_routes=to_route(list_destination);
         List<String> routes = to_connections_routes();
@@ -103,13 +105,24 @@ public class RouteBl {
         for (int g = 0; g < origin_routes.size(); g++) {
             //TODO falta la comparacion de los minimios entre origenes y rutas al obtener ya la ruta al destino minio es lo mismo pero con origenes
             /*se inicia el general que es tipo string para poder encontrar repeticiones con la funcion string*/
-            message=general(origin_routes.get(g),grafo,routes,destination_routes,message);
+            draw_route=general(origin_routes.get(g),grafo,routes,destination_routes,message);
+            if(draw_route.size()<=compare){
+                compare=draw_route.size();
+            }
             /*cuando el cont sea igual a el size del general la bandera cambiara a true*/
         }
+        if(draw_route.size()>0){
+            message="SI HAY UNA RUTA DISPONIBLE"+"\n";
+            draw_file_KML(draw_route);
+        }else{
+            message="NO HAY UNA RUTA DISPONIBLE"+"\n";
+        }
+
+
         return message;
     }
 
-    private String general(int origin_routes, Graph<String,String> graph, List<String> routes, List<Integer> destination_routes, String message){
+    private List<String> general(int origin_routes, Graph<String,String> graph, List<String> routes, List<Integer> destination_routes, String message){
         /*Se obtiene el grafo a partir del origin_routes que se da */
         graph=general_graph(graph,origin_routes,routes);
         /*Se elimina las repeticiones del grafo*/
@@ -118,13 +131,14 @@ public class RouteBl {
         * el general*/
         destination_routes=verifying_destiny_exists(graph,destination_routes);
         /*si el size de destination_routes es mayor a 0 entonces por lo menos este tiene un destino*/
+        List<String> connection_routes=null;
         if(destination_routes.size()>0){
-            message="SI HAY UNA RUTA DISPONIBLE"+"\n";
-            dijkstra(graph,origin_routes,destination_routes);
+           // message="SI HAY UNA RUTA DISPONIBLE"+"\n";
+            connection_routes=dijkstra(graph,origin_routes,destination_routes);
         }else{
-            message="NO HAY RUTA DISPONIBLE";
+           // message="NO HAY RUTA DISPONIBLE";
         }
-        return message;
+        return connection_routes;
     }
 
     private Graph<String,String> general_graph(Graph<String,String> graph,int origin_routes,List<String> routes){
@@ -186,9 +200,9 @@ public class RouteBl {
 
     /*....................................................DIJKSTRA.....................................................................................*/
 /*En esta funcion se maneja dijkstra*/
-    private void dijkstra(Graph<String,String> graph,int origin_routes,List<Integer> destination_routes){
+    private List<String> dijkstra(Graph<String,String> graph,int origin_routes,List<Integer> destination_routes){
         List<String> draw_route=compare_route_size(graph,origin_routes,destination_routes);
-        file=createKMLFile(draw_route);
+        return draw_route;
     }
     /*se compara con todos los destination routes y el que tenga menor cantidad de rutas conectadas se devuelve*/
     private List<String> compare_route_size(Graph<String,String> graph,int origin_routes,List<Integer> destination_routes){
@@ -263,6 +277,8 @@ public class RouteBl {
         List<String> edge=edges_to_String(graph);
         /*Ahora si se dibuja un nuevo grafo*/
         Graph<String, String> new_graph =draw_new_graph(vertex,edge);
+        LOGGER.info("GRAFOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        LOGGER.info(String.valueOf(new_graph));
         return new_graph;
     }
     /*se convierte los vertex a una lista vertex*/
@@ -324,6 +340,10 @@ public class RouteBl {
     /**************************************************************************************************************************************************/
 
     /*----------------------------------CREANDO EL ARCHIVO KML --------------------------------------------------------------------------*/
+    /*funcion para dibujar el archivo KML*/
+    private void draw_file_KML(List<String> draw_route){
+        file=createKMLFile(draw_route);
+    }
     /*Se crea el archivo KML llamando a las respectivas funciones*/
     private File createKMLFile(List <String> routes){
         String kml=createStringKML(routes);

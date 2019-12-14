@@ -113,8 +113,8 @@ public class BotM  extends TelegramLongPollingBot {
         }
 
     public ReplyKeyboardMarkup punto(Update update,ReplyKeyboardMarkup keyboardMarkup) throws IOException {
-       //String conversacion = usersBl.lastPointConversation(update);
-        String conversacion=universal_point;
+       String conversacion = usersBl.lastPointConversation(update);
+        //String conversacion=universal_point;
        switch (conversacion){
            //ESTE ES EL NIVEL BASICO
            case "0":

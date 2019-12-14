@@ -1,24 +1,21 @@
 package com.example.lp;
 
-import com.example.lp.bl.RouteBl;
 import com.example.lp.bl.StopBl;
 import com.example.lp.dao.*;
 import com.example.lp.domain.ConnectionRoutesEntity;
 import com.example.lp.domain.RouteStopEntity;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.Date;
+//import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 //@SpringBootTest
 
