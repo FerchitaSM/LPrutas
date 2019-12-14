@@ -85,13 +85,13 @@ public class RouteBl {
        // List<Integer> codes=new ArrayList<>();
         //codes=findRoute(list_origin,list_destination);
        // message=routelist_url(codes,message);
-        message=kml();
+        message=kml(list_origin,list_destination);
         return message;
     }
 
 
 /*//////////////////////////////////////////////////////REALIZANDO MAPAS CON KML////////////////////////////////////////////////////////////////////////////*/
-    public String kml(){
+    public String kml(List<Integer> list_origin,List<Integer> list_destination){
         String message="";
         List<Integer> origin_routes=to_route(list_origin);
         List<Integer> destination_routes=to_route(list_destination);
@@ -138,7 +138,6 @@ public class RouteBl {
             /*se adiciona al grafo adentro */
             Vertex<String, String> vuno = graph.addVertex(general.get(cont));
             for (int i = 0; i < routes.size(); i++) {
-                //TODO AQUI SE DEBE AUMENTAR EN LA PARTE DE RUTAS CUANDO SE TENGA EL TIPO DE CONEXION SI ES ENTRE TELEFERICOS, PUMAS O MIXTOS
                 String string = routes.get(i);
                 String[] parts = string.split(",");
                 String part1 = parts[0];
@@ -241,11 +240,11 @@ public class RouteBl {
         return convert_list;
     }
     /*Se obtiene las conexiones de rutas segun el tipo de transporte*/
-    //TODO falta hacer busqueda mixta
+    //TODO idea basica busqueda mixta modificar
     private List<String> to_connections_routes(){
         List<String> routes = new ArrayList<>();
         List<ConnectionRoutesEntity> all=null;
-        if(cod_transport==4){
+        if(cod_transport>3){
             all=this.connectionRoutesRepository.findAll();
         }else{
             all=this.connectionRoutesRepository.findAllByTypeTransport(cod_transport);
@@ -441,7 +440,7 @@ public class RouteBl {
         //Obteniendo una lista con los lugares mas cercanos a mi ubicacion
         list_origin=nearby_points(list_origin,update,15);
 
-        message=kml();
+        message=kml(list_origin,list_destination);
         return message;
     }
 
