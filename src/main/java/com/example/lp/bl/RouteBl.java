@@ -96,11 +96,12 @@ public class RouteBl {
     public String route_two(Update update,String message){
        // u_destination=latitude(update)+","+longitude(update);
         //Obteniendo los puntos mas cercanos a mi destino
-        list_destination=nearby_points(list_destination,update,30);
+        list_destination=nearby_points(list_destination,update,15);
         //Se envia la lista de puntos cercanos a la ubicacion del usuario y la lista de los puntos cercanos a su destino
        // List<Integer> codes=new ArrayList<>();
         //codes=findRoute(list_origin,list_destination);
        // message=routelist_url(codes,message);
+
         message=kml(list_origin,list_destination);
         return message;
     }
@@ -108,6 +109,8 @@ public class RouteBl {
 
 /*//////////////////////////////////////////////////////REALIZANDO MAPAS CON KML////////////////////////////////////////////////////////////////////////////*/
     public String kml(List<Integer> list_origin,List<Integer> list_destination){
+        //TODO falta para cuando ambos puntos se encuentren en la misma ruta
+        //TODO se puede eliminar tablas
         String message="";
         int compare=100;
         List<String> draw_route=null;
@@ -129,11 +132,12 @@ public class RouteBl {
             }
             /*cuando el cont sea igual a el size del general la bandera cambiara a true*/
         }
-        if(draw_route!=null && draw_route.size()>0){
+        if(draw_route!=null){
             message="SI HAY UNA RUTA DISPONIBLE"+"\n";
             draw_file_KML(draw_route);
         }else{
             message="NO HAY UNA RUTA DISPONIBLE"+"\n";
+            file=null;
         }
 
 
@@ -151,10 +155,16 @@ public class RouteBl {
         /*si el size de destination_routes es mayor a 0 entonces por lo menos este tiene un destino*/
         List<String> connection_routes=null;
         if(destination_routes.size()>0){
-           // message="SI HAY UNA RUTA DISPONIBLE"+"\n";
             connection_routes=dijkstra(graph,origin_routes,destination_routes);
-        }else{
-           // message="NO HAY RUTA DISPONIBLE";
+        }
+        List<String> vertex=new ArrayList<>();
+        Vertex<String,String> e[]=graph.vertices_array();
+        for(Vertex<String,String> e1: e){
+            vertex.add(e1.getData());
+        }
+        vertex=finding_repetitions_string(vertex);
+        if(vertex.size()==1){
+            connection_routes.add(vertex.get(0));
         }
         return connection_routes;
     }
@@ -234,10 +244,8 @@ public class RouteBl {
                 minimum_route=destination_routes.get(i);
             }
         }
-        //TODO revisar crear una tabla mas que diga tipo de conexion teleferico teleferico osea 1-1
         /*Al obtener la ruta y comprobando que el destin_route es mayor a 0 y distinto de nuestro numero de comparacion del principio se genera la lista de
         * la ruta*/
-
         if(minimum_route>0 && minimum_route!=100){
             draw_route=dijkstra_function(graph,origin_routes,minimum_route);
         }
@@ -251,7 +259,7 @@ public class RouteBl {
         Vertex<String,String> v2=convert_string_to_vertex(graph,destination_routes+"");
         Edge<String,String> dijsktra[]=graph.dijkstra(v1,v2);
         for(Edge<String,String> dijsktra1:dijsktra){
-            System.out.println(dijsktra1);
+            System.out.println("DIJSTRA"+ dijsktra1);
             draw_route.add(dijsktra1.getV1().getData()+"");
             draw_route.add(dijsktra1.getV2().getData()+"");
         }
@@ -272,7 +280,6 @@ public class RouteBl {
         return convert_list;
     }
     /*Se obtiene las conexiones de rutas segun el tipo de transporte*/
-    //TODO idea basica busqueda mixta modificar
     private List<String> to_connections_routes(){
         List<String> routes = new ArrayList<>();
         List<ConnectionRoutesEntity> all=null;
@@ -386,6 +393,21 @@ public class RouteBl {
                 "\t<name>Líneas de Teleférico</name>\n"+
                 "\t<description/>\n";
         String document="";
+        /*si es que solo es una ruta*/
+        if(routes.size()==1){
+            List<RouteEntity> all = this.routeRepository.findByRoute(Integer.parseInt(routes.get(0)));
+            for (RouteEntity x : all) {
+                //se obtiene la ruta del punto de inicio
+                document=document+
+                        "\t<NetworkLink>\n"+
+                        "\t<name>"+x.getRouteName()+"</name>\n"+
+                        "\t<Link>\n"+
+                        "\t <href>"+x.getRouteDetails()+"</href>\n"+
+                        "\t</Link>\n"+
+                        "\t</NetworkLink>\n";
+
+            }
+        }
         /*for para ingresar el documento de todas las rutas*/
         for(int i=0;i<routes.size();i++){
             List<RouteEntity> all = this.routeRepository.findByRoute(Integer.parseInt(routes.get(i)));

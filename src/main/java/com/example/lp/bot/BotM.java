@@ -102,6 +102,7 @@ public class BotM  extends TelegramLongPollingBot {
                    execute(download_message);
                    execute(document);
                    file=null;
+                   downl_message="";
                }
 
             } catch (TelegramApiException e) {
@@ -145,7 +146,7 @@ public class BotM  extends TelegramLongPollingBot {
            case "4":
                //Se muestra los tipos de transporte que hay
                //String mas=routeBl.get_transport(update);
-               mensaje="Elige una opcion+\n";
+               mensaje="Elige una opcion\n";
                //mensaje=mensaje+mas;
                keyboardMarkup=transportBl.DescriptionConnectionInfo(keyboardMarkup);
                universal_point="5";

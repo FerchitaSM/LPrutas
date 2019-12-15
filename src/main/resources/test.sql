@@ -27,7 +27,7 @@ INSERT INTO `transport` (`id_transport`, `transport_status`, `tx_host`, `tx_user
 (NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Roja', '1', 'https://i.ibb.co/HrjXVGJ/Rojo.jpg'),
 (NULL, '1', 'localhost', 'fer', '2019-11-15', 'Linea Verde', '1', 'https://i.ibb.co/pfptz1S/Verde.jpg');
 
-
+/*Datos paradas Telefericos*/
 insert into `stop` (`id_stop`,`stop_status`,`tx_host`,`tx_user`,`tx_date`,`latitude`,`longitude`,`description`) values
 ('1','1','localhost','karen',now(),'-16.48996','-68.20907','P Teleferico Río Seco'),
 ('2','1','localhost','karen',now(),'-16.48952','-68.19287','P Teleferico Plaza Upea'),
@@ -56,7 +56,26 @@ insert into `stop` (`id_stop`,`stop_status`,`tx_host`,`tx_user`,`tx_date`,`latit
 ('25','1','localhost','karen',now(),'-16.51229','-68.15371','P Teleferico Faro Murillo'),
 ('26','1','localhost','karen',now(),'-16.50001','-68.13524','P Teleferico San Jose')
 ;
-
+/*Insertando datos de puma katari Inca Llojeta-PUC*/
+insert into `stop` (`id_stop`,`stop_status`,`tx_host`,`tx_user`,`tx_date`,`latitude`,`longitude`,`description`) values
+('27','1','localhost','karen',now(),'-16.50394','-68.12842','P Cancha Zapata'),
+('28','1','localhost','karen',now(),'-16.51426','-68.11445','P IV Centenario - U.E. Amor de Dios'),
+('29','1','localhost','karen',now(),'-16.51684','-68.12144','P Puentes Trillizos'),
+('30','1','localhost','karen',now(),'-16.51987','-68.12539','P Emaverde'),
+('31','1','localhost','karen',now(),'-16.5231','-68.12198','R. Cementerio Japonés'),
+('32','1','localhost','karen',now(),'-16.52578','-68.12371','P U.E. Boliviano Japonés'),
+('33','1','localhost','karen',now(),'-16.5278','-68.12645','P H. Nuestra Sra. de La Paz'),
+('34','1','localhost','karen',now(),'-16.53101','-68.12626','P Las Acacias'),
+('35','1','localhost','karen',now(),'-16.52971','-68.12862','P Las Petunias'),
+('36','1','localhost','karen',now(),'-16.53286','-68.13162','P Tomillo'),
+('37','1','localhost','karen',now(),'-16.53394','-68.13461','P Vergelito'),
+('38','1','localhost','karen',now(),'-16.53348','-68.13795','P Centro de Salud Vergel'),
+('39','1','localhost','karen',now(),'-16.53315','-68.14037','P Final Buenos Aires'),
+('40','1','localhost','karen',now(),'-16.53251','-68.14256','P U.E. José Santos Vargas'),
+('41','1','localhost','karen',now(),'-16.53418','-68.14588','P Raúl Salmón'),
+('42','1','localhost','karen',now(),'-16.52899','-68.14304','P R. Tupac Katari')
+;
+/*-------------------------------------------------*/
 /*Rutas de teleferico*/
 insert into `route` (`id_route`,`route_status`,`tx_host`,`tx_user`,`tx_date`,`route_name`,`route_details`,`stop_start`,`stop_finish`) values
 ('1','1','localhost','karen',now(),'Línea Azul','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1FR6QONhp60bSEgcK0QzGQDwRRBfjN8eJ]]>','1','5'),
@@ -69,6 +88,11 @@ insert into `route` (`id_route`,`route_status`,`tx_host`,`tx_user`,`tx_date`,`ro
 ('8','1','localhost','karen',now(),'Línea Morada','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1vsibOWQr8OrDKAz2ekD08_q59AjA_UY4]]>','24','26'),
 ('9','1','localhost','karen',now(),'Línea Café','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sjQ6xUw0oyyKZJuuD9aUWcFMjKGKSx_a]]>','11','23'),
 ('10','1','localhost','karen',now(),'Línea Plateada','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1osq23KE1YO2EeaT9_sS4syQhBiC5MZk8]]>','5','22');
+/*Rutas PUMA Inca Llojeta-PUC*/
+insert into `route` (`id_route`,`route_status`,`tx_host`,`tx_user`,`tx_date`,`route_name`,`route_details`,`stop_start`,`stop_finish`) values
+('11','1','localhost','karen',now(),'Inca Llojeta - PUC','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1alvQHnYnglrqJp_I86OIk4OWv6atPWTf]]>','27','42');
+
+
 
 insert into `type_connection`(`id_typeconnection`,`typeconnection_status`,`tx_host`,`tx_user`,`tx_date`,`t_transport_a`,`t_transport_b`,`description`) values
 ('1','1','localhost','karen',now(),'2','2','Teleférico'),
@@ -89,6 +113,10 @@ insert into `connection_routes` (`id_coroutes`,`coroutes_status`,`tx_host`,`tx_u
 ('10','1','localhost','karen',now(),'10','8','1','Linea Plateada-Morada'),
 ('11','1','localhost','karen',now(),'4','9','1','Linea Blanca-Cafe'),
 ('12','1','localhost','karen',now(),'10','2','1','Linea Plateada-Rojo');
+/*CONEXION DE RUTAS DE PUMA KATARI*/
+insert into `connection_routes` (`id_coroutes`,`coroutes_status`,`tx_host`,`tx_user`,`tx_date`,`route_a`,`route_b`,`type_connection`,`description`) values
+('13','1','localhost','karen',now(),'5','11','3','Linea Azul-Rojo');
+
 
 
 /*Conexion de telefericos*/
@@ -138,6 +166,25 @@ insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_us
 ('34','10','5','karen','localhost',now()),
 ('35','10','25','karen','localhost',now()),
 ('36','10','22','karen','localhost',now());
+/*Conexion de Pumas Kataris Inca Llojeta-PUC*/
+insert into `route_stop` (`id_route_stop`,`route_id_route`,`stop_id_stop`,`tx_user`,`tx_host`,`tx_date`)values
+('37','11','27','karen','localhost',now()),
+('38','11','28','karen','localhost',now()),
+('39','11','29','karen','localhost',now()),
+('40','11','30','karen','localhost',now()),
+('41','11','31','karen','localhost',now()),
+('42','11','32','karen','localhost',now()),
+('43','11','33','karen','localhost',now()),
+('44','11','34','karen','localhost',now()),
+('45','11','35','karen','localhost',now()),
+('46','11','36','karen','localhost',now()),
+('47','11','37','karen','localhost',now()),
+('48','11','38','karen','localhost',now()),
+('49','11','39','karen','localhost',now()),
+('50','11','40','karen','localhost',now()),
+('51','11','41','karen','localhost',now()),
+('52','11','42','karen','localhost',now());
+
 
 
 
