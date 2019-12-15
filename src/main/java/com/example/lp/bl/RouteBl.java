@@ -157,7 +157,7 @@ public class RouteBl {
         if(destination_routes.size()>0){
             connection_routes=dijkstra(graph,origin_routes,destination_routes);
         }
-        List<String> vertex=new ArrayList<>();
+       /* List<String> vertex=new ArrayList<>();
         Vertex<String,String> e[]=graph.vertices_array();
         for(Vertex<String,String> e1: e){
             vertex.add(e1.getData());
@@ -165,7 +165,7 @@ public class RouteBl {
         vertex=finding_repetitions_string(vertex);
         if(vertex.size()==1){
             connection_routes.add(vertex.get(0));
-        }
+        }*/
         return connection_routes;
     }
 

@@ -58,10 +58,10 @@ public class BotM  extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if(update.hasMessage()){
             long chat_id = update.getMessage().getChatId();
-            long chatIdAdmi = usersBl.administrator().getIdUserBot();
+            /*long chatIdAdmi = usersBl.administrator().getIdUserBot();
             if(chat_id== chatIdAdmi){
                 botAdministrador.sendAnswer(update);
-            }
+            }*/
             usersBl.saveMessageAndUser( update);
             SendMessage message = new SendMessage()// Create a message object object
                     .setChatId(chat_id)
@@ -77,7 +77,6 @@ public class BotM  extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
           /*TODO hay un error cuando el mensaje es largo*/
-
 
            usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
            usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
