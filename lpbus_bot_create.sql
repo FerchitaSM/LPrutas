@@ -108,6 +108,35 @@ CREATE TABLE `parada_taxi` (
   `tx_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `parada_taxi`
+--
+INSERT INTO `parada_taxi` (`id_taxi`,`company_name`,`phone_number`,`zone_t`,`address`,`map_photo`,`tx_user`,`tx_host`,`tx_date`) VALUES
+(1,'Estrella de San Pedro Bello Horizonte','2486078','Sopocachi','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(2,'Etaxi.bo','2731515','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(3,'Florisur Guarachi SRL','2750202','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(4,'Gold Star SRL Radiomóvil del Sur','2798787','Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(5,'Radiomóvil Achumani SRL','2711717','Achumani','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(6,'Radiomóvil Aguilas Sur','2731515','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(7,'Radiomóvil Armonía','2252626','Villa Armonia','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(8,'Radiomóvil Atenea','2731515','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(9,'Radiomóvil Cristo Rey','2731515','San Pedro','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(10,'Radiomóvil Gold','2731515','Miraflores','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(11,'Radiomóvil Halcón del Sur','Obrajes','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(12,'Radiomóvil Junior Gaucho del Sur','Calacoto','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(13,'Radiomóvil Mallasa City Sur','2731515','Mallasa','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(14,'Radiomóvil Sureño SRL','2731515','Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(15,'Radiomóvil Tramix Sur','2731515','Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(16,'Radiotaxi Amor de Dios ','2731515','La Florida','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(17,'Radiotaxi La Paz ','2731515','San Pedro','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(18,'Radiotaxi Luna Azul','2731515','La Florida','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(19,'Radiotaxi Obrajes','2731515','Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(20,'Trans Estelar Radiomóvil','2731515','Villa Fatima','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(21,'Remisse Sur radiomóvil','2731515','Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(22,'Radiotaxi Servisur LP Ltda','2731515','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(23,'Radiotaxi Gobernador','2731515','Miraflores','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(24,'Radiotaxi Megaservice','2731515','Villa San Antonio','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15'),
+(25,'Radiotaxi VIP SRL','2731515','Alto Obrajes','Direccion exacta','http://url.mapa','ccaverotx','localhost','2019-12-15');
 -- --------------------------------------------------------
 
 --
