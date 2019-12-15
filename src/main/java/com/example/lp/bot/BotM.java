@@ -58,7 +58,8 @@ public class BotM  extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if(update.hasMessage()){
             long chat_id = update.getMessage().getChatId();
-            if(chat_id== BotInicializator.chatIdAdmi){
+            long chatIdAdmi = usersBl.administrator().getIdUserBot();
+            if(chat_id== chatIdAdmi){
                 botAdministrador.sendAnswer(update);
             }
             System.out.println("LLEGO EL MENSAJE");
@@ -245,6 +246,8 @@ public class BotM  extends TelegramLongPollingBot {
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;
     }
+
+
 
     @Override
     public String getBotUsername() {

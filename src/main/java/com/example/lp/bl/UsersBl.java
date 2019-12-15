@@ -1,5 +1,6 @@
 package com.example.lp.bl;
 
+import com.example.lp.bot.BotAdministrador;
 import com.example.lp.bot.BotInicializator;
 import com.example.lp.dao.UserChatRepository;
 import com.example.lp.dao.UserTypeRepository;
@@ -9,6 +10,7 @@ import com.example.lp.domain.UserTypeEntity;
 import com.example.lp.domain.UsersEntity;
 import com.example.lp.dto.Status;
 import com.example.lp.dto.UserChatDto;
+import com.example.lp.dto.UserDto;
 import com.example.lp.dto.UserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,7 @@ public class UsersBl {
     private UsersRepository usersRepository;
     private UserChatRepository userChatRepository;
     private UserTypeRepository userTypeRepository;
+
 
     @Autowired
     public UsersBl(UsersRepository usersRepository, UserChatRepository userChatRepository, UserTypeRepository userTypeRepository) {
@@ -295,12 +298,18 @@ public class UsersBl {
     }
 
 
+
+    public UserDto administrator () {
+        UsersEntity usersEntity = findByIdUser(BotInicializator.idAdmi);
+        UserDto userDto = new UserDto(usersEntity);
+        return userDto;
+    }
     public long chatIdUser() {
-        int idAdmi=findByIdUserBot((int) BotInicializator.chatIdAdmi).getIdUser();
-        int p1 = userChatRepository.finUltimatePointConversatonChatByUserId(idAdmi);
+        int p1 = userChatRepository.finUltimatePointConversatonChatByUserId(BotInicializator.idAdmi);
         String id = String.valueOf(p1);
         long ret = Long.parseLong(id);
         return ret;
 
     }
+
 }

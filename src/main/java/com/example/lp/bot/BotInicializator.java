@@ -13,7 +13,8 @@ import javax.annotation.PostConstruct;
 @Component
 public class BotInicializator  {
     private static final Logger log = LoggerFactory.getLogger(BotInicializator.class);
-    public static  final long chatIdAdmi = 710762348;;
+  //  public static  final long chatIdAdmi = 710762348;;
+    public static  final int idAdmi = 1;;
     TransportBl transportBl;
     TaxiBl taxiBl;
     StopBl stopBl;

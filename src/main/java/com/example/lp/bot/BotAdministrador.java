@@ -2,6 +2,8 @@ package com.example.lp.bot;
 
 import com.example.lp.bl.*;
 import com.example.lp.domain.UserChatEntity;
+import com.example.lp.domain.UsersEntity;
+import com.example.lp.dto.UserDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class BotAdministrador extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
     }
 
+
+
     public void sendAnswer(Update update) {
         long chatIdAdmi = update.getMessage().getChatId();
         respuesta += update.getMessage().getText(); // mesaje del usuario
@@ -54,12 +58,12 @@ public class BotAdministrador extends TelegramLongPollingBot {
     }
 
     public void sendQuestion(Update update) {
+        UserDto userDto= usersBl.administrator();
         int chatIdUser = Integer.parseInt(String.valueOf(update.getMessage().getChatId()));
-        int idAdmi=usersBl.findByIdUserBot((int) BotInicializator.chatIdAdmi).getIdUser();
         String question = update.getMessage().getText();
         Date sDate = getDate();
         UserChatEntity userChatEntity = new UserChatEntity();
-        userChatEntity.setIdUser(idAdmi);
+        userChatEntity.setIdUser(BotInicializator.idAdmi);
         userChatEntity.setInMessage(question);
         userChatEntity.setOutMessage("....");
         userChatEntity.setMsgDate(sDate);
@@ -73,7 +77,7 @@ public class BotAdministrador extends TelegramLongPollingBot {
         usersBl.continueWhitAdmi( userChatEntity);
 
         messageAdmi = new SendMessage()
-                .setChatId(BotInicializator.chatIdAdmi)
+                .setChatId((long) userDto.getIdUserBot())
                 .setText("Preguntan: "+question);
         try {
             execute(messageAdmi);
@@ -89,17 +93,19 @@ public class BotAdministrador extends TelegramLongPollingBot {
     }
 
 
+
     @Override
     public String getBotUsername() {
-        return "pruebaRLP_bot";
+        return "pruebaRLP_bot"; // chatbot Fernanda
         //return "PreguntasLaPaz_bot";
 
     }
 
     @Override
     public String getBotToken() {
-        return  "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";
-        // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";  // chat Grupo
+        // return "878308952:AAELkgmF0NkxPV7t7KvpQ3-JOWWVChLeMbg";
+        return "1048217369:AAFJ7frG5Aikq2ttTMHVi-rvCSHQEDtF1ws";  // chatbot Fernanda
+
 
     }
 
