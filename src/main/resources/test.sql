@@ -70,6 +70,11 @@ insert into `route` (`id_route`,`route_status`,`tx_host`,`tx_user`,`tx_date`,`ro
 ('9','1','localhost','karen',now(),'Línea Café','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sjQ6xUw0oyyKZJuuD9aUWcFMjKGKSx_a]]>','11','23'),
 ('10','1','localhost','karen',now(),'Línea Plateada','<![CDATA[http://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1osq23KE1YO2EeaT9_sS4syQhBiC5MZk8]]>','5','22');
 
+insert into `type_connection`(`id_typeconnection`,`typeconnection_status`,`tx_host`,`tx_user`,`tx_date`,`t_transport_a`,`t_transport_b`,`description`) values
+('1','1','localhost','karen',now(),'2','2','Teleférico'),
+('2','1','localhost','karen',now(),'1','1','Puma Katari'),
+('3','1','localhost','karen',now(),'1','2','Teleférico-Puma Katari');
+
 /*CONEXION DE RUTAAAAAAAAAAAS*/
 insert into `connection_routes` (`id_coroutes`,`coroutes_status`,`tx_host`,`tx_user`,`tx_date`,`route_a`,`route_b`,`type_connection`,`description`) values
 ('1','1','localhost','karen',now(),'1','2','1','Linea Azul-Rojo'),
@@ -82,7 +87,8 @@ insert into `connection_routes` (`id_coroutes`,`coroutes_status`,`tx_host`,`tx_u
 ('8','1','localhost','karen',now(),'10','7','1','Linea Amarilla-Plateada'),
 ('9','1','localhost','karen',now(),'10','1','1','Linea Plateada-Azul'),
 ('10','1','localhost','karen',now(),'10','8','1','Linea Plateada-Morada'),
-('11','1','localhost','karen',now(),'4','9','1','Linea Blanca-Cafe');
+('11','1','localhost','karen',now(),'4','9','1','Linea Blanca-Cafe'),
+('12','1','localhost','karen',now(),'10','2','1','Linea Plateada-Rojo');
 
 
 /*Conexion de telefericos*/

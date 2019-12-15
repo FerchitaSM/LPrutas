@@ -23,6 +23,7 @@ class RouteBlTests {
 
     @Test
     void testProcessUpdateExistingUser() {
+        /*Respecto al Telegram*/
         // Simulando al Telegram
         User user = Mockito.mock(User.class);
         Mockito.doReturn(1234).when(user).getId();
@@ -37,14 +38,21 @@ class RouteBlTests {
         Location location = Mockito.mock(Location.class);
         Mockito.doReturn(-16.4890967).when(location).getLongitude();
         Mockito.doReturn(-68.1377988).when(location).getLatitude();
+        /*----------------------------------------------------------------------------*/
 
         Update update = Mockito.mock(Update.class);
         Mockito.doReturn(message).when(update).getMessage();
 
+        /*Se genera la lista de origen y la lista de destino*/
+        List<Integer> list_origin=null;
+        list_origin.add(1);
+        List<Integer> list_destination=null;
+        list_destination.add(7);
 
         //Simulando acceso a RouteRepository
         RouteRepository routeRepository=Mockito.mock(RouteRepository.class);
 
+        /*se obtiene la ruta de los puntos cercanos*/
         /*REVISAR*/
         //Simulando acceso a la base de datos de RouteStopRepository
         RouteStopEntity routeStopEntity=Mockito.mock(RouteStopEntity.class);
@@ -53,25 +61,22 @@ class RouteBlTests {
         RouteStopRepository routeStopRepository=Mockito.mock(RouteStopRepository.class);
         Mockito.doReturn(routeStopEntity).when(routeStopRepository).findRoute(1);
 
+
+        /*Simulando acceso a la base de datos ConnectionRoutesRepository*/
+        ConnectionRoutesEntity connectionRoutesEntity=Mockito.mock(ConnectionRoutesEntity.class);
+        Mockito.doReturn(1).when(connectionRoutesEntity).getRouteA();
+        Mockito.doReturn(2).when(connectionRoutesEntity).getRouteA();
+        // Mockito.doReturn(4).when(connectionRoutesEntity).getTypeConnection();
+        ConnectionRoutesRepository connectionRoutesRepository=Mockito.mock(ConnectionRoutesRepository.class);
+        Mockito.doReturn(connectionRoutesEntity).when(connectionRoutesRepository).findAllByTypeTransport(4);
+
         //Simulando
         StopRepository stopRepository;
         StopBl stopBl;
         TransportInfoRepository transportInfoRepository;
 
 
-        /*Simulando acceso a la base de datos ConnectionRoutesRepository*/
-        ConnectionRoutesEntity connectionRoutesEntity=Mockito.mock(ConnectionRoutesEntity.class);
-        Mockito.doReturn(1).when(connectionRoutesEntity).getRouteA();
-        Mockito.doReturn(2).when(connectionRoutesEntity).getRouteA();
-       // Mockito.doReturn(4).when(connectionRoutesEntity).getTypeConnection();
-        ConnectionRoutesRepository connectionRoutesRepository=Mockito.mock(ConnectionRoutesRepository.class);
-        Mockito.doReturn(connectionRoutesEntity).when(connectionRoutesRepository).findAllByTypeTransport(4);
 
-
-        List<Integer> list_origin=null;
-        list_origin.add(1);
-        List<Integer> list_destination=null;
-        list_destination.add(7);
         /*
         // Simulando acceso a base de datos CpUserRepository
         CpUser cpUser = Mockito.mock(CpUser.class);

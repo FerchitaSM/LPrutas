@@ -1,3 +1,36 @@
+CREATE TABLE type_connection(
+    id_typeconnection int NOT NULL auto_increment,
+    typeconnection_status int,
+    tx_host varchar(200),
+    tx_user varchar(200),
+    tx_date date,
+    t_transport_a int,
+    t_transport_b int,
+    description varchar(200),
+    CONSTRAINT typeconnection_pk PRIMARY KEY (id_typeconnection),
+    foreign key (t_transport_a) references transport_info(id_transport_info),
+    foreign key (t_transport_b) references transport_info(id_transport_info)
+);
+CREATE TABLE connection_routes(
+	id_coroutes int NOT NULL auto_increment,
+    coroutes_status int,
+    tx_host varchar(200),
+    tx_user varchar(200),
+    tx_date date,
+    route_a int,
+    route_b int,
+    type_connection int,
+    description varchar(200),
+    CONSTRAINT coroutes_pk PRIMARY KEY (id_coroutes),
+    foreign key (route_a) references route(id_route),
+    foreign key (route_b) references route(id_route),
+    foreign key (type_connection) references type_connection(id_typeconnection)
+);
+
+
+
+
+
 
 CREATE TABLE `connection_routes` (
   `id_coroutes` int(11) NOT NULL,

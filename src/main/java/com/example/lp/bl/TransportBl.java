@@ -1,8 +1,10 @@
 package com.example.lp.bl;
 import com.example.lp.dao.TransportInfoRepository;
 import com.example.lp.dao.TransportRepository;
+import com.example.lp.dao.TypeConnectionRepository;
 import com.example.lp.domain.TransportEntity;
 import com.example.lp.domain.TransportInfoEntity;
+import com.example.lp.domain.TypeConnectionEntity;
 import com.example.lp.dto.Status;
 import org.hibernate.validator.internal.constraintvalidators.bv.time.futureorpresent.FutureOrPresentValidatorForDate;
 import org.slf4j.Logger;
@@ -24,14 +26,31 @@ public class TransportBl {
 
     private TransportRepository transportRepository;
     private TransportInfoRepository transportInfoRepository;
+    private TypeConnectionRepository typeConnectionRepository;
 
     @Autowired
-    public TransportBl(TransportRepository transportRepository, TransportInfoRepository transportInfoRepository) {
+    public TransportBl(TransportRepository transportRepository, TransportInfoRepository transportInfoRepository,TypeConnectionRepository typeConnectionRepository) {
         this.transportRepository = transportRepository;
         this.transportInfoRepository = transportInfoRepository;
+        this.typeConnectionRepository=typeConnectionRepository;
     }
-    //Funciones de Transport
+    //Funcion type Connection
+    public ReplyKeyboardMarkup DescriptionConnectionInfo(ReplyKeyboardMarkup keyboardMarkup){
+        List<KeyboardRow> keyboard=new ArrayList<>();
+        List<TypeConnectionEntity> all=this.typeConnectionRepository.findAll();
+        for (TypeConnectionEntity x: all) {
+            KeyboardRow row = new KeyboardRow();// Creando una fila de teclado
+            row.add(x.getDescription());
+            keyboard.add(row);
+        }
+        keyboardMarkup.setKeyboard(keyboard);
+        return keyboardMarkup;
+    }
 
+
+    /*-----------------------------------------------------------------*/
+
+    //Funciones de Transport
     public ReplyKeyboardMarkup DescriptiontransportInfo(ReplyKeyboardMarkup keyboardMarkup){
         List<KeyboardRow> keyboard = new ArrayList<>();
         List<TransportInfoEntity> all = this.transportInfoRepository.findAll();

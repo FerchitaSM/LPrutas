@@ -4,9 +4,9 @@ spring:
     name: LPrutas
   datasource:
     plataform: MySQL
-    url: jdbc:mysql://localhost:3306/lpbus_bot?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/lpbus_bot?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
-    password:
+    password: root
 
   jpa:
     hibernate:

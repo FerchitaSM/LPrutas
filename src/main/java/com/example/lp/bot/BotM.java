@@ -62,7 +62,6 @@ public class BotM  extends TelegramLongPollingBot {
             if(chat_id== chatIdAdmi){
                 botAdministrador.sendAnswer(update);
             }
-            System.out.println("LLEGO EL MENSAJE");
             usersBl.saveMessageAndUser( update);
             SendMessage message = new SendMessage()// Create a message object object
                     .setChatId(chat_id)
@@ -80,8 +79,8 @@ public class BotM  extends TelegramLongPollingBot {
           /*TODO hay un error cuando el mensaje es largo*/
 
 
-            usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
-            usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
+           usersBl.changeResponseChatMessage(update.getMessage().getChatId(),mensaje);
+           usersBl.changePointConversationChatMessage(update.getMessage().getChatId(), universal_point);
             message.setText(mensaje);
             if(keyboardMarkup!=null){
                 message.setReplyMarkup(keyboardMarkup);
@@ -91,7 +90,7 @@ public class BotM  extends TelegramLongPollingBot {
             }
             SendDocument document=new SendDocument()
                     .setChatId(chat_id)
-                    .setCaption("MAP");
+                    .setCaption("Una vez descargado Google Earth:\n -Ingrese al siguiente documento\n (Si Google Earth se cierra solo vuelva a ingresar otra vez)");
             SendMessage download_message=new SendMessage()
                     .setChatId(chat_id);
 
@@ -148,13 +147,13 @@ public class BotM  extends TelegramLongPollingBot {
                //String mas=routeBl.get_transport(update);
                mensaje="Elige una opcion+\n";
                //mensaje=mensaje+mas;
-               keyboardMarkup=transportBl.DescriptiontransportInfo(keyboardMarkup);
+               keyboardMarkup=transportBl.DescriptionConnectionInfo(keyboardMarkup);
                universal_point="5";
                break;
            case "5":
                //Se pide la ubicacion
                keyboardMarkup=null;
-               routeBl.get_transport(update);
+               routeBl.get_type_connection(update);
                mensaje="Envia tu ubicacion";
                universal_point="6";
                break;

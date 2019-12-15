@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,7 +25,8 @@ public class RouteBl {
     private static File file=null;
     private static String u_origin="";
     private static String u_destination="";
-    private static int cod_transport=0;
+    private static String cod_transport=null;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteBl.class);
     private RouteRepository routeRepository;
     private RouteStopRepository routeStopRepository;
@@ -35,18 +34,35 @@ public class RouteBl {
     private StopBl stopBl;
     private TransportInfoRepository transportInfoRepository;
     private ConnectionRoutesRepository connectionRoutesRepository;
+    private TypeConnectionRepository typeConnectionRepository;
 
 
     @Autowired
-    public RouteBl(RouteRepository routeRepository, RouteStopRepository routeStopRepository, StopRepository stopRepository, StopBl stopBl, TransportInfoRepository transportInfoRepository, ConnectionRoutesRepository connectionRoutesRepository) {
+    public RouteBl(RouteRepository routeRepository, RouteStopRepository routeStopRepository, StopRepository stopRepository, StopBl stopBl,
+                   TransportInfoRepository transportInfoRepository, ConnectionRoutesRepository connectionRoutesRepository, TypeConnectionRepository typeConnectionRepository) {
         this.routeRepository = routeRepository;
         this.routeStopRepository=routeStopRepository;
         this.stopRepository=stopRepository;
         this.stopBl=stopBl;
         this.transportInfoRepository=transportInfoRepository;
         this.connectionRoutesRepository=connectionRoutesRepository;
+        this.typeConnectionRepository=typeConnectionRepository;
     }
     /*Obteniendo el codigo del transporte escogido*/
+    /*Obteniendo las conexiones del tipo de transporte elegido*/
+    public void get_type_connection(Update update) throws IOException {
+        String type_transport=update.getMessage().getText();
+        List<TypeConnectionEntity> all = this.typeConnectionRepository.findAll();
+        String info_id=null;
+        for (TypeConnectionEntity x: all) {
+            if(type_transport.equals(x.getDescription())){
+                info_id=x.gettTransportA()+","+x.gettTransportB();
+                LOGGER.info("ESTE ES EL VALOR DEL info id "+info_id);
+            }
+        }
+        cod_transport=info_id;
+    }
+
     public void get_transport(Update update) throws IOException {
         String type_transport=update.getMessage().getText();
         List<TransportInfoEntity> all = this.transportInfoRepository.findAll();
@@ -56,7 +72,7 @@ public class RouteBl {
                 info_id=x.getIdTransportInfo();
             }
         }
-        cod_transport=info_id;
+        cod_transport=info_id+"";
     }
     /*Mensaje sobre descargar Google Earth*/
     public String download_message(){
@@ -103,15 +119,17 @@ public class RouteBl {
         //se ingresara adentro del for para que cada vez que compare inicialize otra vez
         /*Se utiliza un for de los origin_routes para ir uno por uno para formar su grafo y ver si estan conectados con algun destino*/
         for (int g = 0; g < origin_routes.size(); g++) {
-            //TODO falta la comparacion de los minimios entre origenes y rutas al obtener ya la ruta al destino minio es lo mismo pero con origenes
             /*se inicia el general que es tipo string para poder encontrar repeticiones con la funcion string*/
             draw_route=general(origin_routes.get(g),grafo,routes,destination_routes,message);
-            if(draw_route.size()<=compare){
-                compare=draw_route.size();
+            /*compara la minima cantidad de rutas a pasar*/
+            if(draw_route!=null){
+                if(draw_route.size()<=compare){
+                    compare=draw_route.size();
+                }
             }
             /*cuando el cont sea igual a el size del general la bandera cambiara a true*/
         }
-        if(draw_route.size()>0){
+        if(draw_route!=null && draw_route.size()>0){
             message="SI HAY UNA RUTA DISPONIBLE"+"\n";
             draw_file_KML(draw_route);
         }else{
@@ -216,7 +234,7 @@ public class RouteBl {
                 minimum_route=destination_routes.get(i);
             }
         }
-        //TODO revisar que cuando el usuario envia un mensaje despues de pedir el tipo de transporte este acepta y esta mal
+        //TODO revisar crear una tabla mas que diga tipo de conexion teleferico teleferico osea 1-1
         /*Al obtener la ruta y comprobando que el destin_route es mayor a 0 y distinto de nuestro numero de comparacion del principio se genera la lista de
         * la ruta*/
 
@@ -258,10 +276,18 @@ public class RouteBl {
     private List<String> to_connections_routes(){
         List<String> routes = new ArrayList<>();
         List<ConnectionRoutesEntity> all=null;
-        if(cod_transport>3){
-            all=this.connectionRoutesRepository.findAll();
-        }else{
-            all=this.connectionRoutesRepository.findAllByTypeTransport(cod_transport);
+        String string = cod_transport;
+        String[] parts = string.split(",");
+        int part1 = Integer.parseInt(parts[0]);
+        int part2 = Integer.parseInt(parts[1]);
+        if(cod_transport!=null){
+            if(part1==part2){
+                /*manejar yy*/
+                all=this.typeConnectionRepository.findByCompare_and(part1,part2);
+            }else{
+                /*manejar or*/
+                all=this.typeConnectionRepository.findByCompare_or(part1,part2);
+            }
         }
         for (ConnectionRoutesEntity x : all) {
             //se obtiene la ruta del punto de inicio

@@ -6,7 +6,6 @@ import java.sql.Date;
 @Entity
 @Table(name = "connection_routes", schema = "lpbus_bot", catalog = "")@NamedQueries({
         @NamedQuery(name = "ConnectionRoutesEntity.findAllByTypeTransport", query = "SELECT a FROM ConnectionRoutesEntity a WHERE a.typeConnection = :typeConnection")
-
 })
 public class ConnectionRoutesEntity {
     private int idCoroutes;
